@@ -1,0 +1,78 @@
+<style>
+.dce-table { width:100%; border-collapse:collapse; font-size:13px; line-height:1.5; }
+.dce-table th, .dce-table td { padding:10px 12px; border:1px solid #ccc; vertical-align:top; }
+.dce-table thead th { font-weight:bold; font-size:13px; text-align:center; padding:12px; }
+.col-attr { width:18%; text-align:left; font-weight:bold; background:#f0f4f8; }
+.col-prog, .col-sq { width:27.3%; text-align:center; cursor:pointer; transition:background 0.15s; }
+.col-prog:hover, .col-sq:hover { background:#e6f1fb; }
+.col-header-a, .col-header-b { background:#2c5f8a; color:white; cursor:pointer; }
+.col-header-sq { background:#6b6b6b; color:white; cursor:pointer; }
+.col-selected { background:rgba(44,95,138,0.06); }
+.col-header-a.selected { background:#1a4d78; box-shadow:inset 0 -3px 0 #fff; }
+.col-header-b.selected { background:#1a4d78; box-shadow:inset 0 -3px 0 #fff; }
+.col-header-sq.selected { background:#4a4a4a; box-shadow:inset 0 -3px 0 #fff; }
+.select-row td { padding:14px 12px; text-align:center; }
+.radio-circle { display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px; border-radius:50%; border:2px solid #999; background:white; cursor:pointer; transition:all 0.15s; }
+.radio-circle.checked { border-color:#2c5f8a; }
+.radio-dot { width:12px; height:12px; border-radius:50%; background:#2c5f8a; transform:scale(0); transition:transform 0.15s; }
+.radio-circle.checked .radio-dot { transform:scale(1); }
+.select-label { font-size:12px; color:#666; margin-top:6px; }
+</style>
+
+<p><strong>Choice Task ${lm://Field/1} of 8</strong></p>
+<p style="font-size:14px; color:#555; margin-bottom:12px;">Please compare the following flood protection programmes and choose the one you would most prefer.</p>
+
+<table class="dce-table" id="dce-table">
+<thead>
+<tr>
+<th class="col-attr"></th>
+<th class="col-header-a" id="hA" onclick="dce_pick('A')">Programme A</th>
+<th class="col-header-b" id="hB" onclick="dce_pick('B')">Programme B</th>
+<th class="col-header-sq" id="hSQ" onclick="dce_pick('SQ')">Current System<br>(No Change)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="col-attr">Who is protected?</td>
+<td class="col-prog cA" id="PA_A1" onclick="dce_pick('A')"></td>
+<td class="col-prog cB" id="PB_A1" onclick="dce_pick('B')"></td>
+<td class="col-sq cSQ" onclick="dce_pick('SQ')">Only properties in high- or medium-risk areas</td>
+</tr>
+<tr>
+<td class="col-attr">Where should the money come from?</td>
+<td class="col-prog cA" id="PA_A2" onclick="dce_pick('A')"></td>
+<td class="col-prog cB" id="PB_A2" onclick="dce_pick('B')"></td>
+<td class="col-sq cSQ" onclick="dce_pick('SQ')">Through national taxation and council tax, shared across all taxpayers</td>
+</tr>
+<tr>
+<td class="col-attr">How is each household's contribution calculated?</td>
+<td class="col-prog cA" id="PA_A3" onclick="dce_pick('A')"></td>
+<td class="col-prog cB" id="PB_A3" onclick="dce_pick('B')"></td>
+<td class="col-sq cSQ" onclick="dce_pick('SQ')">Based on both wealth and flood risk</td>
+</tr>
+<tr>
+<td class="col-attr">Do polluters pay extra?</td>
+<td class="col-prog cA" id="PA_A4" onclick="dce_pick('A')"></td>
+<td class="col-prog cB" id="PB_A4" onclick="dce_pick('B')"></td>
+<td class="col-sq cSQ" onclick="dce_pick('SQ')">No polluter surcharge</td>
+</tr>
+<tr>
+<td class="col-attr">How effective is the programme?</td>
+<td class="col-prog cA" id="PA_A5" onclick="dce_pick('A')"></td>
+<td class="col-prog cB" id="PB_A5" onclick="dce_pick('B')"></td>
+<td class="col-sq cSQ" onclick="dce_pick('SQ')">No change — flood risk stays the same as today</td>
+</tr>
+<tr>
+<td class="col-attr">Additional cost to your household per year</td>
+<td class="col-prog cA" id="PA_A6" onclick="dce_pick('A')"></td>
+<td class="col-prog cB" id="PB_A6" onclick="dce_pick('B')"></td>
+<td class="col-sq cSQ" onclick="dce_pick('SQ')">£0</td>
+</tr>
+<tr class="select-row">
+<td class="col-attr">Your choice</td>
+<td class="col-prog cA" onclick="dce_pick('A')"><div class="radio-circle" id="rA"><div class="radio-dot"></div></div><div class="select-label">Select A</div></td>
+<td class="col-prog cB" onclick="dce_pick('B')"><div class="radio-circle" id="rB"><div class="radio-dot"></div></div><div class="select-label">Select B</div></td>
+<td class="col-sq cSQ" onclick="dce_pick('SQ')"><div class="radio-circle" id="rSQ"><div class="radio-dot"></div></div><div class="select-label">Keep current</div></td>
+</tr>
+</tbody>
+</table>
