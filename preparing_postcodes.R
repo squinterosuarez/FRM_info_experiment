@@ -6,7 +6,7 @@
 #         One JSON file per postcode area (~120 files total)
 #         Each file maps full postcodes -> risk level
 #
-# Rule (consolidated, precautionary):
+# Rule to define risk level:
 #   - If HIGH_CNT + MED_CNT + LOW_CNT == 0 -> "Very low"
 #   - Else walk High -> Medium -> Low and return the first category
 #     whose share of the total is >= 1/3 (33.33...%)
@@ -42,20 +42,7 @@ classify_risk <- function(h, m, l) {
 df$`FLOOD RISK` <- mapply(classify_risk,
                           df$HIGH_CNT, df$MED_CNT, df$LOW_CNT)
 
-# --- Normalise postcode format ------------------------------------
-# Uppercase, single space between outward and inward codes
-# normalise_postcode <- function(pc) {
-#   pc <- toupper(trimws(pc))
-#   pc <- gsub("\\s+", " ", pc)
-#   # If there's no space and length is 5-7, insert before last 3 chars
-#   if (!grepl(" ", pc) && nchar(pc) >= 5 && nchar(pc) <= 7) {
-#     pc <- paste0(substr(pc, 1, nchar(pc) - 3), " ",
-#                  substr(pc, nchar(pc) - 2, nchar(pc)))
-#   }
-#   pc
-# }
-# 
-# df$Postcode <- sapply(df$Postcode, normalise_postcode)
+
 
 # --- Extract postcode area (leading letters before first digit) ---
 df$area <- sub("^([A-Z]+).*", "\\1", df$Postcode)
