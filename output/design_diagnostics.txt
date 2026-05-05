@@ -1,30 +1,46 @@
 ============================================================
   DCE DESIGN DIAGNOSTICS
-  Generated: 2026-05-04 19:25:12.010137
+  Generated: 2026-05-05 17:29:31.490818
 ============================================================
 
 Design space:    576 candidate profiles
 Choice sets:     32
 Blocks:          4 (8 tasks each)
-Parameters:      12
-Point D-error:   2.1469
+Parameters:      11
+Objective:       Bayesian D-error over 20 prior draws
+D-error (best):  0.1810
 Level imbalance: 0.06
+Info-matrix rank: 11 / 11
+Cost scale:      100 (cost coef interpreted per cost-scale units)
 Seed:            2026
+
+--- Parameters (PRIOR_MEAN order) ---
+  [ 1] ASC_SQ                         prior mean=  0.20, sd=0.30
+  [ 2] A1_excludability_L1_vs_L3      prior mean=  0.00, sd=0.40
+  [ 3] A1_excludability_L2_vs_L3      prior mean=  0.00, sd=0.40
+  [ 4] A2_financing_L1_vs_L3          prior mean=  0.00, sd=0.40
+  [ 5] A2_financing_L2_vs_L3          prior mean=  0.00, sd=0.40
+  [ 6] A3_contribution_L1_vs_L4       prior mean=  0.00, sd=0.40
+  [ 7] A3_contribution_L2_vs_L4       prior mean=  0.00, sd=0.40
+  [ 8] A3_contribution_L3_vs_L4       prior mean=  0.00, sd=0.40
+  [ 9] A4_polluter_L1_vs_L2           prior mean=  0.00, sd=0.40
+  [10] A5_effectiveness_L2_vs_L3      prior mean= -0.45, sd=0.30
+  [11] A6_cost (per 100)              prior mean= -0.80, sd=0.40
 
 --- Level balance (A/B alternatives only) ---
 
 A1 (Excludability):
-  Level 1: n=21 (32.8%)  All properties in England are protected, regardles...
-  Level 2: n=22 (34.4%)  Only properties in high- and medium-risk areas are...
+  Level 1: n=22 (34.4%)  All properties in England are protected, regardles...
+  Level 2: n=21 (32.8%)  Only properties in high- and medium-risk areas are...
   Level 3: n=21 (32.8%)  Only properties that opt in receive individual pro...
 
 A2 (Financing mechanism):
   Level 1: n=21 (32.8%)  Fully funded through national taxation and council...
-  Level 2: n=22 (34.4%)  Co-funded: partly through national taxation, with ...
-  Level 3: n=21 (32.8%)  Fully funded through an additional levy on council...
+  Level 2: n=21 (32.8%)  Co-funded: partly through national taxation, with ...
+  Level 3: n=22 (34.4%)  Fully funded through an additional levy on council...
 
 A3 (Contribution basis):
-  Level 1: n=16 (25.0%)  Flat contribution — every household pays the same
+  Level 1: n=16 (25.0%)  Flat contribution - every household pays the same
   Level 2: n=16 (25.0%)  Wealth-based — wealthier households pay more
   Level 3: n=16 (25.0%)  Risk-based — households in higher-risk areas pay m...
   Level 4: n=16 (25.0%)  Based on both wealth and flood risk
@@ -46,40 +62,48 @@ A6 (Cost):
 --- Level balance by block ---
 
 Block 1 (8 choice sets):
-  A1: L1=6, L2=6, L3=4
-  A2: L1=5, L2=5, L3=6
-  A3: L1=4, L2=4, L3=4, L4=4
-  A4: L1=9, L2=7
-  A5: L2=9, L3=7
-  A6: L2=4, L3=4, L4=4, L5=4
+  A1: L1=4, L2=6, L3=6
+  A2: L1=6, L2=5, L3=5
+  A3: L1=5, L2=3, L3=5, L4=3
+  A4: L1=8, L2=8
+  A5: L2=7, L3=9
+  A6: L2=5, L3=5, L4=3, L5=3
 
 Block 2 (8 choice sets):
   A1: L1=5, L2=5, L3=6
-  A2: L1=5, L2=7, L3=4
-  A3: L1=4, L2=2, L3=5, L4=5
-  A4: L1=7, L2=9
+  A2: L1=5, L2=5, L3=6
+  A3: L1=5, L2=3, L3=3, L4=5
+  A4: L1=10, L2=6
+  A5: L2=9, L3=7
+  A6: L2=5, L3=3, L4=3, L5=5
+
+Block 3 (8 choice sets):
+  A1: L1=7, L2=5, L3=4
+  A2: L1=5, L2=5, L3=6
+  A3: L1=3, L2=5, L3=4, L4=4
+  A4: L1=6, L2=10
   A5: L2=8, L3=8
   A6: L2=2, L3=5, L4=5, L5=4
 
-Block 3 (8 choice sets):
-  A1: L1=6, L2=5, L3=5
-  A2: L1=5, L2=5, L3=6
-  A3: L1=5, L2=5, L3=4, L4=2
-  A4: L1=9, L2=7
-  A5: L2=8, L3=8
-  A6: L2=4, L3=4, L4=2, L5=6
-
 Block 4 (8 choice sets):
-  A1: L1=4, L2=6, L3=6
-  A2: L1=6, L2=5, L3=5
-  A3: L1=3, L2=5, L3=3, L4=5
-  A4: L1=7, L2=9
-  A5: L2=7, L3=9
-  A6: L2=6, L3=3, L4=5, L5=2
+  A1: L1=6, L2=5, L3=5
+  A2: L1=5, L2=6, L3=5
+  A3: L1=3, L2=5, L3=4, L4=4
+  A4: L1=8, L2=8
+  A5: L2=8, L3=8
+  A6: L2=4, L3=3, L4=5, L5=4
 
---- Dominance check ---
+--- Dominance and equality checks ---
   None found.
 
 --- Attribute differences (A vs B) ---
-  Min: 3  Max: 6  Mean: 4.5
-  Distribution: 3-diff=2, 4-diff=14, 5-diff=13, 6-diff=3
+  Min: 2  Max: 6  Mean: 4.3
+  Distribution: 2-diff=2, 3-diff=4, 4-diff=10, 5-diff=14, 6-diff=2
+
+--- Attribute overlap rate (A and B share level) ---
+  A1: 2/32 (6%)
+  A2: 2/32 (6%)
+  A3: 3/32 (9%)
+  A4: 18/32 (56%)
+  A5: 18/32 (56%)
+  A6: 11/32 (34%)

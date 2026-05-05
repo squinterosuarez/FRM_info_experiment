@@ -1,103 +1,678 @@
 // ==============================================================
 // DCE QUALTRICS JAVASCRIPT
 // ==============================================================
-// Auto-generated — do not edit manually.
+// Auto-generated -- do not edit manually.
 // To update: edit config.R, then run: Rscript run.R
 //
 // HOW TO USE IN QUALTRICS:
 // 1. Open this file in a TEXT EDITOR (Notepad, VS Code, etc.)
-//    Do NOT double-click it — that will try to execute it.
+//    Do NOT double-click it -- that will try to execute it.
 // 2. Create a Multiple Choice question with the HTML from
 //    qualtrics_choicecard.html as the question text.
 // 3. Set answer choices: Programme A / Programme B / Current System (No Change)
 // 4. Click the question gear > Add JavaScript
 // 5. Delete the default content, then paste EVERYTHING below.
 // 6. Enable Loop & Merge on the block (8 rows, Field 1 = 1..8).
-// 7. See qualtrics_setup_guide.md for full instructions.
 // ==============================================================
 
 Qualtrics.SurveyEngine.addOnReady(function() {
 
   // --- DESIGN MATRIX ---
   var DESIGN = {
-    1: [
-      {cs:3, PA:{A1:2,A2:1,A3:3,A4:2,A5:2,A6:25}, PB:{A1:3,A2:2,A3:3,A4:1,A5:2,A6:75}},
-      {cs:8, PA:{A1:1,A2:1,A3:3,A4:2,A5:3,A6:25}, PB:{A1:3,A2:2,A3:4,A4:2,A5:3,A6:25}},
-      {cs:11, PA:{A1:1,A2:3,A3:4,A4:2,A5:2,A6:150}, PB:{A1:2,A2:1,A3:2,A4:2,A5:3,A6:300}},
-      {cs:15, PA:{A1:2,A2:2,A3:4,A4:1,A5:2,A6:150}, PB:{A1:1,A2:3,A3:4,A4:1,A5:3,A6:300}},
-      {cs:23, PA:{A1:2,A2:3,A3:3,A4:1,A5:2,A6:150}, PB:{A1:1,A2:2,A3:2,A4:1,A5:2,A6:300}},
-      {cs:24, PA:{A1:2,A2:2,A3:1,A4:1,A5:2,A6:75}, PB:{A1:3,A2:3,A3:1,A4:1,A5:3,A6:150}},
-      {cs:26, PA:{A1:1,A2:1,A3:2,A4:2,A5:3,A6:300}, PB:{A1:2,A2:3,A3:1,A4:1,A5:3,A6:75}},
-      {cs:32, PA:{A1:1,A2:3,A3:2,A4:1,A5:2,A6:25}, PB:{A1:3,A2:1,A3:1,A4:2,A5:2,A6:75}}
-    ],
-    2: [
-      {cs:1, PA:{A1:1,A2:2,A3:3,A4:2,A5:3,A6:150}, PB:{A1:2,A2:1,A3:3,A4:2,A5:2,A6:150}},
-      {cs:5, PA:{A1:2,A2:2,A3:4,A4:1,A5:3,A6:75}, PB:{A1:3,A2:3,A3:2,A4:2,A5:3,A6:75}},
-      {cs:9, PA:{A1:2,A2:3,A3:4,A4:2,A5:2,A6:75}, PB:{A1:1,A2:1,A3:1,A4:1,A5:3,A6:75}},
-      {cs:12, PA:{A1:2,A2:3,A3:1,A4:2,A5:2,A6:150}, PB:{A1:3,A2:2,A3:1,A4:1,A5:2,A6:300}},
-      {cs:17, PA:{A1:1,A2:2,A3:3,A4:2,A5:2,A6:150}, PB:{A1:3,A2:2,A3:4,A4:2,A5:3,A6:300}},
-      {cs:22, PA:{A1:2,A2:3,A3:3,A4:1,A5:3,A6:150}, PB:{A1:1,A2:1,A3:4,A4:2,A5:3,A6:75}},
-      {cs:27, PA:{A1:3,A2:2,A3:4,A4:1,A5:2,A6:300}, PB:{A1:3,A2:1,A3:1,A4:2,A5:2,A6:25}},
-      {cs:28, PA:{A1:1,A2:2,A3:2,A4:1,A5:2,A6:25}, PB:{A1:3,A2:1,A3:3,A4:1,A5:3,A6:300}}
-    ],
-    3: [
-      {cs:13, PA:{A1:1,A2:2,A3:1,A4:1,A5:2,A6:75}, PB:{A1:2,A2:1,A3:3,A4:2,A5:3,A6:75}},
-      {cs:14, PA:{A1:3,A2:3,A3:4,A4:1,A5:2,A6:300}, PB:{A1:2,A2:1,A3:2,A4:1,A5:3,A6:300}},
-      {cs:16, PA:{A1:2,A2:2,A3:2,A4:2,A5:3,A6:300}, PB:{A1:1,A2:3,A3:3,A4:2,A5:2,A6:300}},
-      {cs:20, PA:{A1:2,A2:3,A3:1,A4:1,A5:2,A6:25}, PB:{A1:1,A2:1,A3:2,A4:1,A5:2,A6:150}},
-      {cs:21, PA:{A1:1,A2:3,A3:3,A4:1,A5:2,A6:150}, PB:{A1:3,A2:2,A3:2,A4:2,A5:3,A6:300}},
-      {cs:25, PA:{A1:3,A2:1,A3:4,A4:1,A5:2,A6:25}, PB:{A1:1,A2:3,A3:1,A4:2,A5:3,A6:75}},
-      {cs:30, PA:{A1:2,A2:2,A3:1,A4:2,A5:3,A6:300}, PB:{A1:3,A2:1,A3:1,A4:1,A5:2,A6:25}},
-      {cs:31, PA:{A1:1,A2:3,A3:2,A4:2,A5:3,A6:25}, PB:{A1:3,A2:2,A3:3,A4:1,A5:3,A6:75}}
-    ],
-    4: [
-      {cs:2, PA:{A1:3,A2:1,A3:3,A4:2,A5:2,A6:25}, PB:{A1:2,A2:3,A3:2,A4:1,A5:2,A6:75}},
-      {cs:4, PA:{A1:1,A2:2,A3:3,A4:2,A5:2,A6:25}, PB:{A1:2,A2:1,A3:4,A4:2,A5:3,A6:150}},
-      {cs:6, PA:{A1:2,A2:1,A3:2,A4:2,A5:2,A6:25}, PB:{A1:1,A2:2,A3:1,A4:1,A5:3,A6:75}},
-      {cs:7, PA:{A1:2,A2:1,A3:1,A4:1,A5:3,A6:150}, PB:{A1:3,A2:3,A3:3,A4:2,A5:3,A6:25}},
-      {cs:10, PA:{A1:2,A2:2,A3:2,A4:2,A5:3,A6:25}, PB:{A1:3,A2:1,A3:2,A4:1,A5:3,A6:150}},
-      {cs:18, PA:{A1:3,A2:3,A3:4,A4:1,A5:3,A6:300}, PB:{A1:1,A2:1,A3:4,A4:1,A5:2,A6:25}},
-      {cs:19, PA:{A1:3,A2:3,A3:2,A4:2,A5:3,A6:75}, PB:{A1:2,A2:2,A3:4,A4:1,A5:3,A6:150}},
-      {cs:29, PA:{A1:3,A2:2,A3:1,A4:2,A5:2,A6:150}, PB:{A1:1,A2:3,A3:4,A4:2,A5:2,A6:300}}
-    ]
-  };
-
-  // --- LABEL LOOKUP TABLES (card_levels: shortened wording) ---
-  var LABELS = {
-    A1: {
-      1: "All properties, regardless of flood risk",
-      2: "Only properties in high- or medium-risk areas",
-      3: "Only properties that opt in receive individual protection"
+  "1": [
+    {
+      "cs": 1,
+      "PA": {
+        "A1": 1,
+        "A2": 1,
+        "A3": 3,
+        "A4": 1,
+        "A5": 3,
+        "A6": 300
+      },
+      "PB": {
+        "A1": 3,
+        "A2": 3,
+        "A3": 4,
+        "A4": 1,
+        "A5": 2,
+        "A6": 75
+      }
     },
-    A2: {
-      1: "Through national taxation and council tax, shared across all taxpayers",
-      2: "Partly through national taxation, and a new dedicated council tax levy",
-      3: "Entirely through an additional local council tax levy in areas that benefit"
+    {
+      "cs": 4,
+      "PA": {
+        "A1": 1,
+        "A2": 3,
+        "A3": 3,
+        "A4": 2,
+        "A5": 3,
+        "A6": 75
+      },
+      "PB": {
+        "A1": 2,
+        "A2": 2,
+        "A3": 1,
+        "A4": 1,
+        "A5": 3,
+        "A6": 75
+      }
     },
-    A3: {
-      1: "Flat u2014 every household pays the same",
-      2: "Wealth-based u2014 wealthier households pay more",
-      3: "Risk-based u2014 households in higher-risk areas pay more",
-      4: "Based on both wealth and flood risk"
+    {
+      "cs": 10,
+      "PA": {
+        "A1": 3,
+        "A2": 3,
+        "A3": 1,
+        "A4": 1,
+        "A5": 2,
+        "A6": 25
+      },
+      "PB": {
+        "A1": 1,
+        "A2": 2,
+        "A3": 4,
+        "A4": 2,
+        "A5": 2,
+        "A6": 25
+      }
     },
-    A4: {
-      1: "No polluter surcharge",
-      2: "Yes u2014 firms with high greenhouse-gas emissions pay a surcharge"
+    {
+      "cs": 14,
+      "PA": {
+        "A1": 2,
+        "A2": 2,
+        "A3": 3,
+        "A4": 1,
+        "A5": 3,
+        "A6": 75
+      },
+      "PB": {
+        "A1": 3,
+        "A2": 1,
+        "A3": 1,
+        "A4": 1,
+        "A5": 3,
+        "A6": 75
+      }
     },
-    A5: {
-      2: "Every property moves to at least one lower risk category",
-      3: "Every property reaches low or very low risk"
+    {
+      "cs": 15,
+      "PA": {
+        "A1": 3,
+        "A2": 1,
+        "A3": 2,
+        "A4": 2,
+        "A5": 3,
+        "A6": 150
+      },
+      "PB": {
+        "A1": 2,
+        "A2": 2,
+        "A3": 4,
+        "A4": 1,
+        "A5": 3,
+        "A6": 300
+      }
+    },
+    {
+      "cs": 18,
+      "PA": {
+        "A1": 2,
+        "A2": 1,
+        "A3": 2,
+        "A4": 2,
+        "A5": 3,
+        "A6": 150
+      },
+      "PB": {
+        "A1": 3,
+        "A2": 2,
+        "A3": 3,
+        "A4": 2,
+        "A5": 2,
+        "A6": 25
+      }
+    },
+    {
+      "cs": 20,
+      "PA": {
+        "A1": 3,
+        "A2": 1,
+        "A3": 2,
+        "A4": 2,
+        "A5": 2,
+        "A6": 300
+      },
+      "PB": {
+        "A1": 2,
+        "A2": 3,
+        "A3": 1,
+        "A4": 1,
+        "A5": 2,
+        "A6": 25
+      }
+    },
+    {
+      "cs": 29,
+      "PA": {
+        "A1": 2,
+        "A2": 1,
+        "A3": 3,
+        "A4": 2,
+        "A5": 2,
+        "A6": 25
+      },
+      "PB": {
+        "A1": 1,
+        "A2": 3,
+        "A3": 1,
+        "A4": 2,
+        "A5": 3,
+        "A6": 150
+      }
     }
-  };
+  ],
+  "2": [
+    {
+      "cs": 2,
+      "PA": {
+        "A1": 3,
+        "A2": 3,
+        "A3": 4,
+        "A4": 1,
+        "A5": 2,
+        "A6": 150
+      },
+      "PB": {
+        "A1": 3,
+        "A2": 1,
+        "A3": 2,
+        "A4": 2,
+        "A5": 2,
+        "A6": 300
+      }
+    },
+    {
+      "cs": 7,
+      "PA": {
+        "A1": 1,
+        "A2": 1,
+        "A3": 1,
+        "A4": 2,
+        "A5": 3,
+        "A6": 150
+      },
+      "PB": {
+        "A1": 2,
+        "A2": 3,
+        "A3": 2,
+        "A4": 2,
+        "A5": 3,
+        "A6": 25
+      }
+    },
+    {
+      "cs": 12,
+      "PA": {
+        "A1": 1,
+        "A2": 3,
+        "A3": 3,
+        "A4": 1,
+        "A5": 2,
+        "A6": 25
+      },
+      "PB": {
+        "A1": 2,
+        "A2": 1,
+        "A3": 1,
+        "A4": 1,
+        "A5": 3,
+        "A6": 75
+      }
+    },
+    {
+      "cs": 13,
+      "PA": {
+        "A1": 2,
+        "A2": 2,
+        "A3": 2,
+        "A4": 2,
+        "A5": 2,
+        "A6": 25
+      },
+      "PB": {
+        "A1": 1,
+        "A2": 2,
+        "A3": 4,
+        "A4": 1,
+        "A5": 3,
+        "A6": 25
+      }
+    },
+    {
+      "cs": 16,
+      "PA": {
+        "A1": 2,
+        "A2": 2,
+        "A3": 1,
+        "A4": 1,
+        "A5": 2,
+        "A6": 300
+      },
+      "PB": {
+        "A1": 1,
+        "A2": 1,
+        "A3": 3,
+        "A4": 1,
+        "A5": 2,
+        "A6": 25
+      }
+    },
+    {
+      "cs": 19,
+      "PA": {
+        "A1": 3,
+        "A2": 2,
+        "A3": 1,
+        "A4": 1,
+        "A5": 3,
+        "A6": 75
+      },
+      "PB": {
+        "A1": 3,
+        "A2": 3,
+        "A3": 3,
+        "A4": 1,
+        "A5": 3,
+        "A6": 75
+      }
+    },
+    {
+      "cs": 23,
+      "PA": {
+        "A1": 3,
+        "A2": 3,
+        "A3": 1,
+        "A4": 1,
+        "A5": 2,
+        "A6": 300
+      },
+      "PB": {
+        "A1": 1,
+        "A2": 1,
+        "A3": 4,
+        "A4": 1,
+        "A5": 2,
+        "A6": 150
+      }
+    },
+    {
+      "cs": 30,
+      "PA": {
+        "A1": 3,
+        "A2": 2,
+        "A3": 4,
+        "A4": 2,
+        "A5": 2,
+        "A6": 300
+      },
+      "PB": {
+        "A1": 2,
+        "A2": 3,
+        "A3": 4,
+        "A4": 2,
+        "A5": 3,
+        "A6": 300
+      }
+    }
+  ],
+  "3": [
+    {
+      "cs": 3,
+      "PA": {
+        "A1": 3,
+        "A2": 2,
+        "A3": 3,
+        "A4": 2,
+        "A5": 3,
+        "A6": 75
+      },
+      "PB": {
+        "A1": 1,
+        "A2": 3,
+        "A3": 1,
+        "A4": 2,
+        "A5": 3,
+        "A6": 75
+      }
+    },
+    {
+      "cs": 6,
+      "PA": {
+        "A1": 1,
+        "A2": 2,
+        "A3": 1,
+        "A4": 2,
+        "A5": 3,
+        "A6": 300
+      },
+      "PB": {
+        "A1": 3,
+        "A2": 3,
+        "A3": 2,
+        "A4": 1,
+        "A5": 2,
+        "A6": 75
+      }
+    },
+    {
+      "cs": 8,
+      "PA": {
+        "A1": 2,
+        "A2": 2,
+        "A3": 4,
+        "A4": 2,
+        "A5": 2,
+        "A6": 150
+      },
+      "PB": {
+        "A1": 1,
+        "A2": 3,
+        "A3": 2,
+        "A4": 2,
+        "A5": 3,
+        "A6": 300
+      }
+    },
+    {
+      "cs": 11,
+      "PA": {
+        "A1": 2,
+        "A2": 3,
+        "A3": 4,
+        "A4": 1,
+        "A5": 3,
+        "A6": 150
+      },
+      "PB": {
+        "A1": 1,
+        "A2": 2,
+        "A3": 3,
+        "A4": 2,
+        "A5": 3,
+        "A6": 75
+      }
+    },
+    {
+      "cs": 17,
+      "PA": {
+        "A1": 1,
+        "A2": 1,
+        "A3": 4,
+        "A4": 2,
+        "A5": 2,
+        "A6": 75
+      },
+      "PB": {
+        "A1": 2,
+        "A2": 3,
+        "A3": 3,
+        "A4": 2,
+        "A5": 3,
+        "A6": 300
+      }
+    },
+    {
+      "cs": 24,
+      "PA": {
+        "A1": 2,
+        "A2": 2,
+        "A3": 3,
+        "A4": 1,
+        "A5": 2,
+        "A6": 25
+      },
+      "PB": {
+        "A1": 1,
+        "A2": 1,
+        "A3": 2,
+        "A4": 1,
+        "A5": 2,
+        "A6": 150
+      }
+    },
+    {
+      "cs": 25,
+      "PA": {
+        "A1": 2,
+        "A2": 1,
+        "A3": 2,
+        "A4": 1,
+        "A5": 2,
+        "A6": 25
+      },
+      "PB": {
+        "A1": 3,
+        "A2": 3,
+        "A3": 1,
+        "A4": 2,
+        "A5": 2,
+        "A6": 150
+      }
+    },
+    {
+      "cs": 27,
+      "PA": {
+        "A1": 1,
+        "A2": 1,
+        "A3": 2,
+        "A4": 1,
+        "A5": 3,
+        "A6": 150
+      },
+      "PB": {
+        "A1": 3,
+        "A2": 1,
+        "A3": 4,
+        "A4": 2,
+        "A5": 2,
+        "A6": 300
+      }
+    }
+  ],
+  "4": [
+    {
+      "cs": 5,
+      "PA": {
+        "A1": 3,
+        "A2": 2,
+        "A3": 2,
+        "A4": 1,
+        "A5": 3,
+        "A6": 300
+      },
+      "PB": {
+        "A1": 1,
+        "A2": 3,
+        "A3": 3,
+        "A4": 1,
+        "A5": 2,
+        "A6": 300
+      }
+    },
+    {
+      "cs": 9,
+      "PA": {
+        "A1": 1,
+        "A2": 1,
+        "A3": 3,
+        "A4": 2,
+        "A5": 2,
+        "A6": 150
+      },
+      "PB": {
+        "A1": 3,
+        "A2": 2,
+        "A3": 2,
+        "A4": 2,
+        "A5": 3,
+        "A6": 25
+      }
+    },
+    {
+      "cs": 21,
+      "PA": {
+        "A1": 1,
+        "A2": 2,
+        "A3": 1,
+        "A4": 1,
+        "A5": 3,
+        "A6": 75
+      },
+      "PB": {
+        "A1": 3,
+        "A2": 1,
+        "A3": 1,
+        "A4": 2,
+        "A5": 3,
+        "A6": 75
+      }
+    },
+    {
+      "cs": 22,
+      "PA": {
+        "A1": 2,
+        "A2": 1,
+        "A3": 4,
+        "A4": 1,
+        "A5": 3,
+        "A6": 25
+      },
+      "PB": {
+        "A1": 1,
+        "A2": 2,
+        "A3": 2,
+        "A4": 1,
+        "A5": 2,
+        "A6": 25
+      }
+    },
+    {
+      "cs": 26,
+      "PA": {
+        "A1": 3,
+        "A2": 2,
+        "A3": 2,
+        "A4": 1,
+        "A5": 2,
+        "A6": 300
+      },
+      "PB": {
+        "A1": 2,
+        "A2": 3,
+        "A3": 3,
+        "A4": 2,
+        "A5": 2,
+        "A6": 150
+      }
+    },
+    {
+      "cs": 28,
+      "PA": {
+        "A1": 2,
+        "A2": 3,
+        "A3": 4,
+        "A4": 2,
+        "A5": 3,
+        "A6": 150
+      },
+      "PB": {
+        "A1": 3,
+        "A2": 2,
+        "A3": 4,
+        "A4": 2,
+        "A5": 3,
+        "A6": 150
+      }
+    },
+    {
+      "cs": 31,
+      "PA": {
+        "A1": 2,
+        "A2": 1,
+        "A3": 3,
+        "A4": 1,
+        "A5": 2,
+        "A6": 150
+      },
+      "PB": {
+        "A1": 1,
+        "A2": 3,
+        "A3": 2,
+        "A4": 2,
+        "A5": 2,
+        "A6": 25
+      }
+    },
+    {
+      "cs": 32,
+      "PA": {
+        "A1": 1,
+        "A2": 3,
+        "A3": 4,
+        "A4": 1,
+        "A5": 3,
+        "A6": 300
+      },
+      "PB": {
+        "A1": 2,
+        "A2": 1,
+        "A3": 1,
+        "A4": 2,
+        "A5": 2,
+        "A6": 75
+      }
+    }
+  ]
+};
+
+  // --- LABEL LOOKUP (card_levels: shortened wording) ---
+  var LABELS = {
+  "A1": {
+    "1": "All properties, regardless of flood risk",
+    "2": "Only properties in high- or medium-risk areas",
+    "3": "Only properties that opt in receive individual protection"
+  },
+  "A2": {
+    "1": "Through national taxation and council tax, shared across all taxpayers",
+    "2": "Partly through national taxation, and a new dedicated council tax levy",
+    "3": "Entirely through an additional local council tax levy in areas that benefit"
+  },
+  "A3": {
+    "1": "Flat — every household pays the same",
+    "2": "Wealth-based — wealthier households pay more",
+    "3": "Risk-based — households in higher-risk areas pay more",
+    "4": "Based on both wealth and flood risk"
+  },
+  "A4": {
+    "1": "No polluter surcharge",
+    "2": "Yes — firms with high greenhouse-gas emissions pay a surcharge"
+  },
+  "A5": {
+    "2": "Every property moves to at least one lower risk category",
+    "3": "Every property reaches low or very low risk"
+  }
+};
 
   // --- GET BLOCK AND TASK ---
-  var block = parseInt("${e://Field/DCE_Block}", 10);
+  var block = "${e://Field/DCE_Block}";
   var taskNum = parseInt("${lm://Field/1}", 10);
   var taskIndex = taskNum - 1;
   var task = DESIGN[block][taskIndex];
 
   // --- POPULATE TABLE ---
-  var attrs = ["A1", "A2", "A3", "A4", "A5"];
+  var attrs = ["A1","A2","A3","A4","A5"];
   for (var i = 0; i < attrs.length; i++) {
     var a = attrs[i];
     document.getElementById("PA_" + a).innerHTML = LABELS[a][task.PA[a]];
@@ -112,19 +687,18 @@ Qualtrics.SurveyEngine.addOnReady(function() {
   Qualtrics.SurveyEngine.setEmbeddedData("task" + taskNum + "_cs", task.cs);
 
   // --- COLUMN SELECTION LOGIC ---
-  // Maps visual column clicks to the Qualtrics MC answer choices.
-  // Choice 1 = Programme A, Choice 2 = Programme B, Choice 3 = Current System
   var qObj = this;
 
   // Hide the default Qualtrics answer choices (the table radio is the UI)
   var choiceContainer = document.getElementById("QR~" + qObj.questionId);
   if (choiceContainer) { choiceContainer.style.display = "none"; }
+  var choiceList = document.querySelector("#" + qObj.questionId + " .ChoiceStructure");
+  if (choiceList) { choiceList.style.display = "none"; }
 
-  // dce_pick is called by onclick in the HTML
-  window.dce_pick = function(opt) {
-    // Visual update: highlight column and check radio
+  // Restore visual state if the respondent navigates back
+  function dce_apply_visual(opt) {
     document.querySelectorAll(".radio-circle").forEach(function(el) { el.classList.remove("checked"); });
-    document.getElementById("r" + opt).classList.add("checked");
+    if (opt && document.getElementById("r" + opt)) document.getElementById("r" + opt).classList.add("checked");
     document.querySelectorAll(".cA").forEach(function(el) { el.classList.toggle("col-selected", opt === "A"); });
     document.querySelectorAll(".cB").forEach(function(el) { el.classList.toggle("col-selected", opt === "B"); });
     document.querySelectorAll(".cSQ").forEach(function(el) { el.classList.toggle("col-selected", opt === "SQ"); });
@@ -132,12 +706,20 @@ Qualtrics.SurveyEngine.addOnReady(function() {
     if (opt === "A")  document.getElementById("hA").classList.add("selected");
     if (opt === "B")  document.getElementById("hB").classList.add("selected");
     if (opt === "SQ") document.getElementById("hSQ").classList.add("selected");
+  }
 
-    // Sync with Qualtrics MC answer
+  // Restore prior selection on back-navigation (read from current MC value)
+  var sel = qObj.getSelectedChoices();
+  if (sel && sel.length) {
+    var rev = {1:"A", 2:"B", 3:"SQ"};
+    dce_apply_visual(rev[sel[0]]);
+  }
+
+  // dce_pick is called by onclick in the HTML
+  window.dce_pick = function(opt) {
+    dce_apply_visual(opt);
     var choiceMap = {"A": 1, "B": 2, "SQ": 3};
     qObj.setChoiceValue(choiceMap[opt], true);
-
-    // Store in embedded data
     Qualtrics.SurveyEngine.setEmbeddedData("task" + taskNum + "_choice", opt);
   };
 
