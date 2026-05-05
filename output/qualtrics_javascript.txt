@@ -13,525 +13,44 @@
 // 4. Click the question gear > Add JavaScript
 // 5. Delete the default content, then paste EVERYTHING below.
 // 6. Enable Loop & Merge on the block (8 rows, Field 1 = 1..8).
+// 7. See qualtrics_setup_guide.md for full instructions.
 // ==============================================================
 
-Qualtrics.SurveyEngine.addOnReady(function() {
-
-  // --- DESIGN MATRIX ---
-  var DESIGN = {
+// --- DESIGN AND LABELS (block-keyed) ---
+// Defined OUTSIDE the lifecycle hooks so they survive even if a hook errors.
+var DCE_DESIGN = {
   "1": [
     {
-      "cs": 1,
+      "cs": 4,
       "PA": {
-        "A1": 1,
-        "A2": 1,
-        "A3": 3,
-        "A4": 1,
+        "A1": 4,
+        "A2": 3,
+        "A3": 1,
+        "A4": 2,
         "A5": 3,
         "A6": 300
       },
       "PB": {
         "A1": 3,
-        "A2": 3,
-        "A3": 4,
-        "A4": 1,
-        "A5": 2,
-        "A6": 75
-      }
-    },
-    {
-      "cs": 4,
-      "PA": {
-        "A1": 1,
-        "A2": 3,
-        "A3": 3,
-        "A4": 2,
-        "A5": 3,
-        "A6": 75
-      },
-      "PB": {
-        "A1": 2,
         "A2": 2,
-        "A3": 1,
-        "A4": 1,
-        "A5": 3,
-        "A6": 75
-      }
-    },
-    {
-      "cs": 10,
-      "PA": {
-        "A1": 3,
-        "A2": 3,
-        "A3": 1,
-        "A4": 1,
-        "A5": 2,
-        "A6": 25
-      },
-      "PB": {
-        "A1": 1,
-        "A2": 2,
-        "A3": 4,
+        "A3": 2,
         "A4": 2,
         "A5": 2,
-        "A6": 25
-      }
-    },
-    {
-      "cs": 14,
-      "PA": {
-        "A1": 2,
-        "A2": 2,
-        "A3": 3,
-        "A4": 1,
-        "A5": 3,
-        "A6": 75
-      },
-      "PB": {
-        "A1": 3,
-        "A2": 1,
-        "A3": 1,
-        "A4": 1,
-        "A5": 3,
         "A6": 75
       }
     },
     {
       "cs": 15,
       "PA": {
-        "A1": 3,
-        "A2": 1,
-        "A3": 2,
-        "A4": 2,
-        "A5": 3,
-        "A6": 150
-      },
-      "PB": {
-        "A1": 2,
+        "A1": 1,
         "A2": 2,
-        "A3": 4,
-        "A4": 1,
-        "A5": 3,
-        "A6": 300
-      }
-    },
-    {
-      "cs": 18,
-      "PA": {
-        "A1": 2,
-        "A2": 1,
-        "A3": 2,
-        "A4": 2,
-        "A5": 3,
-        "A6": 150
-      },
-      "PB": {
-        "A1": 3,
-        "A2": 2,
-        "A3": 3,
-        "A4": 2,
-        "A5": 2,
-        "A6": 25
-      }
-    },
-    {
-      "cs": 20,
-      "PA": {
-        "A1": 3,
-        "A2": 1,
         "A3": 2,
         "A4": 2,
         "A5": 2,
         "A6": 300
       },
       "PB": {
-        "A1": 2,
-        "A2": 3,
-        "A3": 1,
-        "A4": 1,
-        "A5": 2,
-        "A6": 25
-      }
-    },
-    {
-      "cs": 29,
-      "PA": {
-        "A1": 2,
-        "A2": 1,
-        "A3": 3,
-        "A4": 2,
-        "A5": 2,
-        "A6": 25
-      },
-      "PB": {
-        "A1": 1,
-        "A2": 3,
-        "A3": 1,
-        "A4": 2,
-        "A5": 3,
-        "A6": 150
-      }
-    }
-  ],
-  "2": [
-    {
-      "cs": 2,
-      "PA": {
-        "A1": 3,
-        "A2": 3,
-        "A3": 4,
-        "A4": 1,
-        "A5": 2,
-        "A6": 150
-      },
-      "PB": {
-        "A1": 3,
-        "A2": 1,
-        "A3": 2,
-        "A4": 2,
-        "A5": 2,
-        "A6": 300
-      }
-    },
-    {
-      "cs": 7,
-      "PA": {
-        "A1": 1,
-        "A2": 1,
-        "A3": 1,
-        "A4": 2,
-        "A5": 3,
-        "A6": 150
-      },
-      "PB": {
-        "A1": 2,
-        "A2": 3,
-        "A3": 2,
-        "A4": 2,
-        "A5": 3,
-        "A6": 25
-      }
-    },
-    {
-      "cs": 12,
-      "PA": {
-        "A1": 1,
-        "A2": 3,
-        "A3": 3,
-        "A4": 1,
-        "A5": 2,
-        "A6": 25
-      },
-      "PB": {
-        "A1": 2,
-        "A2": 1,
-        "A3": 1,
-        "A4": 1,
-        "A5": 3,
-        "A6": 75
-      }
-    },
-    {
-      "cs": 13,
-      "PA": {
-        "A1": 2,
-        "A2": 2,
-        "A3": 2,
-        "A4": 2,
-        "A5": 2,
-        "A6": 25
-      },
-      "PB": {
-        "A1": 1,
-        "A2": 2,
-        "A3": 4,
-        "A4": 1,
-        "A5": 3,
-        "A6": 25
-      }
-    },
-    {
-      "cs": 16,
-      "PA": {
-        "A1": 2,
-        "A2": 2,
-        "A3": 1,
-        "A4": 1,
-        "A5": 2,
-        "A6": 300
-      },
-      "PB": {
-        "A1": 1,
-        "A2": 1,
-        "A3": 3,
-        "A4": 1,
-        "A5": 2,
-        "A6": 25
-      }
-    },
-    {
-      "cs": 19,
-      "PA": {
-        "A1": 3,
-        "A2": 2,
-        "A3": 1,
-        "A4": 1,
-        "A5": 3,
-        "A6": 75
-      },
-      "PB": {
-        "A1": 3,
-        "A2": 3,
-        "A3": 3,
-        "A4": 1,
-        "A5": 3,
-        "A6": 75
-      }
-    },
-    {
-      "cs": 23,
-      "PA": {
-        "A1": 3,
-        "A2": 3,
-        "A3": 1,
-        "A4": 1,
-        "A5": 2,
-        "A6": 300
-      },
-      "PB": {
-        "A1": 1,
-        "A2": 1,
-        "A3": 4,
-        "A4": 1,
-        "A5": 2,
-        "A6": 150
-      }
-    },
-    {
-      "cs": 30,
-      "PA": {
-        "A1": 3,
-        "A2": 2,
-        "A3": 4,
-        "A4": 2,
-        "A5": 2,
-        "A6": 300
-      },
-      "PB": {
-        "A1": 2,
-        "A2": 3,
-        "A3": 4,
-        "A4": 2,
-        "A5": 3,
-        "A6": 300
-      }
-    }
-  ],
-  "3": [
-    {
-      "cs": 3,
-      "PA": {
-        "A1": 3,
-        "A2": 2,
-        "A3": 3,
-        "A4": 2,
-        "A5": 3,
-        "A6": 75
-      },
-      "PB": {
-        "A1": 1,
-        "A2": 3,
-        "A3": 1,
-        "A4": 2,
-        "A5": 3,
-        "A6": 75
-      }
-    },
-    {
-      "cs": 6,
-      "PA": {
-        "A1": 1,
-        "A2": 2,
-        "A3": 1,
-        "A4": 2,
-        "A5": 3,
-        "A6": 300
-      },
-      "PB": {
-        "A1": 3,
-        "A2": 3,
-        "A3": 2,
-        "A4": 1,
-        "A5": 2,
-        "A6": 75
-      }
-    },
-    {
-      "cs": 8,
-      "PA": {
-        "A1": 2,
-        "A2": 2,
-        "A3": 4,
-        "A4": 2,
-        "A5": 2,
-        "A6": 150
-      },
-      "PB": {
-        "A1": 1,
-        "A2": 3,
-        "A3": 2,
-        "A4": 2,
-        "A5": 3,
-        "A6": 300
-      }
-    },
-    {
-      "cs": 11,
-      "PA": {
-        "A1": 2,
-        "A2": 3,
-        "A3": 4,
-        "A4": 1,
-        "A5": 3,
-        "A6": 150
-      },
-      "PB": {
-        "A1": 1,
-        "A2": 2,
-        "A3": 3,
-        "A4": 2,
-        "A5": 3,
-        "A6": 75
-      }
-    },
-    {
-      "cs": 17,
-      "PA": {
-        "A1": 1,
-        "A2": 1,
-        "A3": 4,
-        "A4": 2,
-        "A5": 2,
-        "A6": 75
-      },
-      "PB": {
-        "A1": 2,
-        "A2": 3,
-        "A3": 3,
-        "A4": 2,
-        "A5": 3,
-        "A6": 300
-      }
-    },
-    {
-      "cs": 24,
-      "PA": {
-        "A1": 2,
-        "A2": 2,
-        "A3": 3,
-        "A4": 1,
-        "A5": 2,
-        "A6": 25
-      },
-      "PB": {
-        "A1": 1,
-        "A2": 1,
-        "A3": 2,
-        "A4": 1,
-        "A5": 2,
-        "A6": 150
-      }
-    },
-    {
-      "cs": 25,
-      "PA": {
-        "A1": 2,
-        "A2": 1,
-        "A3": 2,
-        "A4": 1,
-        "A5": 2,
-        "A6": 25
-      },
-      "PB": {
-        "A1": 3,
-        "A2": 3,
-        "A3": 1,
-        "A4": 2,
-        "A5": 2,
-        "A6": 150
-      }
-    },
-    {
-      "cs": 27,
-      "PA": {
-        "A1": 1,
-        "A2": 1,
-        "A3": 2,
-        "A4": 1,
-        "A5": 3,
-        "A6": 150
-      },
-      "PB": {
-        "A1": 3,
-        "A2": 1,
-        "A3": 4,
-        "A4": 2,
-        "A5": 2,
-        "A6": 300
-      }
-    }
-  ],
-  "4": [
-    {
-      "cs": 5,
-      "PA": {
-        "A1": 3,
-        "A2": 2,
-        "A3": 2,
-        "A4": 1,
-        "A5": 3,
-        "A6": 300
-      },
-      "PB": {
-        "A1": 1,
-        "A2": 3,
-        "A3": 3,
-        "A4": 1,
-        "A5": 2,
-        "A6": 300
-      }
-    },
-    {
-      "cs": 9,
-      "PA": {
-        "A1": 1,
-        "A2": 1,
-        "A3": 3,
-        "A4": 2,
-        "A5": 2,
-        "A6": 150
-      },
-      "PB": {
-        "A1": 3,
-        "A2": 2,
-        "A3": 2,
-        "A4": 2,
-        "A5": 3,
-        "A6": 25
-      }
-    },
-    {
-      "cs": 21,
-      "PA": {
-        "A1": 1,
-        "A2": 2,
-        "A3": 1,
-        "A4": 1,
-        "A5": 3,
-        "A6": 75
-      },
-      "PB": {
-        "A1": 3,
+        "A1": 4,
         "A2": 1,
         "A3": 1,
         "A4": 2,
@@ -542,75 +61,94 @@ Qualtrics.SurveyEngine.addOnReady(function() {
     {
       "cs": 22,
       "PA": {
-        "A1": 2,
-        "A2": 1,
+        "A1": 1,
+        "A2": 3,
         "A3": 4,
         "A4": 1,
-        "A5": 3,
-        "A6": 25
+        "A5": 2,
+        "A6": 150
       },
       "PB": {
         "A1": 1,
-        "A2": 2,
+        "A2": 3,
+        "A3": 3,
+        "A4": 1,
+        "A5": 3,
+        "A6": 300
+      }
+    },
+    {
+      "cs": 23,
+      "PA": {
+        "A1": 4,
+        "A2": 3,
         "A3": 2,
         "A4": 1,
         "A5": 2,
         "A6": 25
+      },
+      "PB": {
+        "A1": 1,
+        "A2": 3,
+        "A3": 3,
+        "A4": 2,
+        "A5": 2,
+        "A6": 75
+      }
+    },
+    {
+      "cs": 25,
+      "PA": {
+        "A1": 2,
+        "A2": 2,
+        "A3": 3,
+        "A4": 2,
+        "A5": 3,
+        "A6": 150
+      },
+      "PB": {
+        "A1": 4,
+        "A2": 2,
+        "A3": 4,
+        "A4": 1,
+        "A5": 2,
+        "A6": 150
       }
     },
     {
       "cs": 26,
       "PA": {
-        "A1": 3,
+        "A1": 1,
         "A2": 2,
         "A3": 2,
         "A4": 1,
-        "A5": 2,
-        "A6": 300
-      },
-      "PB": {
-        "A1": 2,
-        "A2": 3,
-        "A3": 3,
-        "A4": 2,
-        "A5": 2,
-        "A6": 150
-      }
-    },
-    {
-      "cs": 28,
-      "PA": {
-        "A1": 2,
-        "A2": 3,
-        "A3": 4,
-        "A4": 2,
         "A5": 3,
-        "A6": 150
+        "A6": 25
       },
       "PB": {
         "A1": 3,
         "A2": 2,
-        "A3": 4,
-        "A4": 2,
+        "A3": 1,
+        "A4": 1,
         "A5": 3,
-        "A6": 150
+        "A6": 300
       }
     },
     {
-      "cs": 31,
+      "cs": 27,
       "PA": {
-        "A1": 2,
+        "A1": 3,
         "A2": 1,
         "A3": 3,
         "A4": 1,
-        "A5": 2,
-        "A6": 150
+        "A5": 3,
+        "A6": 75
       },
       "PB": {
-        "A1": 1,
-        "A2": 3,
-        "A3": 2,
-        "A4": 2,
+        "A1": 2,
+        "A2": 2,
+        "A3": 4,
+        "A4": 1,
         "A5": 2,
         "A6": 25
       }
@@ -619,6 +157,411 @@ Qualtrics.SurveyEngine.addOnReady(function() {
       "cs": 32,
       "PA": {
         "A1": 1,
+        "A2": 1,
+        "A3": 1,
+        "A4": 2,
+        "A5": 3,
+        "A6": 300
+      },
+      "PB": {
+        "A1": 2,
+        "A2": 3,
+        "A3": 4,
+        "A4": 2,
+        "A5": 2,
+        "A6": 75
+      }
+    }
+  ],
+  "2": [
+    {
+      "cs": 5,
+      "PA": {
+        "A1": 4,
+        "A2": 2,
+        "A3": 4,
+        "A4": 2,
+        "A5": 3,
+        "A6": 75
+      },
+      "PB": {
+        "A1": 3,
+        "A2": 2,
+        "A3": 1,
+        "A4": 2,
+        "A5": 3,
+        "A6": 150
+      }
+    },
+    {
+      "cs": 7,
+      "PA": {
+        "A1": 1,
+        "A2": 1,
+        "A3": 2,
+        "A4": 1,
+        "A5": 3,
+        "A6": 150
+      },
+      "PB": {
+        "A1": 3,
+        "A2": 3,
+        "A3": 3,
+        "A4": 1,
+        "A5": 2,
+        "A6": 150
+      }
+    },
+    {
+      "cs": 8,
+      "PA": {
+        "A1": 1,
+        "A2": 1,
+        "A3": 3,
+        "A4": 1,
+        "A5": 2,
+        "A6": 300
+      },
+      "PB": {
+        "A1": 4,
+        "A2": 3,
+        "A3": 3,
+        "A4": 1,
+        "A5": 2,
+        "A6": 75
+      }
+    },
+    {
+      "cs": 10,
+      "PA": {
+        "A1": 3,
+        "A2": 3,
+        "A3": 2,
+        "A4": 2,
+        "A5": 3,
+        "A6": 300
+      },
+      "PB": {
+        "A1": 2,
+        "A2": 1,
+        "A3": 2,
+        "A4": 1,
+        "A5": 2,
+        "A6": 300
+      }
+    },
+    {
+      "cs": 13,
+      "PA": {
+        "A1": 2,
+        "A2": 3,
+        "A3": 2,
+        "A4": 2,
+        "A5": 3,
+        "A6": 150
+      },
+      "PB": {
+        "A1": 3,
+        "A2": 1,
+        "A3": 4,
+        "A4": 1,
+        "A5": 2,
+        "A6": 25
+      }
+    },
+    {
+      "cs": 14,
+      "PA": {
+        "A1": 2,
+        "A2": 2,
+        "A3": 1,
+        "A4": 1,
+        "A5": 3,
+        "A6": 150
+      },
+      "PB": {
+        "A1": 1,
+        "A2": 3,
+        "A3": 2,
+        "A4": 2,
+        "A5": 2,
+        "A6": 25
+      }
+    },
+    {
+      "cs": 21,
+      "PA": {
+        "A1": 2,
+        "A2": 1,
+        "A3": 2,
+        "A4": 1,
+        "A5": 2,
+        "A6": 25
+      },
+      "PB": {
+        "A1": 1,
+        "A2": 3,
+        "A3": 4,
+        "A4": 1,
+        "A5": 3,
+        "A6": 150
+      }
+    },
+    {
+      "cs": 29,
+      "PA": {
+        "A1": 1,
+        "A2": 2,
+        "A3": 4,
+        "A4": 2,
+        "A5": 3,
+        "A6": 25
+      },
+      "PB": {
+        "A1": 2,
+        "A2": 1,
+        "A3": 2,
+        "A4": 2,
+        "A5": 3,
+        "A6": 75
+      }
+    }
+  ],
+  "3": [
+    {
+      "cs": 1,
+      "PA": {
+        "A1": 3,
+        "A2": 3,
+        "A3": 3,
+        "A4": 1,
+        "A5": 2,
+        "A6": 150
+      },
+      "PB": {
+        "A1": 4,
+        "A2": 1,
+        "A3": 4,
+        "A4": 2,
+        "A5": 2,
+        "A6": 25
+      }
+    },
+    {
+      "cs": 9,
+      "PA": {
+        "A1": 2,
+        "A2": 3,
+        "A3": 1,
+        "A4": 2,
+        "A5": 2,
+        "A6": 150
+      },
+      "PB": {
+        "A1": 3,
+        "A2": 1,
+        "A3": 2,
+        "A4": 2,
+        "A5": 3,
+        "A6": 25
+      }
+    },
+    {
+      "cs": 11,
+      "PA": {
+        "A1": 3,
+        "A2": 3,
+        "A3": 2,
+        "A4": 2,
+        "A5": 2,
+        "A6": 75
+      },
+      "PB": {
+        "A1": 1,
+        "A2": 2,
+        "A3": 1,
+        "A4": 1,
+        "A5": 2,
+        "A6": 25
+      }
+    },
+    {
+      "cs": 12,
+      "PA": {
+        "A1": 4,
+        "A2": 3,
+        "A3": 4,
+        "A4": 2,
+        "A5": 3,
+        "A6": 25
+      },
+      "PB": {
+        "A1": 4,
+        "A2": 2,
+        "A3": 2,
+        "A4": 2,
+        "A5": 3,
+        "A6": 300
+      }
+    },
+    {
+      "cs": 17,
+      "PA": {
+        "A1": 2,
+        "A2": 1,
+        "A3": 4,
+        "A4": 2,
+        "A5": 2,
+        "A6": 150
+      },
+      "PB": {
+        "A1": 3,
+        "A2": 3,
+        "A3": 1,
+        "A4": 1,
+        "A5": 2,
+        "A6": 25
+      }
+    },
+    {
+      "cs": 18,
+      "PA": {
+        "A1": 2,
+        "A2": 2,
+        "A3": 4,
+        "A4": 1,
+        "A5": 2,
+        "A6": 300
+      },
+      "PB": {
+        "A1": 3,
+        "A2": 1,
+        "A3": 3,
+        "A4": 1,
+        "A5": 3,
+        "A6": 300
+      }
+    },
+    {
+      "cs": 28,
+      "PA": {
+        "A1": 1,
+        "A2": 1,
+        "A3": 3,
+        "A4": 1,
+        "A5": 3,
+        "A6": 75
+      },
+      "PB": {
+        "A1": 1,
+        "A2": 3,
+        "A3": 1,
+        "A4": 1,
+        "A5": 3,
+        "A6": 75
+      }
+    },
+    {
+      "cs": 30,
+      "PA": {
+        "A1": 4,
+        "A2": 1,
+        "A3": 3,
+        "A4": 1,
+        "A5": 3,
+        "A6": 75
+      },
+      "PB": {
+        "A1": 2,
+        "A2": 2,
+        "A3": 1,
+        "A4": 2,
+        "A5": 3,
+        "A6": 75
+      }
+    }
+  ],
+  "4": [
+    {
+      "cs": 2,
+      "PA": {
+        "A1": 3,
+        "A2": 2,
+        "A3": 3,
+        "A4": 2,
+        "A5": 3,
+        "A6": 75
+      },
+      "PB": {
+        "A1": 4,
+        "A2": 1,
+        "A3": 1,
+        "A4": 2,
+        "A5": 3,
+        "A6": 75
+      }
+    },
+    {
+      "cs": 3,
+      "PA": {
+        "A1": 4,
+        "A2": 2,
+        "A3": 3,
+        "A4": 2,
+        "A5": 3,
+        "A6": 300
+      },
+      "PB": {
+        "A1": 1,
+        "A2": 1,
+        "A3": 3,
+        "A4": 2,
+        "A5": 2,
+        "A6": 150
+      }
+    },
+    {
+      "cs": 6,
+      "PA": {
+        "A1": 3,
+        "A2": 2,
+        "A3": 2,
+        "A4": 1,
+        "A5": 2,
+        "A6": 75
+      },
+      "PB": {
+        "A1": 4,
+        "A2": 2,
+        "A3": 3,
+        "A4": 2,
+        "A5": 2,
+        "A6": 150
+      }
+    },
+    {
+      "cs": 16,
+      "PA": {
+        "A1": 3,
+        "A2": 2,
+        "A3": 1,
+        "A4": 1,
+        "A5": 3,
+        "A6": 300
+      },
+      "PB": {
+        "A1": 4,
+        "A2": 1,
+        "A3": 2,
+        "A4": 2,
+        "A5": 3,
+        "A6": 300
+      }
+    },
+    {
+      "cs": 19,
+      "PA": {
+        "A1": 4,
         "A2": 3,
         "A3": 4,
         "A4": 1,
@@ -626,23 +569,79 @@ Qualtrics.SurveyEngine.addOnReady(function() {
         "A6": 300
       },
       "PB": {
+        "A1": 3,
+        "A2": 1,
+        "A3": 1,
+        "A4": 1,
+        "A5": 2,
+        "A6": 25
+      }
+    },
+    {
+      "cs": 20,
+      "PA": {
+        "A1": 2,
+        "A2": 1,
+        "A3": 4,
+        "A4": 2,
+        "A5": 2,
+        "A6": 300
+      },
+      "PB": {
+        "A1": 2,
+        "A2": 3,
+        "A3": 4,
+        "A4": 1,
+        "A5": 3,
+        "A6": 25
+      }
+    },
+    {
+      "cs": 24,
+      "PA": {
+        "A1": 1,
+        "A2": 1,
+        "A3": 4,
+        "A4": 1,
+        "A5": 2,
+        "A6": 25
+      },
+      "PB": {
+        "A1": 4,
+        "A2": 2,
+        "A3": 3,
+        "A4": 1,
+        "A5": 2,
+        "A6": 25
+      }
+    },
+    {
+      "cs": 31,
+      "PA": {
+        "A1": 2,
+        "A2": 3,
+        "A3": 1,
+        "A4": 2,
+        "A5": 2,
+        "A6": 150
+      },
+      "PB": {
         "A1": 2,
         "A2": 1,
         "A3": 1,
         "A4": 2,
         "A5": 2,
-        "A6": 75
+        "A6": 150
       }
     }
   ]
 };
-
-  // --- LABEL LOOKUP (card_levels: shortened wording) ---
-  var LABELS = {
+var DCE_LABELS = {
   "A1": {
-    "1": "All properties, regardless of flood risk",
-    "2": "Only properties in high- or medium-risk areas",
-    "3": "Only properties that opt in receive individual protection"
+    "1": "Only properties in higher-risk and higher-deprivation areas",
+    "2": "All properties, regardless of flood risk",
+    "3": "Only properties in high- or medium-risk areas",
+    "4": "Only properties that opt in receive individual protection"
   },
   "A2": {
     "1": "Through national taxation and council tax, shared across all taxpayers",
@@ -664,63 +663,123 @@ Qualtrics.SurveyEngine.addOnReady(function() {
     "3": "Every property reaches low or very low risk"
   }
 };
+var DCE_ATTRS  = ["A1","A2","A3","A4","A5"];
 
-  // --- GET BLOCK AND TASK ---
-  var block = "${e://Field/DCE_Block}";
-  var taskNum = parseInt("${lm://Field/1}", 10);
-  var taskIndex = taskNum - 1;
-  var task = DESIGN[block][taskIndex];
-
-  // --- POPULATE TABLE ---
-  var attrs = ["A1","A2","A3","A4","A5"];
-  for (var i = 0; i < attrs.length; i++) {
-    var a = attrs[i];
-    document.getElementById("PA_" + a).innerHTML = LABELS[a][task.PA[a]];
-    document.getElementById("PB_" + a).innerHTML = LABELS[a][task.PB[a]];
-  }
-
-  // Cost attribute (A6)
-  document.getElementById("PA_A6").innerHTML = "\u00a3" + task.PA.A6;
-  document.getElementById("PB_A6").innerHTML = "\u00a3" + task.PB.A6;
-
-  // --- STORE CHOICE SET ID ---
-  Qualtrics.SurveyEngine.setEmbeddedData("task" + taskNum + "_cs", task.cs);
-
-  // --- COLUMN SELECTION LOGIC ---
+Qualtrics.SurveyEngine.addOnload(function() {
+  // ============================================================
+  // PHASE 1 (addOnload): runs BEFORE the question paints.
+  // The ONLY job here is to register window.dce_pick so that the
+  // inline onclick="dce_pick(...)" handlers in the HTML resolve
+  // immediately when the question paints. We deliberately do NOT
+  // touch the DOM at this stage -- the question container exists
+  // but our table HTML may not yet, and selecting/hiding things
+  // before the table is rendered risks hiding wrappers that turn
+  // out to also contain the table.
+  // ============================================================
   var qObj = this;
 
-  // Hide the default Qualtrics answer choices (the table radio is the UI)
-  var choiceContainer = document.getElementById("QR~" + qObj.questionId);
-  if (choiceContainer) { choiceContainer.style.display = "none"; }
-  var choiceList = document.querySelector("#" + qObj.questionId + " .ChoiceStructure");
-  if (choiceList) { choiceList.style.display = "none"; }
+  window.dce_pick = function(opt) {
+    var choiceMap = {"A": 1, "B": 2, "SQ": 3};
+    try { qObj.setChoiceValue(choiceMap[opt], true); }
+    catch (e) { /* silent */ }
+    if (typeof window.dce_apply_visual === "function") {
+      try { window.dce_apply_visual(opt); } catch (e) { /* silent */ }
+    }
+    try {
+      var tn = parseInt("${lm://Field/1}", 10);
+      if (!isNaN(tn)) {
+        Qualtrics.SurveyEngine.setEmbeddedData("task" + tn + "_choice", opt);
+      }
+    } catch (e) { /* silent */ }
+  };
+});
 
-  // Restore visual state if the respondent navigates back
-  function dce_apply_visual(opt) {
+Qualtrics.SurveyEngine.addOnReady(function() {
+  // ============================================================
+  // PHASE 2 (addOnReady): the question DOM is mounted. Hide the
+  // default radio list, populate the table, restore prior choice.
+  // ============================================================
+  var qObj = this;
+
+  // ---- 2A. Resolve the question container ----
+  var qContainer =
+    (typeof qObj.getQuestionContainer === "function" ? qObj.getQuestionContainer() : null) ||
+    qObj.questionContainer ||
+    document.getElementById(qObj.questionId) ||
+    document.getElementById("Question_" + qObj.questionId);
+
+  // ---- 2B. Hide the default Qualtrics radio choices ----
+  // PRINCIPLED APPROACH: walk UP from actual radio <input> elements to
+  // find their containing <ul>/<ol>/<fieldset> and hide just that.
+  // Our DCE table contains zero <input> elements, so any radio inputs
+  // in the question container must belong to the default Qualtrics
+  // choices -- there is no risk of hitting the table itself.
+  if (qContainer) {
+    var choiceInputs = qContainer.querySelectorAll('input[type="radio"], input[type="checkbox"]');
+    var hidden = [];
+    for (var i = 0; i < choiceInputs.length; i++) {
+      var el = choiceInputs[i];
+      // Walk up until we find a list/fieldset wrapper, or a recognised
+      // Qualtrics choice container class. Stop at qContainer.
+      while (el && el !== qContainer) {
+        var tag = el.tagName;
+        if (tag === "UL" || tag === "OL" || tag === "FIELDSET") break;
+        if (el.classList && (el.classList.contains("ChoiceStructure") ||
+                             el.classList.contains("q-choice-list"))) break;
+        el = el.parentElement;
+      }
+      if (el && el !== qContainer && hidden.indexOf(el) === -1) {
+        el.style.display = "none";
+        hidden.push(el);
+      }
+    }
+  }
+
+  // ---- 2C. Visual-state helper ----
+  window.dce_apply_visual = function(opt) {
     document.querySelectorAll(".radio-circle").forEach(function(el) { el.classList.remove("checked"); });
-    if (opt && document.getElementById("r" + opt)) document.getElementById("r" + opt).classList.add("checked");
+    var dot = document.getElementById("r" + opt);
+    if (dot) dot.classList.add("checked");
     document.querySelectorAll(".cA").forEach(function(el) { el.classList.toggle("col-selected", opt === "A"); });
     document.querySelectorAll(".cB").forEach(function(el) { el.classList.toggle("col-selected", opt === "B"); });
     document.querySelectorAll(".cSQ").forEach(function(el) { el.classList.toggle("col-selected", opt === "SQ"); });
     document.querySelectorAll(".col-header-a,.col-header-b,.col-header-sq").forEach(function(el) { el.classList.remove("selected"); });
-    if (opt === "A")  document.getElementById("hA").classList.add("selected");
-    if (opt === "B")  document.getElementById("hB").classList.add("selected");
-    if (opt === "SQ") document.getElementById("hSQ").classList.add("selected");
-  }
-
-  // Restore prior selection on back-navigation (read from current MC value)
-  var sel = qObj.getSelectedChoices();
-  if (sel && sel.length) {
-    var rev = {1:"A", 2:"B", 3:"SQ"};
-    dce_apply_visual(rev[sel[0]]);
-  }
-
-  // dce_pick is called by onclick in the HTML
-  window.dce_pick = function(opt) {
-    dce_apply_visual(opt);
-    var choiceMap = {"A": 1, "B": 2, "SQ": 3};
-    qObj.setChoiceValue(choiceMap[opt], true);
-    Qualtrics.SurveyEngine.setEmbeddedData("task" + taskNum + "_choice", opt);
+    var hdr = document.getElementById("h" + opt);
+    if (hdr) hdr.classList.add("selected");
   };
 
+  // ---- 2D. Populate the table from DESIGN data (defensive) ----
+  try {
+    var block   = "${e://Field/DCE_Block}";
+    var taskNum = parseInt("${lm://Field/1}", 10);
+    if (!block) throw new Error("DCE_Block embedded field is empty -- set it in survey flow.");
+    if (isNaN(taskNum)) throw new Error("Loop & Merge field 1 not numeric -- check L&M setup.");
+    var task = DCE_DESIGN[block] && DCE_DESIGN[block][taskNum - 1];
+    if (!task) throw new Error("No task for block=" + block + " taskNum=" + taskNum);
+
+    for (var i = 0; i < DCE_ATTRS.length; i++) {
+      var a = DCE_ATTRS[i];
+      var pa = document.getElementById("PA_" + a);
+      var pb = document.getElementById("PB_" + a);
+      if (pa) pa.innerHTML = DCE_LABELS[a][task.PA[a]];
+      if (pb) pb.innerHTML = DCE_LABELS[a][task.PB[a]];
+    }
+    var paCost = document.getElementById("PA_A6");
+    var pbCost = document.getElementById("PB_A6");
+    if (paCost) paCost.innerHTML = "\u00a3" + task.PA.A6;
+    if (pbCost) pbCost.innerHTML = "\u00a3" + task.PB.A6;
+
+    Qualtrics.SurveyEngine.setEmbeddedData("task" + taskNum + "_cs", task.cs);
+  } catch (e) {
+    if (window.console && console.error) console.error("DCE table population failed:", e);
+  }
+
+  // ---- 2E. Restore prior selection on back-navigation ----
+  try {
+    var sel = qObj.getSelectedChoices();
+    if (sel && sel.length) {
+      var rev = {1: "A", 2: "B", 3: "SQ"};
+      window.dce_apply_visual(rev[sel[0]]);
+    }
+  } catch (e) { /* silent */ }
 });

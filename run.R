@@ -34,7 +34,6 @@ cat("============================================================\n\n")
 # LOAD CONFIGURATION
 # --------------------------------------------------------------
 
-# FIX 8: robust script-directory detection that works under both
 # `Rscript run.R` and `source("run.R")`.
 get_script_dir <- function() {
   args <- commandArgs(trailingOnly = FALSE)
@@ -167,10 +166,10 @@ effects_code <- function(level, n_levels) {
   code
 }
 
-# FIX 10: cost rescaling now uses the configurable COST_SCALE instead of a
-# hidden /100 inside the function body. The cost prior must be on the same scale.
+# Cost rescaling uses the configurable COST_SCALE. The cost prior must 
+# be on the same scale.
 #
-# IDENTIFICATION FIX: encode each non-cost attribute over its `ab_levels`
+# IDENTIFICATION: encode each non-cost attribute over its `ab_levels`
 # only. If the SQ alternative carries a level that does NOT appear in the
 # A/B alternatives (i.e. ab_only excludes it), the SQ contributes zeros for
 # that attribute's effects -- ASC_SQ absorbs the missing-level effect.
@@ -207,7 +206,7 @@ code_profile <- function(lvls) {
 cand_grid <- expand.grid(ab_levels)
 names(cand_grid) <- attr_keys
 
-# FIX 2: drop any candidate whose level vector exactly matches the SQ on
+# Drop any candidate whose level vector exactly matches the SQ on
 # every attribute. With this config, A5 and A6 already exclude their SQ
 # levels via `ab_only`, so the filter removes nothing -- but for any future
 # config where all attributes have ab_only = NULL, this stops the optimiser
@@ -233,7 +232,7 @@ cat(sprintf("  Candidates:  %d profiles\n", N_CAND))
 # PART 4: BAYESIAN D-EFFICIENT DESIGN (MODIFIED FEDEROV)
 # ==============================================================
 
-# FIX 1: actually use PRIOR_SD. We draw `N_DRAWS` parameter vectors from
+# It uses PRIOR_SD. We draw `N_DRAWS` parameter vectors from
 # the prior and minimise the *expected* D-error. If all PRIOR_SD == 0 the
 # code reduces to local D-efficiency at PRIOR_MEAN automatically (1 draw).
 
@@ -500,7 +499,7 @@ t0 <- proc.time()
 
 for (start in 1:N_STARTS) {
 
-  # FIX 13: per-start seed so individual starts are independently reproducible.
+  # Per-start seed so individual starts are independently reproducible.
   set.seed(SEED + start)
 
   design <- matrix(NA, N_SETS, 2)
@@ -528,7 +527,7 @@ for (start in 1:N_STARTS) {
     improved <- FALSE
     iter <- iter + 1
 
-    # FIX 11: randomise scan order so improvement isn't biased by index.
+    # Randomise scan order so improvement isn't biased by index.
     set_order <- sample(N_SETS)
     for (s in set_order) {
       for (j in sample(2)) {
@@ -636,7 +635,7 @@ elapsed     <- (proc.time() - t0)[3]
 cat(sprintf("\nBest: D=%.4f, imbalance=%.2f  (%.1fs elapsed)\n\n",
             FINAL_D_ERR, FINAL_IMBAL, elapsed))
 
-# FIX 12: identification check on the final information matrix at PRIOR_MEAN.
+# Identification check on the final information matrix at PRIOR_MEAN.
 final_info_pm <- matrix(0, N_PAR, N_PAR)
 {
   bd_save <- beta_draws_t
@@ -714,7 +713,7 @@ for (attempt in 1:500) {
                               full_design$alternative != "Status_Quo", ]
     for (k in attr_keys) {
       col <- paste0(k, "_level")
-      # FIX 3: include all possible levels so missing levels are visible
+      # Include all possible levels so missing levels are visible
       # rather than silently dropped by `factor()`.
       freq <- table(factor(block_rows[[col]], levels = ab_levels[[k]]))
       expected <- sum(freq) / length(freq)
@@ -751,9 +750,8 @@ cat("Design CSVs written.\n")
 # ==============================================================
 # PART 7: GENERATE QUALTRICS HTML
 # ==============================================================
-
+# Build the choice card HTML with clickable columns and radio selectors
 n_tasks <- N_SETS / N_BLOCKS
-
 html_lines <- c(
   '<style>',
   '.dce-table { width:100%; border-collapse:collapse; font-size:13px; line-height:1.5; }',
@@ -790,7 +788,7 @@ html_lines <- c(
   '</thead>',
   '<tbody>'
 )
-
+# Attribute rows
 for (k in attr_keys) {
   a <- ATTRIBUTES[[k]]
   sq_card_text <- a$card_levels[a$sq]
@@ -803,7 +801,7 @@ for (k in attr_keys) {
     '</tr>'
   )
 }
-
+# Selection row with radio buttons
 html_lines <- c(html_lines,
   '<tr class="select-row">',
   '<td class="col-attr">Your choice</td>',
@@ -814,9 +812,10 @@ html_lines <- c(html_lines,
   '</tbody>',
   '</table>'
 )
-
+# Substitute placeholders
 html_lines <- gsub("TASK_TITLE", CARD_TITLE, html_lines)
-
+# enc2utf8 + useBytes ensures non-ASCII characters (\u00a3, \u2014) are written as
+# proper UTF-8 instead of <U+xxxx> escapes when R is running under a non-UTF-8 locale.
 writeLines(enc2utf8(html_lines), file.path(OUTPUT_DIR, "qualtrics_choicecard.html"), useBytes = TRUE)
 cat("Choice card HTML written.\n")
 
@@ -825,7 +824,7 @@ cat("Choice card HTML written.\n")
 # PART 8: GENERATE QUALTRICS JAVASCRIPT
 # ==============================================================
 
-# FIX 6: build the DESIGN and LABELS objects in R, then emit them as JSON
+# Build the DESIGN and LABELS objects in R, then emit them as JSON
 # via jsonlite. This handles all string escaping correctly (quotes,
 # backslashes, newlines, "</script>", and non-ASCII characters), eliminating
 # the silent breakage / injection risk in the original gsub-based encoder.
@@ -891,74 +890,132 @@ js_lines <- c(
   '// 4. Click the question gear > Add JavaScript',
   '// 5. Delete the default content, then paste EVERYTHING below.',
   sprintf('// 6. Enable Loop & Merge on the block (%d rows, Field 1 = 1..%d).', n_tasks, n_tasks),
+  '// 7. See qualtrics_setup_guide.md for full instructions.',
   '// ==============================================================',
   '',
-  'Qualtrics.SurveyEngine.addOnReady(function() {',
+  '// --- DESIGN AND LABELS (block-keyed) ---',
+  '// Defined OUTSIDE the lifecycle hooks so they survive even if a hook errors.',
+  paste0('var DCE_DESIGN = ', design_json, ';'),
+  paste0('var DCE_LABELS = ', labels_json, ';'),
+  paste0('var DCE_ATTRS  = ', attrs_json, ';'),
   '',
-  '  // --- DESIGN MATRIX ---',
-  paste0('  var DESIGN = ', design_json, ';'),
-  '',
-  '  // --- LABEL LOOKUP (card_levels: shortened wording) ---',
-  paste0('  var LABELS = ', labels_json, ';'),
-  '',
-  '  // --- GET BLOCK AND TASK ---',
-  '  var block = "${e://Field/DCE_Block}";',
-  '  var taskNum = parseInt("${lm://Field/1}", 10);',
-  '  var taskIndex = taskNum - 1;',
-  '  var task = DESIGN[block][taskIndex];',
-  '',
-  '  // --- POPULATE TABLE ---',
-  paste0('  var attrs = ', attrs_json, ';'),
-  '  for (var i = 0; i < attrs.length; i++) {',
-  '    var a = attrs[i];',
-  '    document.getElementById("PA_" + a).innerHTML = LABELS[a][task.PA[a]];',
-  '    document.getElementById("PB_" + a).innerHTML = LABELS[a][task.PB[a]];',
-  '  }',
-  '',
-  sprintf('  // Cost attribute (%s)', cost_key),
-  sprintf('  document.getElementById("PA_%s").innerHTML = "\\u00a3" + task.PA.%s;', cost_key, cost_key),
-  sprintf('  document.getElementById("PB_%s").innerHTML = "\\u00a3" + task.PB.%s;', cost_key, cost_key),
-  '',
-  '  // --- STORE CHOICE SET ID ---',
-  '  Qualtrics.SurveyEngine.setEmbeddedData("task" + taskNum + "_cs", task.cs);',
-  '',
-  '  // --- COLUMN SELECTION LOGIC ---',
+  'Qualtrics.SurveyEngine.addOnload(function() {',
+  '  // ============================================================',
+  '  // PHASE 1 (addOnload): runs BEFORE the question paints.',
+  '  // The ONLY job here is to register window.dce_pick so that the',
+  '  // inline onclick="dce_pick(...)" handlers in the HTML resolve',
+  '  // immediately when the question paints. We deliberately do NOT',
+  '  // touch the DOM at this stage -- the question container exists',
+  '  // but our table HTML may not yet, and selecting/hiding things',
+  '  // before the table is rendered risks hiding wrappers that turn',
+  '  // out to also contain the table.',
+  '  // ============================================================',
   '  var qObj = this;',
   '',
-  '  // Hide the default Qualtrics answer choices (the table radio is the UI)',
-  '  var choiceContainer = document.getElementById("QR~" + qObj.questionId);',
-  '  if (choiceContainer) { choiceContainer.style.display = "none"; }',
-  '  var choiceList = document.querySelector("#" + qObj.questionId + " .ChoiceStructure");',
-  '  if (choiceList) { choiceList.style.display = "none"; }',
+  '  window.dce_pick = function(opt) {',
+  '    var choiceMap = {"A": 1, "B": 2, "SQ": 3};',
+  '    try { qObj.setChoiceValue(choiceMap[opt], true); }',
+  '    catch (e) { /* silent */ }',
+  '    if (typeof window.dce_apply_visual === "function") {',
+  '      try { window.dce_apply_visual(opt); } catch (e) { /* silent */ }',
+  '    }',
+  '    try {',
+  '      var tn = parseInt("${lm://Field/1}", 10);',
+  '      if (!isNaN(tn)) {',
+  '        Qualtrics.SurveyEngine.setEmbeddedData("task" + tn + "_choice", opt);',
+  '      }',
+  '    } catch (e) { /* silent */ }',
+  '  };',
+  '});',
   '',
-  '  // Restore visual state if the respondent navigates back',
-  '  function dce_apply_visual(opt) {',
+  'Qualtrics.SurveyEngine.addOnReady(function() {',
+  '  // ============================================================',
+  '  // PHASE 2 (addOnReady): the question DOM is mounted. Hide the',
+  '  // default radio list, populate the table, restore prior choice.',
+  '  // ============================================================',
+  '  var qObj = this;',
+  '',
+  '  // ---- 2A. Resolve the question container ----',
+  '  var qContainer =',
+  '    (typeof qObj.getQuestionContainer === "function" ? qObj.getQuestionContainer() : null) ||',
+  '    qObj.questionContainer ||',
+  '    document.getElementById(qObj.questionId) ||',
+  '    document.getElementById("Question_" + qObj.questionId);',
+  '',
+  '  // ---- 2B. Hide the default Qualtrics radio choices ----',
+  '  // PRINCIPLED APPROACH: walk UP from actual radio <input> elements to',
+  '  // find their containing <ul>/<ol>/<fieldset> and hide just that.',
+  '  // Our DCE table contains zero <input> elements, so any radio inputs',
+  '  // in the question container must belong to the default Qualtrics',
+  '  // choices -- there is no risk of hitting the table itself.',
+  '  if (qContainer) {',
+  '    var choiceInputs = qContainer.querySelectorAll(\'input[type="radio"], input[type="checkbox"]\');',
+  '    var hidden = [];',
+  '    for (var i = 0; i < choiceInputs.length; i++) {',
+  '      var el = choiceInputs[i];',
+  '      // Walk up until we find a list/fieldset wrapper, or a recognised',
+  '      // Qualtrics choice container class. Stop at qContainer.',
+  '      while (el && el !== qContainer) {',
+  '        var tag = el.tagName;',
+  '        if (tag === "UL" || tag === "OL" || tag === "FIELDSET") break;',
+  '        if (el.classList && (el.classList.contains("ChoiceStructure") ||',
+  '                             el.classList.contains("q-choice-list"))) break;',
+  '        el = el.parentElement;',
+  '      }',
+  '      if (el && el !== qContainer && hidden.indexOf(el) === -1) {',
+  '        el.style.display = "none";',
+  '        hidden.push(el);',
+  '      }',
+  '    }',
+  '  }',
+  '',
+  '  // ---- 2C. Visual-state helper ----',
+  '  window.dce_apply_visual = function(opt) {',
   '    document.querySelectorAll(".radio-circle").forEach(function(el) { el.classList.remove("checked"); });',
-  '    if (opt && document.getElementById("r" + opt)) document.getElementById("r" + opt).classList.add("checked");',
+  '    var dot = document.getElementById("r" + opt);',
+  '    if (dot) dot.classList.add("checked");',
   '    document.querySelectorAll(".cA").forEach(function(el) { el.classList.toggle("col-selected", opt === "A"); });',
   '    document.querySelectorAll(".cB").forEach(function(el) { el.classList.toggle("col-selected", opt === "B"); });',
   '    document.querySelectorAll(".cSQ").forEach(function(el) { el.classList.toggle("col-selected", opt === "SQ"); });',
   '    document.querySelectorAll(".col-header-a,.col-header-b,.col-header-sq").forEach(function(el) { el.classList.remove("selected"); });',
-  '    if (opt === "A")  document.getElementById("hA").classList.add("selected");',
-  '    if (opt === "B")  document.getElementById("hB").classList.add("selected");',
-  '    if (opt === "SQ") document.getElementById("hSQ").classList.add("selected");',
-  '  }',
-  '',
-  '  // Restore prior selection on back-navigation (read from current MC value)',
-  '  var sel = qObj.getSelectedChoices();',
-  '  if (sel && sel.length) {',
-  '    var rev = {1:"A", 2:"B", 3:"SQ"};',
-  '    dce_apply_visual(rev[sel[0]]);',
-  '  }',
-  '',
-  '  // dce_pick is called by onclick in the HTML',
-  '  window.dce_pick = function(opt) {',
-  '    dce_apply_visual(opt);',
-  '    var choiceMap = {"A": 1, "B": 2, "SQ": 3};',
-  '    qObj.setChoiceValue(choiceMap[opt], true);',
-  '    Qualtrics.SurveyEngine.setEmbeddedData("task" + taskNum + "_choice", opt);',
+  '    var hdr = document.getElementById("h" + opt);',
+  '    if (hdr) hdr.classList.add("selected");',
   '  };',
   '',
+  '  // ---- 2D. Populate the table from DESIGN data (defensive) ----',
+  '  try {',
+  '    var block   = "${e://Field/DCE_Block}";',
+  '    var taskNum = parseInt("${lm://Field/1}", 10);',
+  '    if (!block) throw new Error("DCE_Block embedded field is empty -- set it in survey flow.");',
+  '    if (isNaN(taskNum)) throw new Error("Loop & Merge field 1 not numeric -- check L&M setup.");',
+  '    var task = DCE_DESIGN[block] && DCE_DESIGN[block][taskNum - 1];',
+  '    if (!task) throw new Error("No task for block=" + block + " taskNum=" + taskNum);',
+  '',
+  '    for (var i = 0; i < DCE_ATTRS.length; i++) {',
+  '      var a = DCE_ATTRS[i];',
+  '      var pa = document.getElementById("PA_" + a);',
+  '      var pb = document.getElementById("PB_" + a);',
+  '      if (pa) pa.innerHTML = DCE_LABELS[a][task.PA[a]];',
+  '      if (pb) pb.innerHTML = DCE_LABELS[a][task.PB[a]];',
+  '    }',
+  sprintf('    var paCost = document.getElementById("PA_%s");', cost_key),
+  sprintf('    var pbCost = document.getElementById("PB_%s");', cost_key),
+  sprintf('    if (paCost) paCost.innerHTML = "\\u00a3" + task.PA.%s;', cost_key),
+  sprintf('    if (pbCost) pbCost.innerHTML = "\\u00a3" + task.PB.%s;', cost_key),
+  '',
+  '    Qualtrics.SurveyEngine.setEmbeddedData("task" + taskNum + "_cs", task.cs);',
+  '  } catch (e) {',
+  '    if (window.console && console.error) console.error("DCE table population failed:", e);',
+  '  }',
+  '',
+  '  // ---- 2E. Restore prior selection on back-navigation ----',
+  '  try {',
+  '    var sel = qObj.getSelectedChoices();',
+  '    if (sel && sel.length) {',
+  '      var rev = {1: "A", 2: "B", 3: "SQ"};',
+  '      window.dce_apply_visual(rev[sel[0]]);',
+  '    }',
+  '  } catch (e) { /* silent */ }',
   '});'
 )
 
@@ -966,9 +1023,168 @@ writeLines(enc2utf8(js_lines), file.path(OUTPUT_DIR, "qualtrics_javascript.txt")
 cat("Qualtrics JavaScript written.\n")
 
 
+# ==============================================================
+# PART 9: GENERATE SETUP GUIDE
+# ==============================================================
+
+guide <- c(
+  '# Qualtrics Setup Guide',
+  '',
+  '## Overview',
+  '',
+  sprintf('This experiment uses **%d choice sets** divided into **%d blocks** of **%d tasks** each.', N_SETS, N_BLOCKS, n_tasks),
+  'Each respondent is randomly assigned to one block and completes all tasks in that block.',
+  'Each task presents two designed programmes plus a fixed status quo option.',
+  '',
+  'Implementation uses **Loop & Merge**: you create one question template that repeats',
+  sprintf('%d times, with JavaScript dynamically populating the choice card each time.', n_tasks),
+  '',
+  '## Files in this folder',
+  '',
+  '| File | Purpose |',
+  '|------|---------|',
+  '| `config.R` | Attribute definitions, priors, and parameters -- **edit this to change the experiment** |',
+  '| `run.R` | Master script -- generates everything (do not edit) |',
+  '| `output/dce_design_full.csv` | Complete design with attribute labels |',
+  '| `output/dce_design_compact.csv` | Design with level numbers only (for analysis) |',
+  '| `output/qualtrics_choicecard.html` | HTML for the choice card question text |',
+  '| `output/qualtrics_javascript.txt` | JavaScript to paste into the question (open with a text editor, do NOT double-click) |',
+  '| `output/qualtrics_setup_guide.md` | This file |',
+  '| `output/design_diagnostics.txt` | Level balance and quality checks |',
+  '',
+  '## Step 1: Embedded Data',
+  '',
+  'In **Survey Flow**, add or update the **Embedded Data** element at the top with these fields (leave all values blank):',
+  '',
+  '- `DCE_Block`',
+  sprintf('- `task1_cs` through `task%d_cs`', n_tasks),
+  sprintf('- `task1_choice` through `task%d_choice`', n_tasks),
+  '',
+  '## Step 2: Block Randomisation',
+  '',
+  sprintf('Add a **Randomizer** in the Survey Flow (set to "Randomly present 1, Evenly Present"). Create %d branches:', N_BLOCKS),
+  ''
+)
+for (b in 1:N_BLOCKS) {
+  guide <- c(guide, sprintf('- Branch %d: Set Embedded Data `DCE_Block` = `%d`', b, b))
+}
+guide <- c(guide,
+  '',
+  'Place this randomiser **before** the choice experiment block but **after** consent.',
+  'It must be **independent** of any treatment randomisation.',
+  '',
+  '## Step 3: Set Up the Choice Experiment Block with Loop & Merge',
+  '',
+  '### 3a. Create the question',
+  '',
+  'In your ChoiceExperiment block, create **one** Multiple Choice question (single answer).',
+  '',
+  sprintf('Set **%d answer choices**:', length(CHOICE_LABELS)),
+  ''
+)
+for (i in seq_along(CHOICE_LABELS)) {
+  guide <- c(guide, sprintf('- %d: %s', i, CHOICE_LABELS[i]))
+}
+guide <- c(guide,
+  '',
+  '### 3b. Add the HTML',
+  '',
+  '1. Click on the question text area',
+  '2. Click the HTML source button (`<>`) in the Rich Content Editor',
+  '3. Delete everything in the editor',
+  '4. Open `output/qualtrics_choicecard.html` in a text editor and copy its contents',
+  '5. Paste into the Qualtrics HTML editor',
+  '6. Click the source button again to return to the visual editor -- you should see an empty table',
+  '',
+  '### 3c. Add the JavaScript',
+  '',
+  '1. Click the question gear icon (or three dots) -> **Add JavaScript**',
+  '2. **Delete** everything in the Qualtrics JavaScript editor (it has placeholder code)',
+  '3. Open `output/qualtrics_javascript.txt` in a **text editor** (Notepad, VS Code, etc.)',
+  '   - **Do NOT double-click the file** -- on Windows this tries to execute it and shows an error',
+  '4. Copy the entire contents and paste into the Qualtrics JavaScript editor',
+  '5. Click **Save**',
+  '',
+  '### 3d. Enable Loop & Merge',
+  '',
+  '1. Go to the **Block Editor** (not Survey Flow)',
+  '2. Click on the ChoiceExperiment block name or its options menu',
+  '3. Click **Loop & Merge**',
+  sprintf('4. Add **%d rows** with Field 1 set as follows:', n_tasks),
+  ''
+)
+for (t in 1:n_tasks) {
+  guide <- c(guide, sprintf('   | Loop %d | Field 1 = `%d` |', t, t))
+}
+guide <- c(guide,
+  '',
+  '5. Optionally tick **Randomize Loop Order** to shuffle task order across respondents',
+  '6. Click **Save**',
+  '',
+  '## Step 4: Verify',
+  '',
+  sprintf('- [ ] Preview the survey and complete all %d tasks', n_tasks),
+  sprintf('- [ ] Test with `DCE_Block` manually set to each value (1..%d) to confirm different choice sets appear', N_BLOCKS),
+  '- [ ] After a test run, export the data and check that:',
+  sprintf('  - `task1_cs` through `task%d_cs` contain choice set IDs (numbers)', n_tasks),
+  sprintf('  - `task1_choice` through `task%d_choice` contain A, B, or SQ', n_tasks),
+  '- [ ] Test on mobile -- the table may need font size adjustment for narrow screens',
+  '',
+  '## Updating the Experiment',
+  '',
+  'If you change attributes, levels, priors, or design parameters:',
+  '',
+  '1. Edit `config.R`',
+  '2. Run `Rscript run.R`',
+  '3. In Qualtrics, replace the question HTML with the new `qualtrics_choicecard.html`',
+  '4. Replace the JavaScript with the new `qualtrics_javascript.txt`',
+  '5. If the number of tasks per block changed, update the Loop & Merge rows accordingly',
+  '',
+  '## Data Analysis',
+  '',
+  'After exporting from Qualtrics, merge with `dce_design_compact.csv`:',
+  '',
+  '```r',
+  'library(tidyverse)',
+  '',
+  'design <- read_csv("output/dce_design_compact.csv")',
+  'survey <- read_csv("qualtrics_export.csv")',
+  '',
+  '# Reshape: one row per respondent x task',
+  'long <- survey %>%',
+  '  pivot_longer(',
+  '    cols = matches("task[0-9]+_cs"),',
+  '    names_to = "task", names_pattern = "task(\\\\d+)_cs",',
+  '    values_to = "choice_set"',
+  '  ) %>%',
+  '  left_join(',
+  '    survey %>% pivot_longer(',
+  '      cols = matches("task[0-9]+_choice"),',
+  '      names_to = "task", names_pattern = "task(\\\\d+)_choice",',
+  '      values_to = "choice"',
+  '    ) %>% select(ResponseId, task, choice),',
+  '    by = c("ResponseId", "task")',
+  '  )',
+  '',
+  '# Merge with design matrix',
+  'analysis <- long %>%',
+  '  left_join(design, by = c("choice_set", "DCE_Block" = "block")) %>%',
+  '  mutate(chosen = case_when(',
+  '    choice == "A"  & alternative == "Program_A"  ~ 1,',
+  '    choice == "B"  & alternative == "Program_B"  ~ 1,',
+  '    choice == "SQ" & alternative == "Status_Quo" ~ 1,',
+  '    TRUE ~ 0',
+  '  ))',
+  '```',
+  ''
+)
+
+writeLines(enc2utf8(guide), file.path(OUTPUT_DIR, "qualtrics_setup_guide.md"), useBytes = TRUE)
+cat("Setup guide written.\n")
+
 
 # ==============================================================
-# PART 9: DIAGNOSTICS
+# PART 10: DIAGNOSTICS
 # ==============================================================
 
 diag_lines <- c(
@@ -1114,5 +1330,6 @@ cat("  dce_design_full.csv        -- full design with labels\n")
 cat("  dce_design_compact.csv     -- level numbers for analysis\n")
 cat("  qualtrics_choicecard.html  -- HTML for question text\n")
 cat("  qualtrics_javascript.txt   -- JS to paste into question\n")
+cat("  qualtrics_setup_guide.md   -- step-by-step instructions\n")
 cat("  design_diagnostics.txt     -- balance & quality checks\n")
 cat("============================================================\n\n")

@@ -41,16 +41,18 @@ ATTRIBUTES <- list(
     concept   = "Excludability",
     card_label = "Who is protected?",
     levels    = c(
+      "Only properties in higher-risk and higher-deprivation areas  are protected",
       "All properties in England are protected, regardless of flood risk level",
       "Only properties in high- and medium-risk areas are protected",
       "Only properties that opt in receive individual protection (e.g. flood barriers, flood doors)"
     ),
     card_levels = c(
+      "Only properties in higher-risk and higher-deprivation areas",
       "All properties, regardless of flood risk",
       "Only properties in high- or medium-risk areas",
       "Only properties that opt in receive individual protection"
     ),
-    sq        = 2,
+    sq        = 1,
     ab_only   = NULL   # all levels appear in A/B
   ),
 
@@ -162,7 +164,7 @@ N_DRAWS    <- 20
 # --- Cost coding scale ---
 # Cost values are divided by COST_SCALE before entering the design matrix.
 # With COST_SCALE = 100, the cost coefficient (PRIOR_MEAN[N_PAR]) is interpreted
-# as marginal utility per \u00a3100. Change this only if you also adjust the cost prior.
+# as marginal utility per £100. Change this only if you also adjust the cost prior.
 COST_SCALE <- 100
 
 
@@ -193,18 +195,18 @@ COST_SCALE <- 100
 # After running a pilot, replace these with estimated values.
 
 PRIOR_MEAN <- c(
-  0.2,            # ASC_SQ: mild status quo bias (now also absorbs A5=L1 effect)
-  0, 0,           # A1: no prior (2 cols, 3 A/B levels)
+  0.2,            # ASC_SQ: mild status quo bias
+  0, 0, 0,        # A1: no prior (3 cols, 4 A/B levels)
   0, 0,           # A2: no prior (2 cols, 3 A/B levels)
   0, 0, 0,        # A3: no prior (3 cols, 4 A/B levels)
   0,              # A4: no prior (1 col, 2 A/B levels)
   -0.45,          # A5: 1 col contrasting L2 vs L3 (negative = L2 < L3)
-  -0.8            # A6: cost per \u00a3100 (negative = dislike)
+  -0.8            # A6: cost per £100 (negative = dislike)
 )
 
 PRIOR_SD <- c(
   0.3,            # ASC_SQ
-  rep(0.4, 2),    # A1
+  rep(0.4, 3),    # A1
   rep(0.4, 2),    # A2
   rep(0.4, 3),    # A3
   0.4,            # A4
