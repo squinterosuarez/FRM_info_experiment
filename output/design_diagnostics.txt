@@ -1,16 +1,16 @@
 ============================================================
   DCE DESIGN DIAGNOSTICS
-  Generated: 2026-05-05 20:00:41.869644
+  Generated: 2026-05-27 11:18:18.98917
 ============================================================
 
-Design space:    768 candidate profiles
-Choice sets:     32
-Blocks:          4 (8 tasks each)
-Parameters:      12
+Design space:    288 candidate profiles
+Choice sets:     24
+Blocks:          4 (6 tasks each)
+Parameters:      11
 Objective:       Bayesian D-error over 20 prior draws
-D-error (best):  0.2571
-Level imbalance: 0.03
-Info-matrix rank: 12 / 12
+D-error (best):  0.3828
+Level imbalance: 0.00
+Info-matrix rank: 11 / 11
 Cost scale:      100 (cost coef interpreted per cost-scale units)
 Seed:            2026
 
@@ -19,93 +19,82 @@ Seed:            2026
   [ 2] A1_excludability_L1_vs_L4      prior mean=  0.00, sd=0.40
   [ 3] A1_excludability_L2_vs_L4      prior mean=  0.00, sd=0.40
   [ 4] A1_excludability_L3_vs_L4      prior mean=  0.00, sd=0.40
-  [ 5] A2_financing_L1_vs_L3          prior mean=  0.00, sd=0.40
-  [ 6] A2_financing_L2_vs_L3          prior mean=  0.00, sd=0.40
-  [ 7] A3_contribution_L1_vs_L4       prior mean=  0.00, sd=0.40
-  [ 8] A3_contribution_L2_vs_L4       prior mean=  0.00, sd=0.40
-  [ 9] A3_contribution_L3_vs_L4       prior mean=  0.00, sd=0.40
-  [10] A4_polluter_L1_vs_L2           prior mean=  0.00, sd=0.40
-  [11] A5_effectiveness_L2_vs_L3      prior mean= -0.45, sd=0.30
-  [12] A6_cost (per 100)              prior mean= -0.80, sd=0.40
+  [ 5] A2_funding_mechanism_L1_vs_L4  prior mean=  0.00, sd=0.40
+  [ 6] A2_funding_mechanism_L2_vs_L4  prior mean=  0.00, sd=0.40
+  [ 7] A2_funding_mechanism_L3_vs_L4  prior mean=  0.00, sd=0.40
+  [ 8] A3_distributional_fairness_L1_vs_L3 prior mean=  0.00, sd=0.40
+  [ 9] A3_distributional_fairness_L2_vs_L3 prior mean=  0.00, sd=0.40
+  [10] A4_effectiveness_L1_vs_L3      prior mean=  0.45, sd=0.30
+  [11] A5_cost (per 100)              prior mean= -0.80, sd=0.40
 
 --- Level balance (A/B alternatives only) ---
 
-A1 (Excludability):
-  Level 1: n=16 (25.0%)  Only properties in higher-risk and higher-deprivat...
-  Level 2: n=16 (25.0%)  All properties in England are protected, regardles...
-  Level 3: n=16 (25.0%)  Only properties in high- and medium-risk areas are...
-  Level 4: n=16 (25.0%)  Only properties that opt in receive individual pro...
+A1 (Excludability (who is protected by the programme)):
+  Level 1: n=12 (25.0%)  Households in any areas of England at any level of...
+  Level 2: n=12 (25.0%)  Only households in high-risk areas
+  Level 3: n=12 (25.0%)  Only households in high-risk areas, priority for d...
+  Level 4: n=12 (25.0%)  Only households that opt in to receive protection
 
-A2 (Financing mechanism):
-  Level 1: n=22 (34.4%)  Fully funded through national taxation and council...
-  Level 2: n=21 (32.8%)  Co-funded: partly through national taxation, with ...
-  Level 3: n=21 (32.8%)  Fully funded through an additional levy on council...
+A2 (Funding mechanism (who pays)):
+  Level 1: n=12 (25.0%)  Taxpayers across England
+  Level 2: n=12 (25.0%)  All households in local council area(s) where the ...
+  Level 3: n=12 (25.0%)  National government, sometimes with local contribu...
+  Level 4: n=12 (25.0%)  Only the households that receive flood protection
 
-A3 (Contribution basis):
-  Level 1: n=16 (25.0%)  Flat contribution - every household pays the same
-  Level 2: n=16 (25.0%)  Wealth-based — wealthier households pay more
-  Level 3: n=16 (25.0%)  Risk-based — households in higher-risk areas pay m...
-  Level 4: n=16 (25.0%)  Based on both wealth and flood risk
+A3 (Distributional fairness (how each household's payment is calculated)):
+  Level 1: n=16 (33.3%)  Same amount for each paying household
+  Level 2: n=16 (33.3%)  Higher-income or higher-council-tax-band household...
+  Level 3: n=16 (33.3%)  Households at higher flood risk pay more, independ...
 
-A4 (Polluter-pays principle):
-  Level 1: n=32 (50.0%)  No polluter surcharge
-  Level 2: n=32 (50.0%)  Firms with high greenhouse-gas emissions pay an ad...
+A4 (Effectiveness of the measure):
+  Level 1: n=24 (50.0%)  Risk reduced to minimum level (very low)
+  Level 3: n=24 (50.0%)  Small flood risk reduction, risk category unchange...
 
-A5 (Effectiveness):
-  Level 2: n=32 (50.0%)  Every property moves to at least one lower risk ca...
-  Level 3: n=32 (50.0%)  Every property reaches low or very low risk
-
-A6 (Cost):
-  Level 2: n=16 (25.0%)  £25
-  Level 3: n=16 (25.0%)  £75
-  Level 4: n=16 (25.0%)  £150
-  Level 5: n=16 (25.0%)  £300
+A5 (Additional cost to your household per year):
+  Level 2: n=16 (33.3%)  £75
+  Level 3: n=16 (33.3%)  £150
+  Level 4: n=16 (33.3%)  £300
 
 --- Level balance by block ---
 
-Block 1 (8 choice sets):
-  A1: L1=6, L2=3, L3=3, L4=4
-  A2: L1=3, L2=7, L3=6
-  A3: L1=4, L2=4, L3=4, L4=4
-  A4: L1=8, L2=8
-  A5: L2=8, L3=8
-  A6: L2=3, L3=5, L4=3, L5=5
+Block 1 (6 choice sets):
+  A1: L1=4, L2=2, L3=2, L4=4
+  A2: L1=3, L2=3, L3=4, L4=2
+  A3: L1=3, L2=5, L3=4
+  A4: L1=5, L3=7
+  A5: L2=4, L3=4, L4=4
 
-Block 2 (8 choice sets):
-  A1: L1=5, L2=5, L3=4, L4=2
-  A2: L1=6, L2=4, L3=6
-  A3: L1=2, L2=7, L3=3, L4=4
-  A4: L1=9, L2=7
-  A5: L2=7, L3=9
-  A6: L2=4, L3=3, L4=6, L5=3
+Block 2 (6 choice sets):
+  A1: L1=4, L2=3, L3=3, L4=2
+  A2: L1=4, L2=2, L3=4, L4=2
+  A3: L1=4, L2=4, L3=4
+  A4: L1=7, L3=5
+  A5: L2=5, L3=5, L4=2
 
-Block 3 (8 choice sets):
-  A1: L1=3, L2=4, L3=5, L4=4
-  A2: L1=6, L2=4, L3=6
-  A3: L1=5, L2=3, L3=4, L4=4
-  A4: L1=8, L2=8
-  A5: L2=8, L3=8
-  A6: L2=5, L3=5, L4=3, L5=3
+Block 3 (6 choice sets):
+  A1: L1=2, L2=4, L3=3, L4=3
+  A2: L1=3, L2=2, L3=3, L4=4
+  A3: L1=6, L2=2, L3=4
+  A4: L1=6, L3=6
+  A5: L2=3, L3=4, L4=5
 
-Block 4 (8 choice sets):
-  A1: L1=2, L2=4, L3=4, L4=6
-  A2: L1=7, L2=6, L3=3
-  A3: L1=5, L2=2, L3=5, L4=4
-  A4: L1=7, L2=9
-  A5: L2=9, L3=7
-  A6: L2=4, L3=3, L4=4, L5=5
+Block 4 (6 choice sets):
+  A1: L1=2, L2=3, L3=4, L4=3
+  A2: L1=2, L2=5, L3=1, L4=4
+  A3: L1=3, L2=5, L3=4
+  A4: L1=6, L3=6
+  A5: L2=4, L3=3, L4=5
 
 --- Dominance and equality checks ---
   None found.
 
 --- Attribute differences (A vs B) ---
-  Min: 1  Max: 6  Mean: 4.1
-  Distribution: 1-diff=1, 2-diff=1, 3-diff=7, 4-diff=11, 5-diff=10, 6-diff=2
+  Min: 2  Max: 5  Mean: 3.6
+  Distribution: 2-diff=3, 3-diff=7, 4-diff=11, 5-diff=3
 
 --- Attribute overlap rate (A and B share level) ---
-  A1: 5/32 (16%)
-  A2: 6/32 (19%)
-  A3: 5/32 (16%)
-  A4: 20/32 (62%)
-  A5: 16/32 (50%)
-  A6: 10/32 (31%)
+  A1: 4/24 (17%)
+  A2: 3/24 (12%)
+  A3: 10/24 (42%)
+  A4: 10/24 (42%)
+  A5: 7/24 (29%)

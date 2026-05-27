@@ -29,115 +29,96 @@
 #   is_cost     = TRUE
 #
 # IMPORTANT: the last attribute must be the cost attribute.
-#
-# To change the experiment, edit the levels and labels below.
-# Then run: Rscript run.R
 # --------------------------------------------------------------
 
 ATTRIBUTES <- list(
 
   A1 = list(
     name      = "A1_excludability",
-    concept   = "Excludability",
-    card_label = "Who is protected?",
+    concept   = "Excludability (who is protected by the programme)",
+    card_label = "Who is protected by the programme?",
     levels    = c(
-      "Only properties in higher-risk and higher-deprivation areas  are protected",
-      "All properties in England are protected, regardless of flood risk level",
-      "Only properties in high- and medium-risk areas are protected",
-      "Only properties that opt in receive individual protection (e.g. flood barriers, flood doors)"
+      "Households in any areas of England at any level of risk",
+      "Only households in high-risk areas",
+      "Only households in high-risk areas, priority for deprived communities",
+      "Only households that opt in to receive protection"
     ),
     card_levels = c(
-      "Only properties in higher-risk and higher-deprivation areas",
-      "All properties, regardless of flood risk",
-      "Only properties in high- or medium-risk areas",
-      "Only properties that opt in receive individual protection"
+      "Households in any areas of England at any level of risk",
+      "Only households in high-risk areas",
+      "Only households in high-risk areas, priority for deprived communities",
+      "Only households that opt in to receive protection"
     ),
-    sq        = 1,
-    ab_only   = NULL   # all levels appear in A/B
+    sq        = 3,
+    ab_only   = NULL   # all four levels appear in A/B
   ),
 
   A2 = list(
-    name      = "A2_financing",
-    concept   = "Financing mechanism",
-    card_label = "Where should the money come from?",
+    name      = "A2_funding_mechanism",
+    concept   = "Funding mechanism (who pays)",
+    card_label = "Who pays?",
     levels    = c(
-      "Fully funded through national taxation and council tax \u2014 all taxpayers contribute",
-      "Co-funded: partly through national taxation, with an additional levy on council tax in areas that benefit",
-      "Fully funded through an additional levy on council tax in areas that benefit \u2014 no national tax funding"
+      "Taxpayers across England",
+      "All households in local council area(s) where the scheme is built",
+      "National government, sometimes with local contributions from councils, businesses and/or developers",
+      "Only the households that receive flood protection"
     ),
     card_levels = c(
-      "Through national taxation and council tax, shared across all taxpayers",
-      "Partly through national taxation, and a new dedicated council tax levy",
-      "Entirely through an additional local council tax levy in areas that benefit"
+      "Taxpayers across England",
+      "All households in the local council area(s) where the scheme is built",
+      "National government, sometimes with local contributions from councils, businesses, developers",
+      "Only the households that receive protection"
     ),
-    sq        = 1,
+    sq        = 3,
     ab_only   = NULL
   ),
 
   A3 = list(
-    name      = "A3_contribution",
-    concept   = "Contribution basis",
-    card_label = "How is each household's contribution calculated?",
+    name      = "A3_distributional_fairness",
+    concept   = "Distributional fairness (how each household's payment is calculated)",
+    card_label = "How are payments calculated?",
     levels    = c(
-      "Flat contribution - every household pays the same",
-      "Wealth-based \u2014 wealthier households pay more",
-      "Risk-based \u2014 households in higher-risk areas pay more",
-      "Based on both wealth and flood risk"
+      "Same amount for each paying household",
+      "Higher-income or higher-council-tax-band households pay more, independent of risk",
+      "Households at higher flood risk pay more, independent of wealth"
     ),
     card_levels = c(
-      "Flat \u2014 every household pays the same",
-      "Wealth-based \u2014 wealthier households pay more",
-      "Risk-based \u2014 households in higher-risk areas pay more",
-      "Based on both wealth and flood risk"
+      "Same amount for each paying household",
+      "Higher-income or higher-council-tax-band households pay more",
+      "Households at higher flood risk pay more"
     ),
-    sq        = 4,
+    sq        = 2,
     ab_only   = NULL
   ),
 
   A4 = list(
-    name      = "A4_polluter",
-    concept   = "Polluter-pays principle",
-    card_label = "Do polluters pay extra?",
+    name      = "A4_effectiveness",
+    concept   = "Effectiveness of the measure",
+    card_label = "How effective is the programme?",
     levels    = c(
-      "No polluter surcharge",
-      "Firms with high greenhouse-gas emissions pay an additional surcharge"
+      "Risk reduced to minimum level (very low)",
+      "Risk reduced by one category (e.g. high to medium)",
+      "Small flood risk reduction, risk category unchanged"
     ),
     card_levels = c(
-      "No polluter surcharge",
-      "Yes \u2014 firms with high greenhouse-gas emissions pay a surcharge"
+      "Risk reduced to minimum level (very low)",
+      "Risk reduced by one category (e.g. high to medium)",
+      "Small flood risk reduction, risk category unchanged"
     ),
-    sq        = 1,
-    ab_only   = NULL
+    sq        = 2,
+    ab_only   = c(1, 3)   # level 2 (one-category reduction) is SQ-only
   ),
 
   A5 = list(
-    name      = "A5_effectiveness",
-    concept   = "Effectiveness",
-    card_label = "How effective is the programme?",
-    levels    = c(
-      "Current protection maintained \u2014 flood risk stays the same as today",
-      "Every property moves to at least one lower risk category",
-      "Every property reaches low or very low risk"
-    ),
-    card_levels = c(
-      "No change \u2014 flood risk stays the same as today",
-      "Every property moves to at least one lower risk category",
-      "Every property reaches low or very low risk"
-    ),
-    sq        = 1,
-    ab_only   = c(2, 3)   # level 1 is SQ-only
-  ),
-
-  A6 = list(
-    name        = "A6_cost",
-    concept     = "Cost",
+    name        = "A5_cost",
+    concept     = "Additional cost to your household per year",
     card_label  = "Additional cost to your household per year",
-    levels      = c("\u00a30", "\u00a325", "\u00a375", "\u00a3150", "\u00a3300"),
-    card_levels = c("\u00a30", "\u00a325", "\u00a375", "\u00a3150", "\u00a3300"),
-    cost_values = c(0, 25, 75, 150, 300),
+    levels      = c("\u00a30", "\u00a375", "\u00a3150", "\u00a3300"),
+    card_levels = c("\u00a30", "\u00a375", "\u00a3150", "\u00a3300"),
+    cost_values = c(0, 75, 150, 300),
     is_cost     = TRUE,
     sq          = 1,
-    ab_only     = c(2, 3, 4, 5)   # \u00a30 is SQ-only
+    ab_only     = c(2, 3, 4)   # \u00a30 is SQ-only
   )
 )
 
@@ -146,25 +127,21 @@ ATTRIBUTES <- list(
 # 2. DESIGN PARAMETERS
 # --------------------------------------------------------------
 
-N_SETS     <- 32     # total choice sets (must be divisible by N_BLOCKS)
+N_SETS     <- 24     # total choice sets (must be divisible by N_BLOCKS)
 N_BLOCKS   <- 4      # number of blocks (respondents see N_SETS/N_BLOCKS tasks)
-N_STARTS   <- 20     # random starts for exchange algorithm (more = slower but better)
+                     # 24 / 4 = 6 tasks per respondent
+N_STARTS   <- 20     # random starts for exchange algorithm
 MAX_ITER   <- 100    # max iterations per start
-LAMBDA     <- 0.15   # balance penalty weight (higher = more balanced, less D-efficient)
+LAMBDA     <- 0.15   # balance penalty weight
 SEED       <- 2026   # random seed for reproducibility
 
 # --- Bayesian D-efficiency ---
-# N_DRAWS = number of pseudo-MC draws from the prior used to compute the
-# expected D-error. Set to 1 to recover local D-efficiency at PRIOR_MEAN.
-# Larger = more accurate Bayesian objective but longer runtime (cost grows
-# linearly in N_DRAWS).
-# Typical values: 6 (fast), 20 (default), 50+ (rigorous).
 N_DRAWS    <- 20
 
 # --- Cost coding scale ---
 # Cost values are divided by COST_SCALE before entering the design matrix.
-# With COST_SCALE = 100, the cost coefficient (PRIOR_MEAN[N_PAR]) is interpreted
-# as marginal utility per £100. Change this only if you also adjust the cost prior.
+# With COST_SCALE = 100, the cost coefficient is interpreted as marginal
+# utility per £100.
 COST_SCALE <- 100
 
 
@@ -172,46 +149,41 @@ COST_SCALE <- 100
 # 3. PRIORS
 # --------------------------------------------------------------
 #
-# You must specify prior means and SDs for each parameter.
-# The parameter order is:
+# Parameter order:
 #   1. ASC_SQ (alternative-specific constant for status quo)
-#   2. Effects-coded columns for each non-cost attribute, in order
-#      (each attribute contributes K_ab - 1 columns where K_ab is the number
-#       of levels appearing in the A/B alternatives; the last A/B-level is
-#       the reference = -1 on all columns)
-#   3. Cost as a continuous variable (per COST_SCALE units, default \u00a3100)
+#   2. Effects-coded columns for each non-cost attribute, in order:
+#        A1 excludability:               4 A/B levels -> 3 columns
+#        A2 funding mechanism:           4 A/B levels -> 3 columns
+#        A3 distributional fairness:     3 A/B levels -> 2 columns
+#        A4 effectiveness:               2 A/B levels (SQ is L2, outside ab_only) -> 1 column
+#      Non-cost coefficients: 9
+#   3. Cost as a continuous variable (per COST_SCALE units, default £100)
 #
-# IDENTIFICATION NOTE: when an attribute has `ab_only` set and SQ is at a
-# level *outside* `ab_only`, that level's effect is absorbed into ASC_SQ and
-# the attribute contributes only K_ab - 1 parameters (not K_full - 1).
-# In this config that affects A5 (1 param instead of 2) and explains the
-# total of 11 parameters below.
+# Total parameters: 1 (ASC) + 9 (attributes) + 1 (cost) = 11
 #
-# PRIOR_MEAN: best guess of each coefficient (use 0 for no directional belief).
-# PRIOR_SD:   uncertainty around that guess.
-#             - Set all to 0 to use local D-efficiency only.
-#             - Non-zero values trigger Bayesian D-efficiency over N_DRAWS draws.
-#
-# After running a pilot, replace these with estimated values.
+# NOTE on the A4 effectiveness sign: ab_only = c(1, 3) means the A/B
+# variation is between L1 (very low, most effective) and L3 (small
+# reduction, least effective). With L3 as the reference (-1 in effects
+# coding) and L1 as +1, a POSITIVE coefficient encodes "prefer L1 over
+# L3" = preference for more effective. This flips the sign convention
+# from the previous version, where L2/L3 contrast had a negative prior.
 
 PRIOR_MEAN <- c(
   0.2,            # ASC_SQ: mild status quo bias
-  0, 0, 0,        # A1: no prior (3 cols, 4 A/B levels)
-  0, 0,           # A2: no prior (2 cols, 3 A/B levels)
-  0, 0, 0,        # A3: no prior (3 cols, 4 A/B levels)
-  0,              # A4: no prior (1 col, 2 A/B levels)
-  -0.45,          # A5: 1 col contrasting L2 vs L3 (negative = L2 < L3)
-  -0.8            # A6: cost per £100 (negative = dislike)
+  0, 0, 0,        # A1 excludability: no prior (3 cols)
+  0, 0, 0,        # A2 funding mechanism: no prior (3 cols)
+  0, 0,           # A3 distributional fairness: no prior (2 cols)
+  0.45,           # A4 effectiveness: L1 vs L3 (positive = prefer more effective)
+  -0.8            # A5 cost: per £100 (negative = dislike higher cost)
 )
 
 PRIOR_SD <- c(
   0.3,            # ASC_SQ
-  rep(0.4, 3),    # A1
-  rep(0.4, 2),    # A2
-  rep(0.4, 3),    # A3
-  0.4,            # A4
-  0.3,            # A5 (one parameter)
-  0.4             # A6
+  rep(0.4, 3),    # A1 excludability
+  rep(0.4, 3),    # A2 funding mechanism
+  rep(0.4, 2),    # A3 distributional fairness
+  0.3,            # A4 effectiveness
+  0.4             # A5 cost
 )
 
 

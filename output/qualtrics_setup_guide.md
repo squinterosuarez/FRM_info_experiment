@@ -2,12 +2,12 @@
 
 ## Overview
 
-This experiment uses **32 choice sets** divided into **4 blocks** of **8 tasks** each.
+This experiment uses **24 choice sets** divided into **4 blocks** of **6 tasks** each.
 Each respondent is randomly assigned to one block and completes all tasks in that block.
 Each task presents two designed programmes plus a fixed status quo option.
 
 Implementation uses **Loop & Merge**: you create one question template that repeats
-8 times, with JavaScript dynamically populating the choice card each time.
+6 times, with JavaScript dynamically populating the choice card each time.
 
 ## Files in this folder
 
@@ -27,8 +27,8 @@ Implementation uses **Loop & Merge**: you create one question template that repe
 In **Survey Flow**, add or update the **Embedded Data** element at the top with these fields (leave all values blank):
 
 - `DCE_Block`
-- `task1_cs` through `task8_cs`
-- `task1_choice` through `task8_choice`
+- `task1_cs` through `task6_cs`
+- `task1_choice` through `task6_choice`
 
 ## Step 2: Block Randomisation
 
@@ -77,7 +77,7 @@ Set **3 answer choices**:
 1. Go to the **Block Editor** (not Survey Flow)
 2. Click on the ChoiceExperiment block name or its options menu
 3. Click **Loop & Merge**
-4. Add **8 rows** with Field 1 set as follows:
+4. Add **6 rows** with Field 1 set as follows:
 
    | Loop 1 | Field 1 = `1` |
    | Loop 2 | Field 1 = `2` |
@@ -85,19 +85,17 @@ Set **3 answer choices**:
    | Loop 4 | Field 1 = `4` |
    | Loop 5 | Field 1 = `5` |
    | Loop 6 | Field 1 = `6` |
-   | Loop 7 | Field 1 = `7` |
-   | Loop 8 | Field 1 = `8` |
 
 5. Optionally tick **Randomize Loop Order** to shuffle task order across respondents
 6. Click **Save**
 
 ## Step 4: Verify
 
-- [ ] Preview the survey and complete all 8 tasks
+- [ ] Preview the survey and complete all 6 tasks
 - [ ] Test with `DCE_Block` manually set to each value (1..4) to confirm different choice sets appear
 - [ ] After a test run, export the data and check that:
-  - `task1_cs` through `task8_cs` contain choice set IDs (numbers)
-  - `task1_choice` through `task8_choice` contain A, B, or SQ
+  - `task1_cs` through `task6_cs` contain choice set IDs (numbers)
+  - `task1_choice` through `task6_choice` contain A, B, or SQ
 - [ ] Test on mobile -- the table may need font size adjustment for narrow screens
 
 ## Updating the Experiment

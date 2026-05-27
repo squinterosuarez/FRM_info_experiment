@@ -12,7 +12,7 @@
 // 3. Set answer choices: Programme A / Programme B / Current System (No Change)
 // 4. Click the question gear > Add JavaScript
 // 5. Delete the default content, then paste EVERYTHING below.
-// 6. Enable Loop & Merge on the block (8 rows, Field 1 = 1..8).
+// 6. Enable Loop & Merge on the block (6 rows, Field 1 = 1..6).
 // 7. See qualtrics_setup_guide.md for full instructions.
 // ==============================================================
 
@@ -21,41 +21,88 @@
 var DCE_DESIGN = {
   "1": [
     {
-      "cs": 4,
+      "cs": 1,
       "PA": {
-        "A1": 4,
+        "A1": 2,
         "A2": 3,
-        "A3": 1,
-        "A4": 2,
-        "A5": 3,
-        "A6": 300
+        "A3": 3,
+        "A4": 3,
+        "A5": 150
       },
       "PB": {
-        "A1": 3,
-        "A2": 2,
-        "A3": 2,
-        "A4": 2,
-        "A5": 2,
-        "A6": 75
+        "A1": 1,
+        "A2": 1,
+        "A3": 3,
+        "A4": 1,
+        "A5": 150
       }
     },
     {
-      "cs": 15,
+      "cs": 7,
       "PA": {
-        "A1": 1,
+        "A1": 4,
         "A2": 2,
         "A3": 2,
-        "A4": 2,
-        "A5": 2,
-        "A6": 300
+        "A4": 3,
+        "A5": 300
+      },
+      "PB": {
+        "A1": 2,
+        "A2": 4,
+        "A3": 2,
+        "A4": 1,
+        "A5": 75
+      }
+    },
+    {
+      "cs": 11,
+      "PA": {
+        "A1": 4,
+        "A2": 3,
+        "A3": 2,
+        "A4": 3,
+        "A5": 300
       },
       "PB": {
         "A1": 4,
         "A2": 1,
+        "A3": 2,
+        "A4": 3,
+        "A5": 150
+      }
+    },
+    {
+      "cs": 12,
+      "PA": {
+        "A1": 3,
+        "A2": 1,
+        "A3": 3,
+        "A4": 1,
+        "A5": 300
+      },
+      "PB": {
+        "A1": 1,
+        "A2": 3,
+        "A3": 3,
+        "A4": 1,
+        "A5": 75
+      }
+    },
+    {
+      "cs": 18,
+      "PA": {
+        "A1": 1,
+        "A2": 2,
+        "A3": 2,
+        "A4": 3,
+        "A5": 300
+      },
+      "PB": {
+        "A1": 3,
+        "A2": 4,
         "A3": 1,
-        "A4": 2,
-        "A5": 3,
-        "A6": 75
+        "A4": 1,
+        "A5": 150
       }
     },
     {
@@ -63,113 +110,16 @@ var DCE_DESIGN = {
       "PA": {
         "A1": 1,
         "A2": 3,
-        "A3": 4,
-        "A4": 1,
-        "A5": 2,
-        "A6": 150
-      },
-      "PB": {
-        "A1": 1,
-        "A2": 3,
-        "A3": 3,
-        "A4": 1,
-        "A5": 3,
-        "A6": 300
-      }
-    },
-    {
-      "cs": 23,
-      "PA": {
-        "A1": 4,
-        "A2": 3,
-        "A3": 2,
-        "A4": 1,
-        "A5": 2,
-        "A6": 25
-      },
-      "PB": {
-        "A1": 1,
-        "A2": 3,
-        "A3": 3,
-        "A4": 2,
-        "A5": 2,
-        "A6": 75
-      }
-    },
-    {
-      "cs": 25,
-      "PA": {
-        "A1": 2,
-        "A2": 2,
-        "A3": 3,
-        "A4": 2,
-        "A5": 3,
-        "A6": 150
+        "A3": 1,
+        "A4": 3,
+        "A5": 75
       },
       "PB": {
         "A1": 4,
         "A2": 2,
-        "A3": 4,
-        "A4": 1,
-        "A5": 2,
-        "A6": 150
-      }
-    },
-    {
-      "cs": 26,
-      "PA": {
-        "A1": 1,
-        "A2": 2,
-        "A3": 2,
-        "A4": 1,
-        "A5": 3,
-        "A6": 25
-      },
-      "PB": {
-        "A1": 3,
-        "A2": 2,
         "A3": 1,
-        "A4": 1,
-        "A5": 3,
-        "A6": 300
-      }
-    },
-    {
-      "cs": 27,
-      "PA": {
-        "A1": 3,
-        "A2": 1,
-        "A3": 3,
-        "A4": 1,
-        "A5": 3,
-        "A6": 75
-      },
-      "PB": {
-        "A1": 2,
-        "A2": 2,
-        "A3": 4,
-        "A4": 1,
-        "A5": 2,
-        "A6": 25
-      }
-    },
-    {
-      "cs": 32,
-      "PA": {
-        "A1": 1,
-        "A2": 1,
-        "A3": 1,
-        "A4": 2,
-        "A5": 3,
-        "A6": 300
-      },
-      "PB": {
-        "A1": 2,
-        "A2": 3,
-        "A3": 4,
-        "A4": 2,
-        "A5": 2,
-        "A6": 75
+        "A4": 3,
+        "A5": 75
       }
     }
   ],
@@ -177,493 +127,339 @@ var DCE_DESIGN = {
     {
       "cs": 5,
       "PA": {
-        "A1": 4,
-        "A2": 2,
-        "A3": 4,
-        "A4": 2,
-        "A5": 3,
-        "A6": 75
-      },
-      "PB": {
-        "A1": 3,
-        "A2": 2,
-        "A3": 1,
-        "A4": 2,
-        "A5": 3,
-        "A6": 150
-      }
-    },
-    {
-      "cs": 7,
-      "PA": {
-        "A1": 1,
-        "A2": 1,
-        "A3": 2,
-        "A4": 1,
-        "A5": 3,
-        "A6": 150
-      },
-      "PB": {
-        "A1": 3,
-        "A2": 3,
-        "A3": 3,
-        "A4": 1,
-        "A5": 2,
-        "A6": 150
-      }
-    },
-    {
-      "cs": 8,
-      "PA": {
-        "A1": 1,
-        "A2": 1,
-        "A3": 3,
-        "A4": 1,
-        "A5": 2,
-        "A6": 300
-      },
-      "PB": {
-        "A1": 4,
-        "A2": 3,
-        "A3": 3,
-        "A4": 1,
-        "A5": 2,
-        "A6": 75
-      }
-    },
-    {
-      "cs": 10,
-      "PA": {
-        "A1": 3,
-        "A2": 3,
-        "A3": 2,
-        "A4": 2,
-        "A5": 3,
-        "A6": 300
-      },
-      "PB": {
-        "A1": 2,
-        "A2": 1,
-        "A3": 2,
-        "A4": 1,
-        "A5": 2,
-        "A6": 300
-      }
-    },
-    {
-      "cs": 13,
-      "PA": {
-        "A1": 2,
-        "A2": 3,
-        "A3": 2,
-        "A4": 2,
-        "A5": 3,
-        "A6": 150
-      },
-      "PB": {
-        "A1": 3,
-        "A2": 1,
-        "A3": 4,
-        "A4": 1,
-        "A5": 2,
-        "A6": 25
-      }
-    },
-    {
-      "cs": 14,
-      "PA": {
-        "A1": 2,
-        "A2": 2,
-        "A3": 1,
-        "A4": 1,
-        "A5": 3,
-        "A6": 150
-      },
-      "PB": {
-        "A1": 1,
-        "A2": 3,
-        "A3": 2,
-        "A4": 2,
-        "A5": 2,
-        "A6": 25
-      }
-    },
-    {
-      "cs": 21,
-      "PA": {
-        "A1": 2,
-        "A2": 1,
-        "A3": 2,
-        "A4": 1,
-        "A5": 2,
-        "A6": 25
-      },
-      "PB": {
-        "A1": 1,
-        "A2": 3,
-        "A3": 4,
-        "A4": 1,
-        "A5": 3,
-        "A6": 150
-      }
-    },
-    {
-      "cs": 29,
-      "PA": {
         "A1": 1,
         "A2": 2,
-        "A3": 4,
-        "A4": 2,
-        "A5": 3,
-        "A6": 25
-      },
-      "PB": {
-        "A1": 2,
-        "A2": 1,
         "A3": 2,
-        "A4": 2,
-        "A5": 3,
-        "A6": 75
-      }
-    }
-  ],
-  "3": [
-    {
-      "cs": 1,
-      "PA": {
-        "A1": 3,
-        "A2": 3,
-        "A3": 3,
         "A4": 1,
-        "A5": 2,
-        "A6": 150
+        "A5": 75
       },
       "PB": {
-        "A1": 4,
-        "A2": 1,
-        "A3": 4,
-        "A4": 2,
-        "A5": 2,
-        "A6": 25
-      }
-    },
-    {
-      "cs": 9,
-      "PA": {
         "A1": 2,
         "A2": 3,
         "A3": 1,
-        "A4": 2,
-        "A5": 2,
-        "A6": 150
-      },
-      "PB": {
-        "A1": 3,
-        "A2": 1,
-        "A3": 2,
-        "A4": 2,
-        "A5": 3,
-        "A6": 25
-      }
-    },
-    {
-      "cs": 11,
-      "PA": {
-        "A1": 3,
-        "A2": 3,
-        "A3": 2,
-        "A4": 2,
-        "A5": 2,
-        "A6": 75
-      },
-      "PB": {
-        "A1": 1,
-        "A2": 2,
-        "A3": 1,
         "A4": 1,
-        "A5": 2,
-        "A6": 25
-      }
-    },
-    {
-      "cs": 12,
-      "PA": {
-        "A1": 4,
-        "A2": 3,
-        "A3": 4,
-        "A4": 2,
-        "A5": 3,
-        "A6": 25
-      },
-      "PB": {
-        "A1": 4,
-        "A2": 2,
-        "A3": 2,
-        "A4": 2,
-        "A5": 3,
-        "A6": 300
-      }
-    },
-    {
-      "cs": 17,
-      "PA": {
-        "A1": 2,
-        "A2": 1,
-        "A3": 4,
-        "A4": 2,
-        "A5": 2,
-        "A6": 150
-      },
-      "PB": {
-        "A1": 3,
-        "A2": 3,
-        "A3": 1,
-        "A4": 1,
-        "A5": 2,
-        "A6": 25
-      }
-    },
-    {
-      "cs": 18,
-      "PA": {
-        "A1": 2,
-        "A2": 2,
-        "A3": 4,
-        "A4": 1,
-        "A5": 2,
-        "A6": 300
-      },
-      "PB": {
-        "A1": 3,
-        "A2": 1,
-        "A3": 3,
-        "A4": 1,
-        "A5": 3,
-        "A6": 300
-      }
-    },
-    {
-      "cs": 28,
-      "PA": {
-        "A1": 1,
-        "A2": 1,
-        "A3": 3,
-        "A4": 1,
-        "A5": 3,
-        "A6": 75
-      },
-      "PB": {
-        "A1": 1,
-        "A2": 3,
-        "A3": 1,
-        "A4": 1,
-        "A5": 3,
-        "A6": 75
-      }
-    },
-    {
-      "cs": 30,
-      "PA": {
-        "A1": 4,
-        "A2": 1,
-        "A3": 3,
-        "A4": 1,
-        "A5": 3,
-        "A6": 75
-      },
-      "PB": {
-        "A1": 2,
-        "A2": 2,
-        "A3": 1,
-        "A4": 2,
-        "A5": 3,
-        "A6": 75
-      }
-    }
-  ],
-  "4": [
-    {
-      "cs": 2,
-      "PA": {
-        "A1": 3,
-        "A2": 2,
-        "A3": 3,
-        "A4": 2,
-        "A5": 3,
-        "A6": 75
-      },
-      "PB": {
-        "A1": 4,
-        "A2": 1,
-        "A3": 1,
-        "A4": 2,
-        "A5": 3,
-        "A6": 75
-      }
-    },
-    {
-      "cs": 3,
-      "PA": {
-        "A1": 4,
-        "A2": 2,
-        "A3": 3,
-        "A4": 2,
-        "A5": 3,
-        "A6": 300
-      },
-      "PB": {
-        "A1": 1,
-        "A2": 1,
-        "A3": 3,
-        "A4": 2,
-        "A5": 2,
-        "A6": 150
+        "A5": 150
       }
     },
     {
       "cs": 6,
       "PA": {
-        "A1": 3,
-        "A2": 2,
-        "A3": 2,
+        "A1": 4,
+        "A2": 4,
+        "A3": 3,
         "A4": 1,
-        "A5": 2,
-        "A6": 75
+        "A5": 75
+      },
+      "PB": {
+        "A1": 3,
+        "A2": 1,
+        "A3": 3,
+        "A4": 3,
+        "A5": 150
+      }
+    },
+    {
+      "cs": 8,
+      "PA": {
+        "A1": 3,
+        "A2": 1,
+        "A3": 1,
+        "A4": 3,
+        "A5": 300
       },
       "PB": {
         "A1": 4,
+        "A2": 1,
+        "A3": 2,
+        "A4": 1,
+        "A5": 150
+      }
+    },
+    {
+      "cs": 14,
+      "PA": {
+        "A1": 1,
         "A2": 2,
         "A3": 3,
-        "A4": 2,
-        "A5": 2,
-        "A6": 150
+        "A4": 1,
+        "A5": 150
+      },
+      "PB": {
+        "A1": 1,
+        "A2": 3,
+        "A3": 1,
+        "A4": 3,
+        "A5": 75
+      }
+    },
+    {
+      "cs": 19,
+      "PA": {
+        "A1": 2,
+        "A2": 3,
+        "A3": 2,
+        "A4": 3,
+        "A5": 150
+      },
+      "PB": {
+        "A1": 1,
+        "A2": 4,
+        "A3": 1,
+        "A4": 1,
+        "A5": 300
+      }
+    },
+    {
+      "cs": 20,
+      "PA": {
+        "A1": 3,
+        "A2": 1,
+        "A3": 2,
+        "A4": 1,
+        "A5": 75
+      },
+      "PB": {
+        "A1": 2,
+        "A2": 3,
+        "A3": 3,
+        "A4": 3,
+        "A5": 75
+      }
+    }
+  ],
+  "3": [
+    {
+      "cs": 2,
+      "PA": {
+        "A1": 3,
+        "A2": 3,
+        "A3": 1,
+        "A4": 1,
+        "A5": 150
+      },
+      "PB": {
+        "A1": 1,
+        "A2": 2,
+        "A3": 1,
+        "A4": 3,
+        "A5": 150
+      }
+    },
+    {
+      "cs": 4,
+      "PA": {
+        "A1": 2,
+        "A2": 4,
+        "A3": 1,
+        "A4": 3,
+        "A5": 300
+      },
+      "PB": {
+        "A1": 3,
+        "A2": 3,
+        "A3": 3,
+        "A4": 1,
+        "A5": 75
+      }
+    },
+    {
+      "cs": 9,
+      "PA": {
+        "A1": 4,
+        "A2": 1,
+        "A3": 1,
+        "A4": 1,
+        "A5": 75
+      },
+      "PB": {
+        "A1": 1,
+        "A2": 2,
+        "A3": 1,
+        "A4": 1,
+        "A5": 300
+      }
+    },
+    {
+      "cs": 15,
+      "PA": {
+        "A1": 4,
+        "A2": 1,
+        "A3": 3,
+        "A4": 3,
+        "A5": 300
+      },
+      "PB": {
+        "A1": 2,
+        "A2": 1,
+        "A3": 1,
+        "A4": 3,
+        "A5": 75
       }
     },
     {
       "cs": 16,
       "PA": {
         "A1": 3,
-        "A2": 2,
-        "A3": 1,
-        "A4": 1,
-        "A5": 3,
-        "A6": 300
+        "A2": 4,
+        "A3": 2,
+        "A4": 3,
+        "A5": 300
       },
       "PB": {
-        "A1": 4,
-        "A2": 1,
-        "A3": 2,
-        "A4": 2,
-        "A5": 3,
-        "A6": 300
+        "A1": 2,
+        "A2": 4,
+        "A3": 3,
+        "A4": 1,
+        "A5": 300
       }
     },
     {
-      "cs": 19,
+      "cs": 21,
+      "PA": {
+        "A1": 2,
+        "A2": 3,
+        "A3": 2,
+        "A4": 1,
+        "A5": 150
+      },
+      "PB": {
+        "A1": 4,
+        "A2": 4,
+        "A3": 3,
+        "A4": 3,
+        "A5": 150
+      }
+    }
+  ],
+  "4": [
+    {
+      "cs": 3,
+      "PA": {
+        "A1": 2,
+        "A2": 4,
+        "A3": 3,
+        "A4": 1,
+        "A5": 300
+      },
+      "PB": {
+        "A1": 4,
+        "A2": 2,
+        "A3": 1,
+        "A4": 1,
+        "A5": 75
+      }
+    },
+    {
+      "cs": 10,
+      "PA": {
+        "A1": 2,
+        "A2": 2,
+        "A3": 2,
+        "A4": 3,
+        "A5": 300
+      },
+      "PB": {
+        "A1": 3,
+        "A2": 4,
+        "A3": 3,
+        "A4": 3,
+        "A5": 75
+      }
+    },
+    {
+      "cs": 13,
       "PA": {
         "A1": 4,
+        "A2": 2,
+        "A3": 2,
+        "A4": 3,
+        "A5": 300
+      },
+      "PB": {
+        "A1": 4,
         "A2": 3,
-        "A3": 4,
+        "A3": 2,
         "A4": 1,
-        "A5": 3,
-        "A6": 300
+        "A5": 300
+      }
+    },
+    {
+      "cs": 17,
+      "PA": {
+        "A1": 1,
+        "A2": 1,
+        "A3": 1,
+        "A4": 3,
+        "A5": 150
+      },
+      "PB": {
+        "A1": 3,
+        "A2": 4,
+        "A3": 2,
+        "A4": 3,
+        "A5": 75
+      }
+    },
+    {
+      "cs": 23,
+      "PA": {
+        "A1": 3,
+        "A2": 2,
+        "A3": 2,
+        "A4": 1,
+        "A5": 300
       },
       "PB": {
         "A1": 3,
         "A2": 1,
         "A3": 1,
         "A4": 1,
-        "A5": 2,
-        "A6": 25
-      }
-    },
-    {
-      "cs": 20,
-      "PA": {
-        "A1": 2,
-        "A2": 1,
-        "A3": 4,
-        "A4": 2,
-        "A5": 2,
-        "A6": 300
-      },
-      "PB": {
-        "A1": 2,
-        "A2": 3,
-        "A3": 4,
-        "A4": 1,
-        "A5": 3,
-        "A6": 25
+        "A5": 150
       }
     },
     {
       "cs": 24,
       "PA": {
         "A1": 1,
-        "A2": 1,
-        "A3": 4,
-        "A4": 1,
-        "A5": 2,
-        "A6": 25
+        "A2": 4,
+        "A3": 3,
+        "A4": 3,
+        "A5": 150
       },
       "PB": {
-        "A1": 4,
+        "A1": 2,
         "A2": 2,
         "A3": 3,
         "A4": 1,
-        "A5": 2,
-        "A6": 25
-      }
-    },
-    {
-      "cs": 31,
-      "PA": {
-        "A1": 2,
-        "A2": 3,
-        "A3": 1,
-        "A4": 2,
-        "A5": 2,
-        "A6": 150
-      },
-      "PB": {
-        "A1": 2,
-        "A2": 1,
-        "A3": 1,
-        "A4": 2,
-        "A5": 2,
-        "A6": 150
+        "A5": 75
       }
     }
   ]
 };
 var DCE_LABELS = {
   "A1": {
-    "1": "Only properties in higher-risk and higher-deprivation areas",
-    "2": "All properties, regardless of flood risk",
-    "3": "Only properties in high- or medium-risk areas",
-    "4": "Only properties that opt in receive individual protection"
+    "1": "Households in any areas of England at any level of risk",
+    "2": "Only households in high-risk areas",
+    "3": "Only households in high-risk areas, priority for deprived communities",
+    "4": "Only households that opt in to receive protection"
   },
   "A2": {
-    "1": "Through national taxation and council tax, shared across all taxpayers",
-    "2": "Partly through national taxation, and a new dedicated council tax levy",
-    "3": "Entirely through an additional local council tax levy in areas that benefit"
+    "1": "Taxpayers across England",
+    "2": "All households in the local council area(s) where the scheme is built",
+    "3": "National government, sometimes with local contributions from councils, businesses, developers",
+    "4": "Only the households that receive protection"
   },
   "A3": {
-    "1": "Flat — every household pays the same",
-    "2": "Wealth-based — wealthier households pay more",
-    "3": "Risk-based — households in higher-risk areas pay more",
-    "4": "Based on both wealth and flood risk"
+    "1": "Same amount for each paying household",
+    "2": "Higher-income or higher-council-tax-band households pay more",
+    "3": "Households at higher flood risk pay more"
   },
   "A4": {
-    "1": "No polluter surcharge",
-    "2": "Yes — firms with high greenhouse-gas emissions pay a surcharge"
-  },
-  "A5": {
-    "2": "Every property moves to at least one lower risk category",
-    "3": "Every property reaches low or very low risk"
+    "1": "Risk reduced to minimum level (very low)",
+    "3": "Small flood risk reduction, risk category unchanged"
   }
 };
-var DCE_ATTRS  = ["A1","A2","A3","A4","A5"];
+var DCE_ATTRS  = ["A1","A2","A3","A4"];
 
 Qualtrics.SurveyEngine.addOnload(function() {
   // ============================================================
@@ -764,10 +560,10 @@ Qualtrics.SurveyEngine.addOnReady(function() {
       if (pa) pa.innerHTML = DCE_LABELS[a][task.PA[a]];
       if (pb) pb.innerHTML = DCE_LABELS[a][task.PB[a]];
     }
-    var paCost = document.getElementById("PA_A6");
-    var pbCost = document.getElementById("PB_A6");
-    if (paCost) paCost.innerHTML = "\u00a3" + task.PA.A6;
-    if (pbCost) pbCost.innerHTML = "\u00a3" + task.PB.A6;
+    var paCost = document.getElementById("PA_A5");
+    var pbCost = document.getElementById("PB_A5");
+    if (paCost) paCost.innerHTML = "\u00a3" + task.PA.A5;
+    if (pbCost) pbCost.innerHTML = "\u00a3" + task.PB.A5;
 
     Qualtrics.SurveyEngine.setEmbeddedData("task" + taskNum + "_cs", task.cs);
   } catch (e) {
