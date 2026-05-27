@@ -38,13 +38,13 @@ ATTRIBUTES <- list(
     concept   = "Excludability (who is protected by the programme)",
     card_label = "Who is protected by the programme?",
     levels    = c(
-      "Households in any areas of England at any level of risk",
+      "All households in England at any level of risk",
       "Only households in high-risk areas",
       "Only households in high-risk areas, priority for deprived communities",
       "Only households that opt in to receive protection"
     ),
     card_levels = c(
-      "Households in any areas of England at any level of risk",
+      "All households in England at any level of risk",
       "Only households in high-risk areas",
       "Only households in high-risk areas, priority for deprived communities",
       "Only households that opt in to receive protection"
@@ -55,37 +55,35 @@ ATTRIBUTES <- list(
 
   A2 = list(
     name      = "A2_funding_mechanism",
-    concept   = "Funding mechanism (who pays)",
-    card_label = "Who pays?",
+    concept   = "Funding mechanism (where the money comes from)",
+    card_label = "Where should the money come from?",
     levels    = c(
-      "Taxpayers across England",
-      "All households in local council area(s) where the scheme is built",
-      "National government, sometimes with local contributions from councils, businesses and/or developers",
-      "Only the households that receive flood protection"
+      "General taxation, sometimes with local contributions from councils, businesses, developers",
+      "General taxation and a new local levy in areas that benefit",
+      "Only a new local levy in areas that benefit"
     ),
     card_levels = c(
-      "Taxpayers across England",
-      "All households in the local council area(s) where the scheme is built",
-      "National government, sometimes with local contributions from councils, businesses, developers",
-      "Only the households that receive protection"
+      "General taxation, sometimes with local contributions from councils, businesses, developers",
+      "General taxation and a new local levy in areas that benefit",
+      "Only a new local levy in areas that benefit"
     ),
-    sq        = 3,
+    sq        = 1,
     ab_only   = NULL
   ),
 
   A3 = list(
     name      = "A3_distributional_fairness",
-    concept   = "Distributional fairness (how each household's payment is calculated)",
-    card_label = "How are payments calculated?",
+    concept   = "Distributional fairness (how each household's contribution is calculated)",
+    card_label = "How are contributions calculated?",
     levels    = c(
-      "Same amount for each paying household",
-      "Higher-income or higher-council-tax-band households pay more, independent of risk",
-      "Households at higher flood risk pay more, independent of wealth"
+      "Flat contribution \u2014 same amount for each paying household",
+      "Wealthier households pay more, independent of risk",
+      "Households at higher risk pay more, independent of wealth"
     ),
     card_levels = c(
-      "Same amount for each paying household",
-      "Higher-income or higher-council-tax-band households pay more",
-      "Households at higher flood risk pay more"
+      "Flat \u2014 same amount for each paying household",
+      "Wealthier households pay more, independent of risk",
+      "Households at higher risk pay more, independent of wealth"
     ),
     sq        = 2,
     ab_only   = NULL
@@ -153,25 +151,24 @@ COST_SCALE <- 100
 #   1. ASC_SQ (alternative-specific constant for status quo)
 #   2. Effects-coded columns for each non-cost attribute, in order:
 #        A1 excludability:               4 A/B levels -> 3 columns
-#        A2 funding mechanism:           4 A/B levels -> 3 columns
+#        A2 funding mechanism:           3 A/B levels -> 2 columns
 #        A3 distributional fairness:     3 A/B levels -> 2 columns
-#        A4 effectiveness:               2 A/B levels (SQ is L2, outside ab_only) -> 1 column
-#      Non-cost coefficients: 9
+#        A4 effectiveness:               2 A/B levels (SQ at L2, outside ab_only) -> 1 column
+#      Non-cost coefficients: 8
 #   3. Cost as a continuous variable (per COST_SCALE units, default £100)
 #
-# Total parameters: 1 (ASC) + 9 (attributes) + 1 (cost) = 11
+# Total parameters: 1 (ASC) + 8 (attributes) + 1 (cost) = 10
 #
 # NOTE on the A4 effectiveness sign: ab_only = c(1, 3) means the A/B
 # variation is between L1 (very low, most effective) and L3 (small
 # reduction, least effective). With L3 as the reference (-1 in effects
-# coding) and L1 as +1, a POSITIVE coefficient encodes "prefer L1 over
-# L3" = preference for more effective. This flips the sign convention
-# from the previous version, where L2/L3 contrast had a negative prior.
+# coding) and L1 as +1, a POSITIVE coefficient encodes preference for
+# more effective.
 
 PRIOR_MEAN <- c(
   0.2,            # ASC_SQ: mild status quo bias
   0, 0, 0,        # A1 excludability: no prior (3 cols)
-  0, 0, 0,        # A2 funding mechanism: no prior (3 cols)
+  0, 0,           # A2 funding mechanism: no prior (2 cols)
   0, 0,           # A3 distributional fairness: no prior (2 cols)
   0.45,           # A4 effectiveness: L1 vs L3 (positive = prefer more effective)
   -0.8            # A5 cost: per £100 (negative = dislike higher cost)
@@ -180,7 +177,7 @@ PRIOR_MEAN <- c(
 PRIOR_SD <- c(
   0.3,            # ASC_SQ
   rep(0.4, 3),    # A1 excludability
-  rep(0.4, 3),    # A2 funding mechanism
+  rep(0.4, 2),    # A2 funding mechanism
   rep(0.4, 2),    # A3 distributional fairness
   0.3,            # A4 effectiveness
   0.4             # A5 cost
@@ -191,7 +188,7 @@ PRIOR_SD <- c(
 # 4. CHOICE CARD TEXT
 # --------------------------------------------------------------
 
-CARD_TITLE       <- "Choice Task"
+CARD_TITLE       <- "Comparison"
 CARD_INSTRUCTION <- "Please compare the following flood protection programmes and choose the one you would most prefer."
 CARD_COL_A       <- "Programme A"
 CARD_COL_B       <- "Programme B"
