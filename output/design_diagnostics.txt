@@ -1,6 +1,6 @@
 ============================================================
   DCE DESIGN DIAGNOSTICS
-  Generated: 2026-05-27 20:08:27.297627
+  Generated: 2026-06-04 14:00:39.9186
 ============================================================
 
 Design space:    216 candidate profiles
@@ -35,9 +35,9 @@ A1 (Excludability (who is protected by the programme)):
   Level 4: n=12 (25.0%)  Only households that opt in to receive protection
 
 A2 (Funding mechanism (where the money comes from)):
-  Level 1: n=16 (33.3%)  General taxation, sometimes with local contributio...
-  Level 2: n=16 (33.3%)  General taxation and a new local levy in areas tha...
-  Level 3: n=16 (33.3%)  Only a new local levy in areas that benefit
+  Level 1: n=16 (33.3%)  National taxation
+  Level 2: n=16 (33.3%)  National taxes with some local contribution
+  Level 3: n=16 (33.3%)  Local taxes in areas that benefit
 
 A3 (Distributional fairness (how each household's contribution is calculated)):
   Level 1: n=16 (33.3%)  Flat contribution — same amount for each paying ho...

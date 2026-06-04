@@ -438,24 +438,24 @@ var DCE_DESIGN = {
 };
 var DCE_LABELS = {
   "A1": {
-    "1": "All households in England at any level of risk",
-    "2": "Only households in high-risk areas",
-    "3": "Only households in high-risk areas, priority for deprived communities",
-    "4": "Only households that opt in to receive protection"
+    "1": "Every household in England",
+    "2": "Households in high-risk areas",
+    "3": "Only low-income households in high-risk areas",
+    "4": "Only households that opt in"
   },
   "A2": {
-    "1": "General taxation, sometimes with local contributions from councils, businesses, developers",
-    "2": "General taxation and a new local levy in areas that benefit",
-    "3": "Only a new local levy in areas that benefit"
+    "1": "National taxes",
+    "2": "National and local taxes",
+    "3": "Local taxes in areas that benefit"
   },
   "A3": {
-    "1": "Flat — same amount for each paying household",
-    "2": "Wealthier households pay more, independent of risk",
-    "3": "Households at higher risk pay more, independent of wealth"
+    "1": "Everyone pays the same",
+    "2": "Wealthier pay more",
+    "3": "Those most at risk pay more"
   },
   "A4": {
-    "1": "Risk reduced to minimum level (very low)",
-    "3": "Small flood risk reduction, risk category unchanged"
+    "1": "High - risk reduced to very low",
+    "3": "Low - no risk reduction"
   }
 };
 var DCE_ATTRS  = ["A1","A2","A3","A4"];
