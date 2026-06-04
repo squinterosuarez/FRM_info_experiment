@@ -44,10 +44,10 @@ ATTRIBUTES <- list(
       "Only households that opt in to receive protection"
     ),
     card_levels = c(
-      "All households in England at any level of risk",
-      "Only households in high-risk areas",
-      "Only households in high-risk areas, priority for deprived communities",
-      "Only households that opt in to receive protection"
+      "Every household in England",
+      "Households in high-risk areas",
+      "Only low-income households in high-risk areas",
+      "Only households that opt in"
     ),
     sq        = 3,
     ab_only   = NULL   # all four levels appear in A/B
@@ -58,14 +58,12 @@ ATTRIBUTES <- list(
     concept   = "Funding mechanism (where the money comes from)",
     card_label = "Where should the money come from?",
     levels    = c(
-      "General taxation, sometimes with local contributions from councils, businesses, developers",
-      "General taxation and a new local levy in areas that benefit",
-      "Only a new local levy in areas that benefit"
+      "National taxation",
+      "Local taxes in areas that benefit"
     ),
     card_levels = c(
-      "General taxation, sometimes with local contributions from councils, businesses, developers",
-      "General taxation and a new local levy in areas that benefit",
-      "Only a new local levy in areas that benefit"
+      "National taxes",
+      "Local taxes in areas that benefit"
     ),
     sq        = 1,
     ab_only   = NULL
@@ -81,9 +79,9 @@ ATTRIBUTES <- list(
       "Households at higher risk pay more, independent of wealth"
     ),
     card_levels = c(
-      "Flat \u2014 same amount for each paying household",
-      "Wealthier households pay more, independent of risk",
-      "Households at higher risk pay more, independent of wealth"
+      "Everyone pays the same",
+      "Wealthier pay more",
+      "Those most at risk pay more"
     ),
     sq        = 2,
     ab_only   = NULL
@@ -99,9 +97,9 @@ ATTRIBUTES <- list(
       "Small flood risk reduction, risk category unchanged"
     ),
     card_levels = c(
-      "Risk reduced to minimum level (very low)",
-      "Risk reduced by one category (e.g. high to medium)",
-      "Small flood risk reduction, risk category unchanged"
+      "High - risk reduced to very low",
+      "Medium - risk reduced",
+      "Low - no risk reduction"
     ),
     sq        = 2,
     ab_only   = c(1, 3)   # level 2 (one-category reduction) is SQ-only
