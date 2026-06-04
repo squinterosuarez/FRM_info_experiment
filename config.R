@@ -59,7 +59,7 @@ ATTRIBUTES <- list(
     card_label = "Where should the money come from?",
     levels    = c(
       "National taxation",
-"National taxes with some local contribution"
+"National taxes with some local contribution",
       "Local taxes in areas that benefit"
     ),
     card_levels = c(
