@@ -58,7 +58,7 @@ mean_k <- function(theta, k, g, spec_type = CFG$spec_type) {
 partworths <- function(theta, g) {
   G <- function(k) mean_k(theta, k, g)
   a1 <- c(G("a1e1"),G("a1e2"),G("a1e3")); a1 <- c(a1, -sum(a1))     # levels 1..4
-  a2 <- c(G("a2e1"),G("a2e2"));           a2 <- c(a2, -sum(a2))     # 1..3
+  a2 <- G("a2e1");                        a2 <- c(a2, -a2)          # levels 1..2
   a3 <- c(G("a3e1"),G("a3e2"));           a3 <- c(a3, -sum(a3))     # 1..3
   list(a1=a1, a2=a2, a3=a3, cost=G("cost"))
 }
@@ -79,7 +79,7 @@ pair_wtp <- function(theta, b1, b2, g) {
 
 ## ---- spec-specific target vectors ----------------------------------
 ## DIR_PAIRS are the three headline bundle contrasts the abstract cares about.
-DIR_PAIRS <- list(c("public","club"), c("public","club_mixed"), c("public","private"))
+DIR_PAIRS <- list(c("public","club"), c("public","private"))
 
 target_wtps_dir <- function(theta) {
   out <- numeric(0)

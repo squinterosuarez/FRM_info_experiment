@@ -92,9 +92,15 @@ build_placeholder_design <- function() {
 effects_code_design <- function(d) {
   code_alt <- function(d, alt) {
     pull <- function(a) d[[paste0(alt, "_", a)]]
-    ec_mat <- function(vals, levels, base, pre)
-      t(vapply(vals, ec_row, numeric(length(levels) - 1),
-               levels = levels, base = base, prefix = pre))
+    ec_mat <- function(vals, levels, base, pre) {
+      m <- vapply(vals, ec_row, numeric(length(levels) - 1),
+                  levels = levels, base = base, prefix = pre)
+      ## vapply returns a matrix when >1 column, but a bare vector when the
+      ## attribute has a single effects-coded column (e.g. 2-level A2). Coerce
+      ## the single-column case to an n x 1 matrix with the right column name.
+      if (is.matrix(m)) t(m)
+      else matrix(m, ncol = 1, dimnames = list(NULL, paste0(pre, "e1")))
+    }
     a1 <- ec_mat(pull("a1"), ATTR$a1_levels, EC$a1_base, paste0(alt, "_a1"))
     a2 <- ec_mat(pull("a2"), ATTR$a2_levels, EC$a2_base, paste0(alt, "_a2"))
     a3 <- ec_mat(pull("a3"), ATTR$a3_levels, EC$a3_base, paste0(alt, "_a3"))
@@ -109,7 +115,7 @@ effects_code_design <- function(d) {
 
   ## Identification check: the A-vs-B difference matrix must be full column rank.
   diff_cols <- function(suf) coded[[paste0("A_", suf)]] - coded[[paste0("B_", suf)]]
-  attr_suffix <- c("a1e1","a1e2","a1e3","a2e1","a2e2","a3e1","a3e2","a4e1","cost100")
+  attr_suffix <- c("a1e1","a1e2","a1e3","a2e1","a3e1","a3e2","a4e1","cost100")
   X <- sapply(attr_suffix, diff_cols)
   r <- qr(X)$rank
   if (r < ncol(X))

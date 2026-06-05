@@ -48,7 +48,7 @@ draw_beta_i <- function(r) {
 }
 
 simulate_choices <- function(resp_df, design) {
-  suf  <- c("a1e1","a1e2","a1e3","a2e1","a2e2","a3e1","a3e2","a4e1","cost100")
+  suf  <- c("a1e1","a1e2","a1e3","a2e1","a3e1","a3e2","a4e1","cost100")
   cA <- paste0("A_",suf); cB <- paste0("B_",suf)
   bmap <- c(suf[-length(suf)], "cost")            # cost100 -> coeff 'cost'
   rows <- vector("list", nrow(resp_df))

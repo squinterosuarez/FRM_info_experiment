@@ -29,9 +29,8 @@ This replaced the previous ITT (treatment-arm × attribute) as primary, because 
 Bundles defined on A1/A2/A3 only:
 - **public** = all-households / national / flat
 - **welfare** = high-risk+deprived / national / wealthier-pay  *(this is the SQ config — used as the WTP reference)*
-- **club** = high-risk-area / **local-only** / flat  *(A2.3 — pure club good; **primary** since 2026-06-01)*
-- **club_mixed** = high-risk-area / **national+local** / flat  *(A2.2 — realistic-funding variant; reported as parallel robustness)*
-- **private** = opt-in / local-only / risk-priced
+- **club** = high-risk-area / **local** / flat  *(A2.2 — pure club good, beneficiary group pays; **primary**)*
+- **private** = opt-in / **local** / risk-priced
 
 WTPs computed via **generic part-worths** (ASC not involved); A4 dropped (held at SQ → 0 under effects coding); cost held at SQ. Reported: each non-welfare bundle vs welfare, all pairwise contrasts, and the **directional estimands** `Δ(contrast) = contrast(updater group) − contrast(control)` — the one-number tests of whether learning shifts the public/club/private reading. CIs: delta method (fast) and respondent-clustered bootstrap (the planned method; expensive, off by default).
 
@@ -48,11 +47,10 @@ WTPs computed via **generic part-worths** (ASC not involved); A4 dropped (held a
 3. **A4 (effectiveness)** binary in A/B (levels 1 and 3 only); A4.2 is SQ-only and absorbed into the ASC.
 4. **Cost fixed**, not random — keeps WTP well-defined.
 5. **ASC fixed** (`CFG$asc_random = FALSE`) per PAP-as-written. We tested random-ASC (`TRUE`) earlier and it fit better (LL −8252 vs −8266) and gave better WTP recovery (98% vs 88%) — but pre-registration discipline wins. The fit cost goes into the WTP-space queue, not into relitigating the ASC choice.
-6. **Two club variants reported in parallel** (decided 2026-06-01):
-   - **`club` = A2.3** (high-risk-area / **local-only** / flat) — the **primary** specification. Matches the textbook "club good" framing (beneficiary group pays for its own protection) and gives sharper directional shifts on simulated data.
-   - **`club_mixed` = A2.2** (high-risk-area / **national+local** / flat) — reported as a parallel robustness variant. More politically realistic mixed-funding club.
-   - Head-to-head: respondents prefer `club_mixed` over `club` by ≈£44 at baseline, rising to ≈£65 in the upward arm — driven by the funding-attribute step. Suggested writeup framing: pure-club primary, mixed-club robustness panel, with one sentence on the funding-preference gap.
-   - Code: both bundles live in `BUNDLES` in `R/00_config.R`; `PAIRWISE` and `target_wtps` in `04_wtp.R` carry both variants through all contrasts and directional estimands.
+6. **A2 collapsed from 3 levels to 2** (decided 2026-06-05): A2 is now **national taxation (1)** vs **local taxes (2)**; the old middle "national+local" level was dropped when the DCE language was simplified. Consequences:
+   - The `club_mixed` variant (A2.2 = national+local) **no longer exists**. The single **`club`** bundle is now the local-funded club good (A2.2 = local, beneficiaries pay) and is the primary club specification. `private` is also locally funded (A2.2).
+   - The pure-club-vs-mixed-club head-to-head is gone; there is no longer a funding-step contrast *within* the club good. National-vs-local is now a single one-column part-worth (A2 effects-coded to `a2e1` only → 9 params total, was 10).
+   - Code: `BUNDLES`/`PAIRWISE` in `R/00_config.R`, `DIR_PAIRS`/`target_wtps` in `04_wtp.R`, and the effects coding in `01_design.R` were all updated to the 2-level A2 on 2026-06-05. **Any simulated WTP/recovery numbers produced before that date predate the collapse and must be regenerated.**
 7. **No-idea anchor = 2.5** (scale midpoint) — the modal stated prior was VeryLow, which would have made every update look upward, so the midpoint is doing real work and is the defensible choice. Robustness check: separate no-idea × learned-level channel, not yet coded.
 
 ## Pre-registration items still open

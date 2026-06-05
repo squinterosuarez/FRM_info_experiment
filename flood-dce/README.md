@@ -64,7 +64,7 @@ secondary.** The PAP power section should say this.
 ## Real-data column contract (apollo wide; one row per respondent × task)
 `ID, task, block, treatment(0/1), gapUp, gapDown, noPrior(0/1),
 updater_type, actual_rank, risk_high`, plus effects-coded alternative columns
-`A_a1e1,A_a1e2,A_a1e3,A_a2e1,A_a2e2,A_a3e1,A_a3e2,A_a4e1,A_cost100` and the
+`A_a1e1,A_a1e2,A_a1e3,A_a2e1,A_a3e1,A_a3e2,A_a4e1,A_cost100` and the
 `B_` equivalents, `av_A,av_B,av_SQ`(=1), `choice`(1=A,2=B,3=SQ); sorted by
 ID,task. Replace the placeholder design in `01_design.R` with the locked design.
 

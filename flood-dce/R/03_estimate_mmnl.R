@@ -7,7 +7,7 @@
 ## random part: diagonal (primary) or Cholesky-correlated (robustness).
 ## cost fixed; ASC fixed by default per PAP (CFG$asc_random = FALSE).
 ## =====================================================================
-ATTR_SUFFIX <- c("a1e1","a1e2","a1e3","a2e1","a2e2","a3e1","a3e2","a4e1","cost100")
+ATTR_SUFFIX <- c("a1e1","a1e2","a1e3","a2e1","a3e1","a3e2","a4e1","cost100")
 
 build_start <- function(correlated, cost_random, asc_random, noprior_separate=FALSE,
                         omit_params=character(0), spec_type=CFG$spec_type) {
@@ -120,9 +120,9 @@ make_randCoeff <- function(correlated, cost_random, asc_random, noprior_separate
 apollo_prob_fun <- function(apollo_beta, apollo_inputs, functionality="estimate") {
   apollo_attach(apollo_beta, apollo_inputs); on.exit(apollo_detach(apollo_beta, apollo_inputs))
   P<-list(); V<-list()
-  V[["A"]] <- b_a1e1*A_a1e1+b_a1e2*A_a1e2+b_a1e3*A_a1e3+b_a2e1*A_a2e1+b_a2e2*A_a2e2+
+  V[["A"]] <- b_a1e1*A_a1e1+b_a1e2*A_a1e2+b_a1e3*A_a1e3+b_a2e1*A_a2e1+
               b_a3e1*A_a3e1+b_a3e2*A_a3e2+b_a4e1*A_a4e1+b_cost*A_cost100
-  V[["B"]] <- b_a1e1*B_a1e1+b_a1e2*B_a1e2+b_a1e3*B_a1e3+b_a2e1*B_a2e1+b_a2e2*B_a2e2+
+  V[["B"]] <- b_a1e1*B_a1e1+b_a1e2*B_a1e2+b_a1e3*B_a1e3+b_a2e1*B_a2e1+
               b_a3e1*B_a3e1+b_a3e2*B_a3e2+b_a4e1*B_a4e1+b_cost*B_cost100
   V[["SQ"]] <- b_asc
   s <- list(alternatives=c(A=1,B=2,SQ=3), avail=list(A=av_A,B=av_B,SQ=av_SQ),
