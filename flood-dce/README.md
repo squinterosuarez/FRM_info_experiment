@@ -1,73 +1,103 @@
-# UK flood-protection DCE — analysis pipeline (directional spec)
+# UK flood-protection DCE — analysis pipeline
 
-Simulate → fit MMNL → recover truth → bundle WTPs → tables/figures. Estimation
-uses **apollo**. Built so real data drops in with one substitution post-ethics.
+Simulate → fit MMNL → recover truth → bundle & attribute WTPs → tables/figures.
+Estimation uses **apollo**. Built so real data drops in via a documented column
+contract (below).
 
 ## Run
 ```r
-source("run_all.R")
+# Simulated end-to-end (validation): fits the primary ITT + cate passes
+Rscript run_all.R
+
+# Real data: point at a cleaned, apollo-ready long-format choice file (.rds)
+DATABASE_RDS=path/to/cleaned_choices.rds Rscript run_all.R
 ```
 Dependencies: `apollo`, `numDeriv`, `ggplot2`. Outputs in `./outputs/`.
 
-> Not executed here: this environment has no R/CRAN access, so the apollo fit
-> has not been run. The data-generating side was validated in Python
-> (`sim_check.py`): cell sizes, model-free choice patterns, and the WTP
-> formulas all behave as intended. Treat the first R run as a debugging pass.
+`run_all.R` fits **both** primary specs on the same data and writes
+`wtp_delta_itt.csv` and `wtp_delta_cate.csv` (plus `recovery_wtp_*.csv` in
+simulated mode). On real data the recovery tables are skipped — there is no
+known truth to recover against — but the estimated WTP tables are written.
 
-## Primary specification (directional information effects)
-Each random coefficient's mean is shifted by what respondents *learned*:
+> **Not yet scripted:** the step that turns a raw **Qualtrics export → the
+> column contract below**. The analysis is ready; the cleaning/reshaping is the
+> one remaining piece to build before a real-data run.
 
-`mean_k = mu_k + dt_k·T + up_k·(T·gapUp) + dn_k·(T·gapDown)`  (+ np_asc·T·noPrior on the ASC only)
+## Primary specification — ITT + conditional ITT by prior-gap category
+The pre-registered primary analysis has two layers, both fit by `run_all.R`:
 
-- `gap = actual_risk − prior_belief`, from the **pre-elicited** prior and
-  postcode risk; `gapUp/gapDown` are its positive/negative parts.
-- **"No idea" respondents are updaters too.** They get an imputed prior at the
-  scale midpoint (2.5) — "no stated belief → midpoint" — so learning low/very-low
-  reads as a *downward* update and they flow through the same `gapUp/gapDown`
-  and the same `up_k/dn_k` coefficients as everyone else. `noPrior` survives only
-  as an ASC control (`np_asc`); since the ASC isn't in the bundle contrasts, it
-  cancels out of the headline WTPs. (Anchoring at the modal stated prior instead
-  would mis-fire: in simulation that mode is "Very Low," making every update look
-  upward.) Robustness toggle: estimate a separate no-idea × learned-level channel
-  instead of pooling — not yet coded.
-- Control carries no gap terms (T=0) → it is the clean no-information baseline.
-- `dt_k` = effect of being informed with a *correct* prior (no surprise).
-- Primary estimands: `up_k`, `dn_k` for the conception attributes A1/A2/A3
-  (test I.H1/I.H2), plus A4 and ASC (I.H3). This is the directional version of
-  the PAP — it replaces the arm-level ITT `treatment × attribute` as primary,
-  because I.H1–I.H3 predict upward and downward updaters move in *opposite*
-  directions and an ITT average can cancel them.
+1. **ITT (main analysis)** — the average effect of being *assigned* the
+   information treatment: `mean_k = mu_k + tau_k·T`. Identified by
+   randomisation; the headline, general-hypothesis test. It is attenuated
+   (opposite-direction subgroups partly cancel), not null.
+2. **Conditional ITTs (the mechanism)** — interact treatment with the
+   respondent's **pre-treatment prior-gap category** (underestimator /
+   overestimator / correct / don't-know):
+   `mean_k = mu_k + (category baselines) + tau_k·T + (T × category)`.
+   Because the category is fixed *before* treatment and treatment is randomised
+   within each, every conditional ITT is a clean CATE. This is where the
+   directional story lives: underestimators shift toward collective provision,
+   overestimators the opposite, correct estimators ≈ 0 (internal placebo), and
+   don't-knows pattern with underestimators (by assumption in simulation; an
+   empirical test on the real data).
 
-Cost is fixed; ASC random by default (`CFG$asc_random` — a deviation from the
-PAP-as-written, which writes ASC as fixed; flip if you want to match it).
+Two specs remain wired as **supplementary** (select via `CFG$spec_type`):
+- **`pap`** — 4-cell Treatment × NoPrior decomposition (ITT / UPDATER /
+  NONUPDATER). A robustness lens: does the effect concentrate among people who
+  had *no prior at all*?
+- **`dir`** — the gap-**size** (dose) spec using `gapUp`/`gapDown`.
+  **Simulation-only:** the objective risk band is not stored alongside the
+  stated prior, so gap *magnitude* is not estimable on the real data — only the
+  categorical *direction* (the surprise item) is, which is what `cate` uses.
+
+Cost is fixed; ASC fixed by default (`CFG$asc_random` — flip to deviate from
+PAP-as-written). `CFG$spec_type` default is `itt`; `CFG$dgp_type` default is
+`directional`.
 
 ## Bundles (four; welfare = reference)
-Welfare = A1.3 + A2.1 + A3.2 = the status-quo configuration, so it is the
-reference (its WTP is 0 by definition). The others are valued **relative to
-welfare** via generic part-worths (the ASC is not involved). A4 is dropped
-(held at SQ → 0 under effects coding); cost held at SQ. Club is set to A2.2
-(national + local) so it stays distinct from private (A2.3, local only).
-Reported: each bundle vs welfare, all pairwise contrasts, and the directional
-estimands `Δ(contrast) = contrast(updater group) − contrast(control)` — the
-one-number test of whether learning shifts the public/club/private reading.
+On A1/A2/A3 only. **A2 has two levels** since the 2026-06-05 collapse:
+national taxation (1) vs local taxes / beneficiaries pay (2). Welfare = the
+status-quo configuration, so its WTP is 0 by definition; the others are valued
+relative to welfare via generic part-worths (the ASC is not involved). A4 is
+dropped (held at SQ → 0 under effects coding); cost held at SQ.
 
-## Known power constraint (see sim_check.py output)
-Downward updaters — people who learn they are *safer* than they thought — are
-intrinsically rare here: most people underestimate risk, you oversample
-high-risk areas, and a High-band respondent cannot be a downward updater. The
-stated-prior downward cell is ~32; folding in "no idea" people who learn
-low/very-low (via the midpoint anchor) lifts the effective downward pool to
-~120 — still well below the upward pool (~340), but estimable. **Pre-register
-the asymmetry with upward as confirmatory and downward as lower-powered /
-secondary.** The PAP power section should say this.
+- **public**  = all / national / flat
+- **welfare** = SQ config *(reference; WTP = 0)*
+- **club**    = high-risk area / **local** / flat *(beneficiaries pay)*
+- **private** = opt-in / local / risk-priced
 
-## Real-data column contract (apollo wide; one row per respondent × task)
-`ID, task, block, treatment(0/1), gapUp, gapDown, noPrior(0/1),
-updater_type, actual_rank, risk_high`, plus effects-coded alternative columns
-`A_a1e1,A_a1e2,A_a1e3,A_a2e1,A_a3e1,A_a3e2,A_a4e1,A_cost100` and the
-`B_` equivalents, `av_A,av_B,av_SQ`(=1), `choice`(1=A,2=B,3=SQ); sorted by
-ID,task. Replace the placeholder design in `01_design.R` with the locked design.
+Reported: each bundle vs welfare, all pairwise contrasts, the **conditional
+ITTs** on the headline public-vs-private / public-vs-club contrasts, and the
+**attribute-level conditional ITTs** — national-vs-local funding,
+flat-vs-risk-priced cost-sharing, and effectiveness. CIs: delta method
+(primary) + respondent-clustered bootstrap (robustness).
 
-## Still on the PAP to-do (pre-registered, not yet coded)
-Treatment-on-dispersion (Δσ by arm), WTP-space robustness model, BH-FDR within
-families. The plan is sound; the code needs to catch up.
+## Power asymmetry (see the Monte Carlo)
+Overestimators — people who learn they are *safer* than they thought — are
+intrinsically rare (most underestimate; high-risk areas are oversampled; a
+High-band respondent cannot be an overestimator), ~7% of stated-prior
+respondents. Their conditional ITT is the least precise cell and is read as
+directional / suggestive. The **underestimator and don't-know cells carry the
+hypotheses and the statistical power**. Pre-register the asymmetry:
+underestimators confirmatory, overestimators lower-powered / secondary.
+
+## Real-data column contract (apollo *long*; one row per respondent × task)
+Build a data.frame, save as `.rds`, point `DATABASE_RDS` at it; sorted by
+`ID, task`, with:
+- `ID, task, block, treatment` (0/1)
+- `noPrior` (0/1) and the prior-gap category dummies `catUnder, catOver,
+  catDK` (mutually exclusive; correct = all three 0) — from the
+  surprise-direction survey item
+- effects-coded alternatives `A_a1e1,A_a1e2,A_a1e3,A_a2e1,A_a3e1,A_a3e2,
+  A_a4e1,A_cost100` and the `B_` equivalents — obtained by merging each
+  respondent's `block × task` with the **locked design** (`01_design.R` /
+  `dce_design_compact.csv`) and effects-coding the levels
+- `av_A, av_B, av_SQ` (=1), `choice` (1=A, 2=B, 3=SQ)
+
+`gapUp`/`gapDown` are needed **only** for the supplementary `dir` spec; `itt`
+and `cate` do not use them. **The Qualtrics → this-contract cleaning step is not
+yet scripted** — it is the bridge to a real-data run.
+
+## Still on the PAP to-do (not yet coded)
+Qualtrics→database cleaning script; treatment-on-dispersion (Δσ by arm);
+WTP-space robustness model; BH-FDR within families; separate no-idea channel.
