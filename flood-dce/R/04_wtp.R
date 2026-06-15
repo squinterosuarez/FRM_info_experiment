@@ -31,7 +31,26 @@ GROUPS_PAP <- list(
   treat_prior   = list(treatment=1, noPrior=0),  # non-updater
   treat_noprior = list(treatment=1, noPrior=1)   # updater
 )
-GROUPS <- if (identical(CFG$spec_type, "pap")) GROUPS_PAP else GROUPS_DIR
+## ITT spec: just treated vs control (plain ITT, the main analysis).
+GROUPS_ITT <- list(
+  control = list(treatment=0),
+  treated = list(treatment=1)
+)
+## CATE spec: treatment × pre-treatment prior-gap category. "correct" is the
+## reference cell (all category dummies 0); the conditional ITT for each
+## category is treated_cell − control_cell.
+GROUPS_CATE <- list(
+  ctl_correct = list(treatment=0),
+  ctl_under   = list(treatment=0, catUnder=1),
+  ctl_over    = list(treatment=0, catOver=1),
+  ctl_dk      = list(treatment=0, catDK=1),
+  trt_correct = list(treatment=1),
+  trt_under   = list(treatment=1, catUnder=1),
+  trt_over    = list(treatment=1, catOver=1),
+  trt_dk      = list(treatment=1, catDK=1)
+)
+GROUPS <- switch(CFG$spec_type, pap=GROUPS_PAP, itt=GROUPS_ITT,
+                 cate=GROUPS_CATE, GROUPS_DIR)
 
 p0 <- function(theta, nm) if (nm %in% names(theta)) unname(theta[[nm]]) else 0  # absent -> 0
 
@@ -40,7 +59,17 @@ p0 <- function(theta, nm) if (nm %in% names(theta)) unname(theta[[nm]]) else 0  
 mean_k <- function(theta, k, g, spec_type = CFG$spec_type) {
   T  <- g$treatment
   NP <- if (is.null(g$noPrior)) 0 else g$noPrior
-  if (spec_type == "pap") {
+  U  <- if (is.null(g$catUnder)) 0 else g$catUnder
+  O  <- if (is.null(g$catOver))  0 else g$catOver
+  DK <- if (is.null(g$catDK))    0 else g$catDK
+  if (spec_type == "itt") {
+    p0(theta, paste0("mu_",k)) + T * p0(theta, paste0("tau_",k))
+  } else if (spec_type == "cate") {
+    p0(theta, paste0("mu_",k)) +
+      U*p0(theta,paste0("cU_",k)) + O*p0(theta,paste0("cO_",k)) + DK*p0(theta,paste0("cDK_",k)) +
+      T  * p0(theta,paste0("tau_",k)) +
+      T*U*p0(theta,paste0("dU_",k)) + T*O*p0(theta,paste0("dO_",k)) + T*DK*p0(theta,paste0("dDK_",k))
+  } else if (spec_type == "pap") {
     p0(theta, paste0("mu_",k)) +
       T  * p0(theta, paste0("alpha_",k)) +
       NP * p0(theta, paste0("beta_", k)) +
@@ -60,7 +89,8 @@ partworths <- function(theta, g) {
   a1 <- c(G("a1e1"),G("a1e2"),G("a1e3")); a1 <- c(a1, -sum(a1))     # levels 1..4
   a2 <- G("a2e1");                        a2 <- c(a2, -a2)          # levels 1..2
   a3 <- c(G("a3e1"),G("a3e2"));           a3 <- c(a3, -sum(a3))     # 1..3
-  list(a1=a1, a2=a2, a3=a3, cost=G("cost"))
+  a4 <- G("a4e1");                        a4 <- c(a4, -a4)          # [1]=most eff (lvl1), [2]=least (lvl3)
+  list(a1=a1, a2=a2, a3=a3, a4=a4, cost=G("cost"))
 }
 
 ## generic utility of a bundle (A1,A2,A3 only)
@@ -75,6 +105,13 @@ bundle_wtp <- function(theta, bundle_name, g) {
 pair_wtp <- function(theta, b1, b2, g) {
   pw <- partworths(theta, g)
   unname(-GBP * (bundle_V(pw, BUNDLES[[b1]]) - bundle_V(pw, BUNDLES[[b2]])) / pw$cost)
+}
+## WTP (£/yr) of a single-attribute level contrast (hi vs lo) within a group.
+## Used for the distributive estimands: a2 national(1) vs local(2) funding,
+## a3 flat(1) vs risk-priced(3) cost-sharing.
+attr_contrast_wtp <- function(theta, g, attr, hi, lo) {
+  pw <- partworths(theta, g)
+  unname(-GBP * (pw[[attr]][hi] - pw[[attr]][lo]) / pw$cost)
 }
 
 ## ---- spec-specific target vectors ----------------------------------
@@ -132,10 +169,74 @@ target_wtps_pap <- function(theta, p_NP = CFG$p_noidea) {
   out
 }
 
+## ITT estimands: bundle/pairwise WTPs in control & treated, plus the plain
+## ITT delta = treated − control on the headline contrasts.
+target_wtps_itt <- function(theta) {
+  out <- numeric(0)
+  non_ref <- setdiff(names(BUNDLES), BUNDLE_REF)
+  for (gname in names(GROUPS_ITT)) for (b in non_ref)
+    out[sprintf("%s__vs_welfare__%s", b, gname)] <- bundle_wtp(theta, b, GROUPS_ITT[[gname]])
+  for (gname in names(GROUPS_ITT)) for (pr in PAIRWISE)
+    out[sprintf("%s_vs_%s__%s", pr[1], pr[2], gname)] <-
+      pair_wtp(theta, pr[1], pr[2], GROUPS_ITT[[gname]])
+  for (pr in DIR_PAIRS) {
+    d <- pair_wtp(theta, pr[1], pr[2], GROUPS_ITT[["treated"]]) -
+         pair_wtp(theta, pr[1], pr[2], GROUPS_ITT[["control"]])
+    out[sprintf("ITT_%s_vs_%s", pr[1], pr[2])] <- d
+  }
+  out
+}
+
+## CATE estimands: bundle/pairwise WTPs in each treatment×category cell, plus
+## the conditional ITT (treated_cell − control_cell) for each category on the
+## headline contrasts. CITT_under_* and CITT_dk_* are the ones the paper reads.
+CATE_CELLS <- list(correct=c("trt_correct","ctl_correct"),
+                   under  =c("trt_under",  "ctl_under"),
+                   over   =c("trt_over",   "ctl_over"),
+                   dk     =c("trt_dk",     "ctl_dk"))
+## Single-attribute conditional ITTs (treated − control by category), on the
+## policy-relevant level contrast for each attribute. national/flat are the
+## distributive levers; effective = scheme efficacy; targeting = coverage breadth.
+ATTR_CITTS <- list(
+  targeting = list(attr="a1", hi=1, lo=4),  # all households vs opt-in only
+  national  = list(attr="a2", hi=1, lo=2),  # national (cross-subsidy) vs local
+  flat      = list(attr="a3", hi=1, lo=3),  # flat vs risk-priced
+  effective = list(attr="a4", hi=1, lo=2)   # most vs least effective (levels 1 vs 3)
+)
+target_wtps_cate <- function(theta) {
+  out <- numeric(0)
+  non_ref <- setdiff(names(BUNDLES), BUNDLE_REF)
+  for (gname in names(GROUPS_CATE)) for (b in non_ref)
+    out[sprintf("%s__vs_welfare__%s", b, gname)] <- bundle_wtp(theta, b, GROUPS_CATE[[gname]])
+  for (gname in names(GROUPS_CATE)) for (pr in PAIRWISE)
+    out[sprintf("%s_vs_%s__%s", pr[1], pr[2], gname)] <-
+      pair_wtp(theta, pr[1], pr[2], GROUPS_CATE[[gname]])
+  for (pr in DIR_PAIRS) for (cl in names(CATE_CELLS)) {
+    gg <- CATE_CELLS[[cl]]
+    d <- pair_wtp(theta, pr[1], pr[2], GROUPS_CATE[[gg[1]]]) -
+         pair_wtp(theta, pr[1], pr[2], GROUPS_CATE[[gg[2]]])
+    out[sprintf("CITT_%s__%s_vs_%s", cl, pr[1], pr[2])] <- d
+  }
+  for (an in names(ATTR_CITTS)) {
+    a <- ATTR_CITTS[[an]]
+    for (cl in names(CATE_CELLS)) {
+      gg <- CATE_CELLS[[cl]]
+      out[sprintf("ACITT_%s__%s", an, cl)] <-
+        attr_contrast_wtp(theta, GROUPS_CATE[[gg[1]]], a$attr, a$hi, a$lo) -
+        attr_contrast_wtp(theta, GROUPS_CATE[[gg[2]]], a$attr, a$hi, a$lo)
+    }
+  }
+  out
+}
+
 ## Dispatch on CFG$spec_type so downstream code (delta_method, bootstrap,
 ## montecarlo) can call target_wtps() generically.
 target_wtps <- function(theta) {
-  if (identical(CFG$spec_type, "pap")) target_wtps_pap(theta) else target_wtps_dir(theta)
+  switch(CFG$spec_type,
+         pap  = target_wtps_pap(theta),
+         itt  = target_wtps_itt(theta),
+         cate = target_wtps_cate(theta),
+         target_wtps_dir(theta))
 }
 
 delta_method <- function(fun, est, vcov) {

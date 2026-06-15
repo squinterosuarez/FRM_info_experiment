@@ -30,7 +30,7 @@ CFG <- list(
   n_draws=500, cost_random=FALSE, asc_random=FALSE,  # PAP-as-written: ASC fixed
   do_bootstrap=FALSE, boot_B=200,
   ## spec & DGP switches
-  spec_type = "pap",         # "pap" (primary) | "dir" (supplementary)
+  spec_type = "itt",         # fallback default; full primary analysis = itt + cate (run_all.R)
   dgp_type  = "directional"  # "directional" (default) | "2x2"
 )
 set.seed(CFG$seed)
@@ -63,6 +63,10 @@ TRUE_dn <- c(asc=0.20, a1e1=-0.20,a1e2=-0.05,a1e3=0.00, a2e1=-0.15,
 ## 'no idea' control: single intercept on ASC. Direction for no-idea people
 ## now flows through the imputed-prior gap (same up/dn coefficients as everyone).
 TRUE_np_asc <- -0.10
+## 'no idea' people now get their OWN treatment effect (de-imputed); set equal
+## to the per-step upward effect so a treated DK behaves like a one-step
+## underestimator. Consumed by the directional DGP's DK branch in 02_simulate.R.
+TRUE_dk <- TRUE_up
 TRUE_sd <- c(asc=1.0, a1e1=0.5,a1e2=0.5,a1e3=0.4, a2e1=0.4, a3e1=0.4,a3e2=0.4, a4e1=0.4)
 
 ## ---- TRUE values for the 2x2 (T × NoPrior) DGP ----

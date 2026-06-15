@@ -1,9 +1,14 @@
 ## =====================================================================
 ## 03_estimate_mmnl.R
 ## MMNL fit. Mean function branches on CFG$spec_type:
+##   spec_type = "itt"  →  mean_k = mu_k + tau_k·T                 (plain ITT; main analysis)
+##   spec_type = "cate" →  mean_k = mu_k + cU_k·U + cO_k·O + cDK_k·DK            (baseline)
+##                                + tau_k·T                                      (correct-cell ITT)
+##                                + dU_k·T·U + dO_k·T·O + dDK_k·T·DK             (CATE deviations)
+##                         conditional ITT: under = tau+dU, over = tau+dO, DK = tau+dDK
 ##   spec_type = "pap"  →  mean_k = mu_k + α_k·T + β_k·NP + γ_k·T·NP
 ##   spec_type = "dir"  →  mean_k = mu_k + dt_k·T + up_k·T·gapUp + dn_k·T·gapDown
-##                                  (+ np_asc·T·NP on ASC only)
+##                                  (+ np_asc·T·NP on ASC only; gap-size robustness)
 ## random part: diagonal (primary) or Cholesky-correlated (robustness).
 ## cost fixed; ASC fixed by default per PAP (CFG$asc_random = FALSE).
 ## =====================================================================
@@ -13,7 +18,19 @@ build_start <- function(correlated, cost_random, asc_random, noprior_separate=FA
                         omit_params=character(0), spec_type=CFG$spec_type) {
   rp_rand <- if (asc_random) RP else setdiff(RP, "asc")
   mus <- c(setNames(rep(0,length(RP)), paste0("mu_",RP)), mu_cost=-0.10)
-  if (spec_type == "pap") {
+  if (spec_type == "itt") {
+    tau   <- c(setNames(rep(0,length(RP)), paste0("tau_",RP)), tau_cost=0)
+    start <- c(mus, tau)
+  } else if (spec_type == "cate") {
+    tau <- c(setNames(rep(0,length(RP)), paste0("tau_",RP)), tau_cost=0)
+    cU  <- setNames(rep(0,length(RP)), paste0("cU_",RP))   # baseline level by category
+    cO  <- setNames(rep(0,length(RP)), paste0("cO_",RP))
+    cDK <- setNames(rep(0,length(RP)), paste0("cDK_",RP))
+    dU  <- setNames(rep(0,length(RP)), paste0("dU_",RP))   # treatment × category (CATE deviation)
+    dO  <- setNames(rep(0,length(RP)), paste0("dO_",RP))
+    dDK <- setNames(rep(0,length(RP)), paste0("dDK_",RP))
+    start <- c(mus, tau, cU, cO, cDK, dU, dO, dDK)
+  } else if (spec_type == "pap") {
     alpha <- c(setNames(rep(0,length(RP)), paste0("alpha_",RP)), alpha_cost=0)
     beta  <- c(setNames(rep(0,length(RP)), paste0("beta_", RP)), beta_cost =0)
     gamma <- c(setNames(rep(0,length(RP)), paste0("gamma_",RP)), gamma_cost=0)
@@ -60,7 +77,17 @@ make_randCoeff <- function(correlated, cost_random, asc_random, noprior_separate
   mean_expr <- function(k) {
     terms <- character(0)
     if (has(paste0("mu_",k))) terms <- c(terms, sprintf("mu_%s", k))
-    if (spec_type == "pap") {
+    if (spec_type == "itt") {
+      if (has(paste0("tau_",k))) terms <- c(terms, sprintf("tau_%s*treatment", k))
+    } else if (spec_type == "cate") {
+      if (has(paste0("cU_",k)))  terms <- c(terms, sprintf("cU_%s*catUnder", k))
+      if (has(paste0("cO_",k)))  terms <- c(terms, sprintf("cO_%s*catOver",  k))
+      if (has(paste0("cDK_",k))) terms <- c(terms, sprintf("cDK_%s*catDK",   k))
+      if (has(paste0("tau_",k))) terms <- c(terms, sprintf("tau_%s*treatment", k))
+      if (has(paste0("dU_",k)))  terms <- c(terms, sprintf("dU_%s*(treatment*catUnder)", k))
+      if (has(paste0("dO_",k)))  terms <- c(terms, sprintf("dO_%s*(treatment*catOver)",  k))
+      if (has(paste0("dDK_",k))) terms <- c(terms, sprintf("dDK_%s*(treatment*catDK)",   k))
+    } else if (spec_type == "pap") {
       if (has(paste0("alpha_",k))) terms <- c(terms, sprintf("alpha_%s*treatment", k))
       if (has(paste0("beta_", k))) terms <- c(terms, sprintf("beta_%s*noPrior",  k))
       if (has(paste0("gamma_",k))) terms <- c(terms, sprintf("gamma_%s*(treatment*noPrior)", k))
@@ -104,7 +131,9 @@ make_randCoeff <- function(correlated, cost_random, asc_random, noprior_separate
     if (has("alpha_cost")) cost_terms <- c(cost_terms, "alpha_cost*treatment")
     if (has("beta_cost"))  cost_terms <- c(cost_terms, "beta_cost*noPrior")
     if (has("gamma_cost")) cost_terms <- c(cost_terms, "gamma_cost*(treatment*noPrior)")
-  } else {
+  } else if (spec_type %in% c("itt","cate")) {
+    if (has("tau_cost")) cost_terms <- c(cost_terms, "tau_cost*treatment")
+  } else {  # "dir"
     if (has("dt_cost")) cost_terms <- c(cost_terms, "dt_cost*treatment")
   }
   if (cost_random && has("sd_cost")) cost_terms <- c(cost_terms, "sd_cost*draws_cost")

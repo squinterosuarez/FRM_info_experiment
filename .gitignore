@@ -4,3 +4,19 @@
 .Ruserdata
 Postcodes_Risk_Assessment_All.csv
 *.Rproj
+
+# OS / editor cruft
+.DS_Store
+~$*
+
+# Logs
+*.log
+
+# Apollo working dirs + Monte Carlo / bootstrap per-iteration caches (regenerable)
+flood-dce/outputs/*_apollo/
+flood-dce/outputs/mc_*_dir/
+flood-dce/outputs/bootstrap_dir/
+flood-dce/outputs/smoke_cate/
+
+# Fitted model objects (regenerable, large-ish binaries)
+flood-dce/outputs/model_*.rds

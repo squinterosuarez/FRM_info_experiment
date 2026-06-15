@@ -83,8 +83,81 @@ true_theta_vec_pap <- function() {
   } else stop("Unknown CFG$dgp_type: ", CFG$dgp_type)
 }
 
+## Cache of category-conditional gap moments + category shares under the
+## de-imputed directional DGP. Mirrors the updated simulate_respondents():
+## category is built from raw prior_rank vs actual_rank (no anchor), DK is
+## its own cell. Used to marginalise TRUE values onto the itt/cate truths.
+.cate_dgp_moments <- local({
+  cache <- NULL
+  function(N_ref = 50000, seed_ref = 999999L) {
+    if (!is.null(cache)) return(cache)
+    old_seed <- if (exists(".Random.seed", envir=globalenv()))
+      get(".Random.seed", envir=globalenv()) else NULL
+    set.seed(seed_ref)
+    actual_rank <- sample(4:1, N_ref, TRUE, prob=rev(CFG$risk_probs))
+    treatment   <- rbinom(N_ref, 1, CFG$prop_treat)
+    no_idea     <- runif(N_ref) < CFG$p_noidea
+    shift       <- sample(CFG$shift_vals, N_ref, TRUE, prob=CFG$shift_probs)
+    prior_rank  <- pmin(pmax(actual_rank - shift, 1), 4)
+    prior_used  <- ifelse(no_idea, CFG$noidea_anchor, prior_rank)
+    gap     <- actual_rank - prior_used
+    gapUp   <- pmax(gap, 0); gapDown <- pmax(-gap, 0)
+    under <- !no_idea & (actual_rank >  prior_rank)
+    over  <- !no_idea & (actual_rank <  prior_rank)
+    if (!is.null(old_seed)) assign(".Random.seed", old_seed, envir=globalenv())
+    T1 <- treatment==1
+    cache <<- list(
+      eUp_under = mean(gapUp[T1 & under]),     # E[gapUp | underestimator, treated]
+      eDn_over  = mean(gapDown[T1 & over]),     # E[gapDown | overestimator, treated]
+      eUp_nonDK = mean(gapUp[T1 & !no_idea]),   # for the population ITT
+      eDn_nonDK = mean(gapDown[T1 & !no_idea]),
+      p_DK      = mean(no_idea)
+    )
+    cache
+  }
+})
+
+## Plain-ITT truth: tau_k = population-average treatment shift, the
+## category-share-weighted mix of the non-DK gap effect and the DK effect.
+true_theta_vec_itt <- function() {
+  rp <- RP; mm <- .cate_dgp_moments()
+  shift_nonDK <- TRUE_dt[rp] + TRUE_up[rp]*mm$eUp_nonDK + TRUE_dn[rp]*mm$eDn_nonDK
+  tau_attr <- (1-mm$p_DK)*shift_nonDK + mm$p_DK*TRUE_dk[rp]
+  shift_nonDK_cost <- unname(TRUE_dt["cost"]) +
+    unname(TRUE_up["cost"])*mm$eUp_nonDK + unname(TRUE_dn["cost"])*mm$eDn_nonDK
+  tau_cost <- (1-mm$p_DK)*shift_nonDK_cost + mm$p_DK*unname(TRUE_dk["cost"])
+  c(setNames(TRUE_mu[rp], paste0("mu_",rp)), mu_cost=unname(TRUE_mu["cost"]),
+    setNames(unname(tau_attr), paste0("tau_",rp)), tau_cost=unname(tau_cost),
+    setNames(TRUE_sd[rp], paste0("sd_",rp)))
+}
+
+## CATE truth: correct cell = TRUE_dt; under/over deviations = gap-weighted
+## TRUE_up/TRUE_dn; DK deviation = TRUE_dk − TRUE_dt; category mains = 0
+## (baseline tastes don't differ by category in the DGP).
+true_theta_vec_cate <- function() {
+  rp <- RP; mm <- .cate_dgp_moments()
+  tau_attr <- TRUE_dt[rp]
+  dU_attr  <- TRUE_up[rp]*mm$eUp_under
+  dO_attr  <- TRUE_dn[rp]*mm$eDn_over
+  dDK_attr <- TRUE_dk[rp] - TRUE_dt[rp]
+  z <- setNames(rep(0, length(rp)), rp)
+  c(setNames(TRUE_mu[rp], paste0("mu_",rp)), mu_cost=unname(TRUE_mu["cost"]),
+    setNames(unname(tau_attr), paste0("tau_",rp)), tau_cost=unname(TRUE_dt["cost"]),
+    setNames(unname(z), paste0("cU_",rp)),
+    setNames(unname(z), paste0("cO_",rp)),
+    setNames(unname(z), paste0("cDK_",rp)),
+    setNames(unname(dU_attr),  paste0("dU_",rp)),
+    setNames(unname(dO_attr),  paste0("dO_",rp)),
+    setNames(unname(dDK_attr), paste0("dDK_",rp)),
+    setNames(TRUE_sd[rp], paste0("sd_",rp)))
+}
+
 true_theta_vec <- function() {
-  if (identical(CFG$spec_type, "pap")) true_theta_vec_pap() else true_theta_vec_dir()
+  switch(CFG$spec_type,
+         pap  = true_theta_vec_pap(),
+         itt  = true_theta_vec_itt(),
+         cate = true_theta_vec_cate(),
+         true_theta_vec_dir())
 }
 
 recovery_table <- function(model) {

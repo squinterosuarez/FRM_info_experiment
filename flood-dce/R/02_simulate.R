@@ -18,23 +18,43 @@ simulate_respondents <- function() {
   noPrior <- as.integer(no_idea)
   upd <- ifelse(treatment==0, "control",
          ifelse(gap>0, "upward", ifelse(gap<0, "downward", "none")))  # by effective gap
+  ## Pre-treatment prior-gap CATEGORY (NO imputation; DK kept as its own cell).
+  ## Built from raw prior_rank vs actual_rank, so it is fixed before treatment.
+  ##   under   = objective risk ABOVE stated prior (underestimator)
+  ##   over    = objective risk BELOW stated prior (overestimator)
+  ##   correct = prior matches objective
+  ##   dontknow= no stated prior (no midpoint anchor here; see gapUp/gapDown for that)
+  ## Consumed by spec_type="cate"; the midpoint-anchored gapUp/gapDown above are
+  ## left untouched so the gap-size robustness spec ("dir") still has its inputs.
+  prior_gap_cat <- ifelse(no_idea, "dontknow",
+                   ifelse(actual_rank >  prior_rank, "under",
+                   ifelse(actual_rank <  prior_rank, "over", "correct")))
+  prior_gap_cat <- factor(prior_gap_cat, levels=c("correct","under","over","dontknow"))
+  catUnder <- as.integer(prior_gap_cat=="under")
+  catOver  <- as.integer(prior_gap_cat=="over")
+  catDK    <- as.integer(prior_gap_cat=="dontknow")
   data.frame(ID=seq_len(N),
              block=sample(rep(seq_len(CFG$n_blocks), length.out=N)),
              treatment=treatment, actual_rank=actual_rank, prior_rank=prior_rank,
              gapUp=gapUp, gapDown=gapDown, noPrior=noPrior,
+             catUnder=catUnder, catOver=catOver, catDK=catDK, prior_gap_cat=prior_gap_cat,
              updater_type=factor(upd, levels=c("control","none","upward","downward")),
              risk_high=as.integer(actual_rank==4))
 }
 
 ## Draw a respondent's β_i. Branches on CFG$dgp_type.
-##   directional: β = μ + T·(dt + up·gapUp + dn·gapDown) + np_asc·T·NP·1{k=asc} + σ·η
+##   directional: stated-prior people  β = μ + T·(dt + up·gapUp + dn·gapDown) + σ·η
+##                don't-know people     β = μ + T·dk + σ·η   (own effect, de-imputed)
 ##   2x2:         β = μ + α·T + β_np·NP + γ·T·NP + σ·η
 draw_beta_i <- function(r) {
   b <- TRUE_mu
   if (CFG$dgp_type == "directional") {
-    b[names(TRUE_dt)] <- b[names(TRUE_dt)] +
-        r$treatment*(TRUE_dt + TRUE_up*r$gapUp + TRUE_dn*r$gapDown)   # direction via gap
-    b["asc"] <- b["asc"] + r$treatment*r$noPrior*TRUE_np_asc          # no-idea ASC control
+    if (r$noPrior == 1) {
+      b[names(TRUE_dk)] <- b[names(TRUE_dk)] + r$treatment*TRUE_dk     # DK: own effect (de-imputed)
+    } else {
+      b[names(TRUE_dt)] <- b[names(TRUE_dt)] +
+          r$treatment*(TRUE_dt + TRUE_up*r$gapUp + TRUE_dn*r$gapDown) # direction via gap
+    }
   } else if (CFG$dgp_type == "2x2") {
     b[names(TRUE_alpha)] <- b[names(TRUE_alpha)] +
         r$treatment*TRUE_alpha +
@@ -64,7 +84,8 @@ simulate_choices <- function(resp_df, design) {
     choice <- max.col(U, "first")
     out <- data.frame(ID=r$ID, block=r$block, task=d$task,
                       treatment=r$treatment, gapUp=r$gapUp, gapDown=r$gapDown,
-                      noPrior=r$noPrior, updater_type=r$updater_type,
+                      noPrior=r$noPrior, catUnder=r$catUnder, catOver=r$catOver, catDK=r$catDK,
+                      updater_type=r$updater_type,
                       actual_rank=r$actual_rank, risk_high=r$risk_high, choice=choice)
     out <- cbind(out, d[,c(cA,cB)]); out$av_A<-1L; out$av_B<-1L; out$av_SQ<-1L
     rows[[i]] <- out
@@ -79,3 +100,5 @@ saveRDS(database, file.path(PATHS$data,"sim_database.rds"))
 message(sprintf("02_simulate.R: %d obs. SQ share=%.3f. Treated updater cells:",
                 nrow(database), mean(database$choice==3)))
 print(table(resp_df$updater_type))
+message("02_simulate.R: prior-gap categories (pre-treatment):")
+print(table(resp_df$prior_gap_cat))
