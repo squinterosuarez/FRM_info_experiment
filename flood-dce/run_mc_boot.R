@@ -17,7 +17,10 @@
 here <- function(...) file.path("R", ...)
 
 ## --------- Pass 1: PAP on directional DGP (realism) ---------
-source(here("00_config.R"))   # defaults to spec_type="pap", dgp_type="directional"
+## Config default is now spec_type="itt" (the primary analysis); this is the
+## SUPPLEMENTARY pap/2x2 driver, so select the PAP spec explicitly.
+source(here("00_config.R"))   # dgp_type="directional"
+CFG$spec_type <- "pap"
 source(here("01_design.R"))
 source(here("02_simulate.R"))         # writes database under directional DGP
 source(here("03_estimate_mmnl.R"))    # auto-fits model_pap on this database

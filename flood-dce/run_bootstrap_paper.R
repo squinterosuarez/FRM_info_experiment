@@ -1,6 +1,6 @@
 ## =====================================================================
 ## run_bootstrap_paper.R -- respondent-clustered bootstrap on the
-## DIRECTIONAL primary fit (the headline spec). Gives empirical clustered
+## DIRECTIONAL fit (a SUPPLEMENTARY spec; itt + cate are primary). Gives empirical clustered
 ## CIs for absolute bundle WTPs + directional Delta-contrasts, to sit
 ## against the delta-method CIs (which run ~16-33% narrow on WTP LEVELS).
 ## B=200, draws=500. Per-rep cache in outputs/bootstrap_dir/ => resumable.
@@ -8,7 +8,7 @@
 ## =====================================================================
 here <- function(...) file.path("R", ...)
 source(here("00_config.R"))
-CFG$spec_type <- "dir"; CFG$dgp_type <- "directional"   # headline spec/DGP
+CFG$spec_type <- "dir"; CFG$dgp_type <- "directional"   # supplementary spec/DGP
 source(here("01_design.R"))
 source(here("02_simulate.R"))        # representative dataset (seed=CFG$seed)
 source(here("03_estimate_mmnl.R"))   # auto-fits model_dir -> model_main

@@ -200,10 +200,11 @@ fit_mmnl <- function(database, model_name=NULL, correlated=FALSE,
                   apollo_prob_fun, apollo_inputs, estimate_settings=est)
 }
 
-## Auto-fit the primary model on source. Object name is `model_pap` (when
-## CFG$spec_type="pap") or `model_dir` ("dir"); generic alias `model_main`
-## always points at whatever was fitted, so downstream modules can be
-## spec-agnostic. Skip if the spec-specific object is already in globalenv.
+## Auto-fit the config-default spec on source. The object name follows the
+## active spec -- `model_itt` (current default), `model_cate`, `model_pap`, or
+## `model_dir`; generic alias `model_main` always points at whatever was
+## fitted, so downstream modules can be spec-agnostic. Skip if the
+## spec-specific object is already in globalenv.
 if (identical(environment(), globalenv())) {
   .obj <- paste0("model_", CFG$spec_type)
   if (!exists(.obj, envir=globalenv())) {

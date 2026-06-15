@@ -13,7 +13,7 @@ GBP <- 100
 ## GROUPS define the "whose preference are we computing" cell for WTP.
 ## Two parallel sets, keyed by spec_type:
 ##   GROUPS_DIR  — directional spec (gap-based)
-##   GROUPS_PAP  — 4-cell PAP spec (T × NoPrior); the primary
+##   GROUPS_PAP  — 4-cell PAP spec (T × NoPrior); supplementary (itt + cate are primary)
 ## The active `GROUPS` is set from CFG$spec_type at source time below.
 ## ====================================================================
 GROUPS_DIR <- list(
