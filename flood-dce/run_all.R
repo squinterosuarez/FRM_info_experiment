@@ -17,6 +17,7 @@ source(here("01_design.R"))
 
 real_path <- Sys.getenv("DATABASE_RDS")
 REAL <- nzchar(real_path)
+REAL_DATA <- REAL   # signal to 06_outputs.R: skip truth-based recovery tables on real data
 if (REAL) {
   message(sprintf("[run_all] REAL data: %s (skipping 02_simulate.R)", real_path))
   database <- readRDS(real_path)

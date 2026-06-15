@@ -1,17 +1,20 @@
-## =====================================================================
-## 00_config.R  (PAP-primary version)
+## 00_config.R
 ## Settings, TRUE parameters, 4 bundles (welfare = reference), helpers.
 ##
-## Two specs are wired in parallel:
-##   "pap"  (primary)       — mean_k = mu_k + α_k·T + β_k·NP + γ_k·T·NP
-##                            (mirrors the PAP: ITT + 4-cell decomposition)
-##   "dir"  (supplementary) — mean_k = mu_k + dt_k·T + up_k·T·gapUp + dn_k·T·gapDown
-##                            (the directional gap-based mechanism spec)
+## Four specs are wired in parallel (CFG$spec_type selects which is fit):
+##   "itt"  (PRIMARY)       — mean_k = mu_k + tau_k·T   (plain ITT; main analysis)
+##   "cate" (PRIMARY)       — mu_k + category baselines + tau_k·T + T×category dummies
+##                            (conditional ITT by pre-treatment prior-gap category;
+##                             the mechanism). itt + cate run together via
+##                             run_all.R (analysis) and run_mc_cate.R (operating chars).
+##   "pap"  (supplementary) — mean_k = mu_k + α_k·T + β_k·NP + γ_k·T·NP (4-cell T×NoPrior)
+##   "dir"  (supplementary) — mean_k = mu_k + dt_k·T + up_k·T·gapUp + dn_k·T·gapDown (gap-based)
 ## Two DGPs are wired in parallel:
 ##   "directional" (default) — gap-based DGP using TRUE_dt/up/dn (realism story)
 ##   "2x2"                   — 2x2 DGP using TRUE_alpha/beta/gamma
 ## CFG$spec_type and CFG$dgp_type select which is fit and which generates data.
-## =====================================================================
+
+
 suppressMessages({ library(apollo); library(numDeriv); library(ggplot2) })
 
 PATHS <- list(out="outputs", data="data")

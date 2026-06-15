@@ -196,7 +196,12 @@ fig_directional <- function(wtp_rec) {
     theme_minimal(base_size=10)
 }
 
-if (exists("model_main")) {
+## Recovery tables compare the fit to the simulation truth (true_theta_vec());
+## they are meaningless on real data, so skip them when REAL_DATA is set
+## (run_all.R sets this for the DATABASE_RDS real-data branch). The estimated
+## WTP table (wtp_delta.csv, written by 04_wtp.R) is unaffected and remains valid.
+.real_data <- isTRUE(get0("REAL_DATA", ifnotfound = FALSE))
+if (exists("model_main") && !.real_data) {
   rec <- recovery_table(model_main)
   write.csv(rec, file.path(PATHS$out,"recovery_params.csv"), row.names=FALSE)
   cat("\n-- Parameter recovery (coverage =",
@@ -208,6 +213,8 @@ if (exists("model_main")) {
   if (identical(CFG$spec_type, "dir"))
     ggsave(file.path(PATHS$out,"fig_directional.png"), fig_directional(wtp_rec),
            width=7, height=5, dpi=150)
+} else if (.real_data) {
+  message("06_outputs.R: REAL_DATA=TRUE -> skipping recovery tables (no known truth on real data).")
 }
 message(sprintf("06_outputs.R loaded (spec_type=%s, dgp_type=%s).",
                 CFG$spec_type, CFG$dgp_type))
