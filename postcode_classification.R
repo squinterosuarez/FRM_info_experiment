@@ -89,17 +89,17 @@ n_unique  <- apply(merged[, cat_cols], 1, function(x) length(unique(x)))
 merged$STABILITY <- ifelse(n_unique == 1, "Stable", "CHANGES")
 
 
-### Transition matrix (FUNCTIONAL -> FIFTY_SPLIT) 
+### Transition matrix (FUNCTIONAL -> UPPER) 
 print(table(
   FUNCTIONAL  = factor(merged$CAT_FUNCTIONAL,  levels = levels_order),
-  FIFTY_SPLIT = factor(merged$CAT_FIFTY_SPLIT, levels = levels_order)
+  UPPER = factor(merged$CAT_UPPER, levels = levels_order)
 ))
 
 
 ### Postcodes that moved from Medium to High between scenarios 
 moved_up <- merged[
   merged$CAT_FUNCTIONAL  == "Medium" &
-    merged$CAT_FIFTY_SPLIT == "High",
+    merged$CAT_UPPER == "High",
   c("Postcode", "HIGH_CNT", "MED_CNT", "LOW_CNT", "V_LOW", "total_addresses",
     "E_FUNCTIONAL", "E_FIFTY_SPLIT")
 ]
@@ -113,7 +113,7 @@ print(head(moved_up, 100), row.names = FALSE)
 print(tail(moved_up, 100), row.names = FALSE)
 
 
-# Placeholder final classification
+# Final classification
 # Options: "CONSERVATIVE", "FUNCTIONAL", "FIFTY_SPLIT", "UPPER"
 FINAL_SCENARIO <- "UPPER"
 
