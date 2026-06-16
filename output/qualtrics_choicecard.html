@@ -1,16 +1,29 @@
 <style>
 .dce-table { width:100%; border-collapse:collapse; font-size:13px; line-height:1.5; }
 .dce-table th, .dce-table td { padding:10px 12px; border:1px solid #ccc; vertical-align:top; }
-.dce-table thead th { font-weight:bold; font-size:13px; text-align:center; padding:12px; }
+.dce-table thead th { font-weight:bold; font-size:14px; text-align:center; padding:14px 12px; }
 .col-attr { width:18%; text-align:left; font-weight:bold; background:#f0f4f8; }
-.col-prog, .col-sq { width:27.3%; text-align:center; cursor:pointer; transition:background 0.15s; }
-.col-prog:hover, .col-sq:hover { background:#e6f1fb; }
-.col-header-a, .col-header-b { background:#2c5f8a; color:white; cursor:pointer; }
-.col-header-sq { background:#6b6b6b; color:white; cursor:pointer; }
-.col-selected { background:rgba(44,95,138,0.06); }
+/* --- Programme A column --- */
+.col-prog-a { width:27.3%; text-align:center; cursor:pointer; transition:background 0.15s; background:rgba(44,95,138,0.06); border-left:3px solid #2c5f8a; }
+.col-prog-a:hover { background:rgba(44,95,138,0.12); }
+/* --- Programme B column --- */
+.col-prog-b { width:27.3%; text-align:center; cursor:pointer; transition:background 0.15s; background:rgba(58,122,109,0.06); border-left:3px solid #3a7a6d; }
+.col-prog-b:hover { background:rgba(58,122,109,0.12); }
+/* --- Status quo column --- */
+.col-sq { width:27.3%; text-align:center; cursor:pointer; transition:background 0.15s; background:rgba(107,107,107,0.06); border-left:3px solid #6b6b6b; }
+.col-sq:hover { background:rgba(107,107,107,0.12); }
+/* --- Headers --- */
+.col-header-a { background:#2c5f8a; color:white; cursor:pointer; border-left:3px solid #2c5f8a; }
+.col-header-b { background:#3a7a6d; color:white; cursor:pointer; border-left:3px solid #3a7a6d; }
+.col-header-sq { background:#6b6b6b; color:white; cursor:pointer; border-left:3px solid #6b6b6b; }
+/* --- Selected states --- */
+.col-prog-a.col-selected { background:rgba(44,95,138,0.14); }
+.col-prog-b.col-selected { background:rgba(58,122,109,0.14); }
+.col-sq.col-selected { background:rgba(107,107,107,0.14); }
 .col-header-a.selected { background:#1a4d78; box-shadow:inset 0 -3px 0 #fff; }
-.col-header-b.selected { background:#1a4d78; box-shadow:inset 0 -3px 0 #fff; }
+.col-header-b.selected { background:#2a6355; box-shadow:inset 0 -3px 0 #fff; }
 .col-header-sq.selected { background:#4a4a4a; box-shadow:inset 0 -3px 0 #fff; }
+/* --- Radio row --- */
 .select-row td { padding:14px 12px; text-align:center; }
 .radio-circle { display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px; border-radius:50%; border:2px solid #999; background:white; cursor:pointer; transition:all 0.15s; }
 .radio-circle.checked { border-color:#2c5f8a; }
@@ -34,38 +47,38 @@
 <tbody>
 <tr>
 <td class="col-attr">Who is protected by the programme?</td>
-<td class="col-prog cA" id="PA_A1" onclick="dce_pick('A')"></td>
-<td class="col-prog cB" id="PB_A1" onclick="dce_pick('B')"></td>
+<td class="col-prog-a cA" id="PA_A1" onclick="dce_pick('A')"></td>
+<td class="col-prog-b cB" id="PB_A1" onclick="dce_pick('B')"></td>
 <td class="col-sq cSQ" onclick="dce_pick('SQ')">Households in high-risk areas, priority for deprived areas</td>
 </tr>
 <tr>
 <td class="col-attr">Who shares the cost?</td>
-<td class="col-prog cA" id="PA_A2" onclick="dce_pick('A')"></td>
-<td class="col-prog cB" id="PB_A2" onclick="dce_pick('B')"></td>
+<td class="col-prog-a cA" id="PA_A2" onclick="dce_pick('A')"></td>
+<td class="col-prog-b cB" id="PB_A2" onclick="dce_pick('B')"></td>
 <td class="col-sq cSQ" onclick="dce_pick('SQ')">Everyone in England, through national taxes</td>
 </tr>
 <tr>
 <td class="col-attr">How is each household's share worked out?</td>
-<td class="col-prog cA" id="PA_A3" onclick="dce_pick('A')"></td>
-<td class="col-prog cB" id="PB_A3" onclick="dce_pick('B')"></td>
+<td class="col-prog-a cA" id="PA_A3" onclick="dce_pick('A')"></td>
+<td class="col-prog-b cB" id="PB_A3" onclick="dce_pick('B')"></td>
 <td class="col-sq cSQ" onclick="dce_pick('SQ')">Wealthier households pay more</td>
 </tr>
 <tr>
 <td class="col-attr">How effective is the programme?</td>
-<td class="col-prog cA" id="PA_A4" onclick="dce_pick('A')"></td>
-<td class="col-prog cB" id="PB_A4" onclick="dce_pick('B')"></td>
+<td class="col-prog-a cA" id="PA_A4" onclick="dce_pick('A')"></td>
+<td class="col-prog-b cB" id="PB_A4" onclick="dce_pick('B')"></td>
 <td class="col-sq cSQ" onclick="dce_pick('SQ')">Medium - risk reduced</td>
 </tr>
 <tr>
 <td class="col-attr">Additional cost to your household per year</td>
-<td class="col-prog cA" id="PA_A5" onclick="dce_pick('A')"></td>
-<td class="col-prog cB" id="PB_A5" onclick="dce_pick('B')"></td>
+<td class="col-prog-a cA" id="PA_A5" onclick="dce_pick('A')"></td>
+<td class="col-prog-b cB" id="PB_A5" onclick="dce_pick('B')"></td>
 <td class="col-sq cSQ" onclick="dce_pick('SQ')">£0</td>
 </tr>
 <tr class="select-row">
 <td class="col-attr">Your choice</td>
-<td class="col-prog cA" onclick="dce_pick('A')"><div class="radio-circle" id="rA"><div class="radio-dot"></div></div><div class="select-label">Select A</div></td>
-<td class="col-prog cB" onclick="dce_pick('B')"><div class="radio-circle" id="rB"><div class="radio-dot"></div></div><div class="select-label">Select B</div></td>
+<td class="col-prog-a cA" onclick="dce_pick('A')"><div class="radio-circle" id="rA"><div class="radio-dot"></div></div><div class="select-label">Select A</div></td>
+<td class="col-prog-b cB" onclick="dce_pick('B')"><div class="radio-circle" id="rB"><div class="radio-dot"></div></div><div class="select-label">Select B</div></td>
 <td class="col-sq cSQ" onclick="dce_pick('SQ')"><div class="radio-circle" id="rSQ"><div class="radio-dot"></div></div><div class="select-label">Keep current</div></td>
 </tr>
 </tbody>

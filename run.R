@@ -747,16 +747,29 @@ html_lines <- c(
   '<style>',
   '.dce-table { width:100%; border-collapse:collapse; font-size:13px; line-height:1.5; }',
   '.dce-table th, .dce-table td { padding:10px 12px; border:1px solid #ccc; vertical-align:top; }',
-  '.dce-table thead th { font-weight:bold; font-size:13px; text-align:center; padding:12px; }',
+  '.dce-table thead th { font-weight:bold; font-size:14px; text-align:center; padding:14px 12px; }',
   '.col-attr { width:18%; text-align:left; font-weight:bold; background:#f0f4f8; }',
-  '.col-prog, .col-sq { width:27.3%; text-align:center; cursor:pointer; transition:background 0.15s; }',
-  '.col-prog:hover, .col-sq:hover { background:#e6f1fb; }',
-  '.col-header-a, .col-header-b { background:#2c5f8a; color:white; cursor:pointer; }',
-  '.col-header-sq { background:#6b6b6b; color:white; cursor:pointer; }',
-  '.col-selected { background:rgba(44,95,138,0.06); }',
+  '/* --- Programme A column --- */',
+  '.col-prog-a { width:27.3%; text-align:center; cursor:pointer; transition:background 0.15s; background:rgba(44,95,138,0.06); border-left:3px solid #2c5f8a; }',
+  '.col-prog-a:hover { background:rgba(44,95,138,0.12); }',
+  '/* --- Programme B column --- */',
+  '.col-prog-b { width:27.3%; text-align:center; cursor:pointer; transition:background 0.15s; background:rgba(58,122,109,0.06); border-left:3px solid #3a7a6d; }',
+  '.col-prog-b:hover { background:rgba(58,122,109,0.12); }',
+  '/* --- Status quo column --- */',
+  '.col-sq { width:27.3%; text-align:center; cursor:pointer; transition:background 0.15s; background:rgba(107,107,107,0.06); border-left:3px solid #6b6b6b; }',
+  '.col-sq:hover { background:rgba(107,107,107,0.12); }',
+  '/* --- Headers --- */',
+  '.col-header-a { background:#2c5f8a; color:white; cursor:pointer; border-left:3px solid #2c5f8a; }',
+  '.col-header-b { background:#3a7a6d; color:white; cursor:pointer; border-left:3px solid #3a7a6d; }',
+  '.col-header-sq { background:#6b6b6b; color:white; cursor:pointer; border-left:3px solid #6b6b6b; }',
+  '/* --- Selected states --- */',
+  '.col-prog-a.col-selected { background:rgba(44,95,138,0.14); }',
+  '.col-prog-b.col-selected { background:rgba(58,122,109,0.14); }',
+  '.col-sq.col-selected { background:rgba(107,107,107,0.14); }',
   '.col-header-a.selected { background:#1a4d78; box-shadow:inset 0 -3px 0 #fff; }',
-  '.col-header-b.selected { background:#1a4d78; box-shadow:inset 0 -3px 0 #fff; }',
+  '.col-header-b.selected { background:#2a6355; box-shadow:inset 0 -3px 0 #fff; }',
   '.col-header-sq.selected { background:#4a4a4a; box-shadow:inset 0 -3px 0 #fff; }',
+  '/* --- Radio row --- */',
   '.select-row td { padding:14px 12px; text-align:center; }',
   '.radio-circle { display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px; border-radius:50%; border:2px solid #999; background:white; cursor:pointer; transition:all 0.15s; }',
   '.radio-circle.checked { border-color:#2c5f8a; }',
@@ -784,29 +797,27 @@ for (k in attr_keys) {
   a <- ATTRIBUTES[[k]]
   sq_card_text <- a$card_levels[a$sq]
   html_lines <- c(html_lines,
-    '<tr>',
-    sprintf('<td class="col-attr">%s</td>', a$card_label),
-    sprintf('<td class="col-prog cA" id="PA_%s" onclick="dce_pick(\'A\')"></td>', k),
-    sprintf('<td class="col-prog cB" id="PB_%s" onclick="dce_pick(\'B\')"></td>', k),
-    sprintf('<td class="col-sq cSQ" onclick="dce_pick(\'SQ\')">%s</td>', sq_card_text),
-    '</tr>'
+                  '<tr>',
+                  sprintf('<td class="col-attr">%s</td>', a$card_label),
+                  sprintf('<td class="col-prog-a cA" id="PA_%s" onclick="dce_pick(\'A\')"></td>', k),
+                  sprintf('<td class="col-prog-b cB" id="PB_%s" onclick="dce_pick(\'B\')"></td>', k),
+                  sprintf('<td class="col-sq cSQ" onclick="dce_pick(\'SQ\')">%s</td>', sq_card_text),
+                  '</tr>'
   )
 }
 # Selection row with radio buttons
 html_lines <- c(html_lines,
-  '<tr class="select-row">',
-  '<td class="col-attr">Your choice</td>',
-  '<td class="col-prog cA" onclick="dce_pick(\'A\')"><div class="radio-circle" id="rA"><div class="radio-dot"></div></div><div class="select-label">Select A</div></td>',
-  '<td class="col-prog cB" onclick="dce_pick(\'B\')"><div class="radio-circle" id="rB"><div class="radio-dot"></div></div><div class="select-label">Select B</div></td>',
-  '<td class="col-sq cSQ" onclick="dce_pick(\'SQ\')"><div class="radio-circle" id="rSQ"><div class="radio-dot"></div></div><div class="select-label">Keep current</div></td>',
-  '</tr>',
-  '</tbody>',
-  '</table>'
+                '<tr class="select-row">',
+                '<td class="col-attr">Your choice</td>',
+                '<td class="col-prog-a cA" onclick="dce_pick(\'A\')"><div class="radio-circle" id="rA"><div class="radio-dot"></div></div><div class="select-label">Select A</div></td>',
+                '<td class="col-prog-b cB" onclick="dce_pick(\'B\')"><div class="radio-circle" id="rB"><div class="radio-dot"></div></div><div class="select-label">Select B</div></td>',
+                '<td class="col-sq cSQ" onclick="dce_pick(\'SQ\')"><div class="radio-circle" id="rSQ"><div class="radio-dot"></div></div><div class="select-label">Keep current</div></td>',
+                '</tr>',
+                '</tbody>',
+                '</table>'
 )
 # Substitute placeholders
 html_lines <- gsub("TASK_TITLE", CARD_TITLE, html_lines)
-# enc2utf8 + useBytes ensures non-ASCII characters (\u00a3, \u2014) are written as
-# proper UTF-8 instead of <U+xxxx> escapes when R is running under a non-UTF-8 locale.
 writeLines(enc2utf8(html_lines), file.path(OUTPUT_DIR, "qualtrics_choicecard.html"), useBytes = TRUE)
 cat("Choice card HTML written.\n")
 
