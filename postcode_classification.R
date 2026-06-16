@@ -15,7 +15,6 @@ library(jsonlite)
 ## File with postcodes 
 merged <- readRDS("merged.rds")
 
-
 ### Working dataset 
 merged <- merged %>% 
   mutate(V_LOW = total_addresses - (HIGH_CNT + MED_CNT + LOW_CNT)) %>%
@@ -44,6 +43,7 @@ expected_prob <- function(h, m, l, v, wH, wM, wL, wV) {
   ifelse(total == 0, NA_real_, (wH*h + wM*m + wL*l + wV*v) / total)
 }
 
+
 # Re-bin expected probability into the EA's four categories.
 band_label <- function(p) {
   ifelse(is.na(p),       "No data",
@@ -52,6 +52,7 @@ band_label <- function(p) {
                        ifelse(p >= 0.1,       "Low",
                               "Very low"))))
 }
+
 
 ### Compute per-scenario columns 
 for (i in seq_len(nrow(weights))) {
@@ -114,7 +115,7 @@ print(tail(moved_up, 100), row.names = FALSE)
 
 # Placeholder final classification
 # Options: "CONSERVATIVE", "FUNCTIONAL", "FIFTY_SPLIT", "UPPER"
-FINAL_SCENARIO <- "FIFTY_SPLIT"
+FINAL_SCENARIO <- "UPPER"
 
 
 ### Build the final two-column data frame
@@ -146,6 +147,7 @@ for (area in areas) {
     file.path(output_dir, paste0(area, ".json"))
   )
 }
+
 
 ### Report
 cat("Done. Wrote", nrow(df), "postcodes across",
