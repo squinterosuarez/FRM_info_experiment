@@ -444,13 +444,13 @@ var DCE_LABELS = {
     "4": "Only households that opt in"
   },
   "A2": {
-    "1": "National taxes",
-    "2": "Local taxes"
+    "1": "Everyone in England, through national taxes",
+    "2": "The local area, through local taxes"
   },
   "A3": {
-    "1": "Everyone pays the same amount",
-    "2": "Wealthier pay more",
-    "3": "Those most at risk pay more"
+    "1": "Every household pays the same",
+    "2": "Wealthier households pay more",
+    "3": "Households most at risk pay more"
   },
   "A4": {
     "1": "High - risk reduced to very low",

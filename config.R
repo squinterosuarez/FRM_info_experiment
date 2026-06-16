@@ -56,14 +56,14 @@ ATTRIBUTES <- list(
   A2 = list(
     name      = "A2_funding_mechanism",
     concept   = "Funding mechanism (where the money comes from)",
-    card_label = "Where should the money come from?",
+    card_label = "Who shares the cost?",
     levels    = c(
-      "National taxation",
-      "Local taxes in areas that benefit"
+      "Everyone in England, through national taxes \u2014 lower-risk areas help fund higher-risk areas",
+      "The local area, through local taxes \u2014 each area funds its own protection"
     ),
     card_levels = c(
-      "National taxes",
-      "Local taxes"
+      "Everyone in England, through national taxes",
+      "The local area, through local taxes"
     ),
     sq        = 1,
     ab_only   = NULL
@@ -72,16 +72,16 @@ ATTRIBUTES <- list(
   A3 = list(
     name      = "A3_distributional_fairness",
     concept   = "Distributional fairness (how each household's contribution is calculated)",
-    card_label = "How are contributions calculated?",
+    card_label = "How is each household's share worked out?",
     levels    = c(
-      "Flat contribution \u2014 same amount for each paying household",
+      "Flat contribution \u2014 every household pays the same amount",
       "Wealthier households pay more, independent of risk",
       "Households at higher risk pay more, independent of wealth"
     ),
     card_levels = c(
-      "Everyone pays the same amount",
-      "Wealthier pay more",
-      "Those most at risk pay more"
+      "Every household pays the same",
+      "Wealthier households pay more",
+      "Households most at risk pay more"
     ),
     sq        = 2,
     ab_only   = NULL
