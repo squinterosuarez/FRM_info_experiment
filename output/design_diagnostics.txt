@@ -1,16 +1,16 @@
 ============================================================
   DCE DESIGN DIAGNOSTICS
-  Generated: 2026-06-16 20:28:50.432359
+  Generated: 2026-06-16 23:12:32.773993
 ============================================================
 
-Design space:    144 candidate profiles
+Design space:    72 candidate profiles
 Choice sets:     24
 Blocks:          4 (6 tasks each)
-Parameters:      9
+Parameters:      8
 Objective:       Bayesian D-error over 500 prior draws
-D-error (best):  0.3477
+D-error (best):  0.3409
 Level imbalance: 0.00
-Info-matrix rank: 9 / 9
+Info-matrix rank: 8 / 8
 Cost scale:      100 (cost coef interpreted per cost-scale units)
 Seed:            2026
 
@@ -19,11 +19,10 @@ Seed:            2026
   [ 2] A1_excludability_L1_vs_L4      prior mean=  0.00, sd=0.40
   [ 3] A1_excludability_L2_vs_L4      prior mean=  0.00, sd=0.40
   [ 4] A1_excludability_L3_vs_L4      prior mean=  0.00, sd=0.40
-  [ 5] A2_funding_mechanism_L1_vs_L2  prior mean=  0.00, sd=0.40
-  [ 6] A3_distributional_fairness_L1_vs_L3 prior mean=  0.00, sd=0.40
-  [ 7] A3_distributional_fairness_L2_vs_L3 prior mean=  0.00, sd=0.40
-  [ 8] A4_effectiveness_L1_vs_L3      prior mean=  0.45, sd=0.30
-  [ 9] A5_cost (per 100)              prior mean= -0.80, sd=0.40
+  [ 5] A2_distributional_fairness_L1_vs_L3 prior mean=  0.00, sd=0.40
+  [ 6] A2_distributional_fairness_L2_vs_L3 prior mean=  0.00, sd=0.40
+  [ 7] A3_effectiveness_L1_vs_L3      prior mean=  0.45, sd=0.30
+  [ 8] A4_cost (per 100)              prior mean= -0.80, sd=0.40
 
 --- Level balance (A/B alternatives only) ---
 
@@ -33,20 +32,16 @@ A1 (Excludability (who is protected by the programme)):
   Level 3: n=12 (25.0%)  Households in high-risk areas, priority for depriv...
   Level 4: n=12 (25.0%)  Only households that opt in to receive protection
 
-A2 (Funding mechanism (where the money comes from)):
-  Level 1: n=24 (50.0%)  Everyone in England, through national taxes — lowe...
-  Level 2: n=24 (50.0%)  The local area, through local taxes — each area fu...
-
-A3 (Distributional fairness (how each household's contribution is calculated)):
+A2 (Distributional fairness (how the cost is split across households)):
   Level 1: n=16 (33.3%)  Flat contribution — every household pays the same ...
   Level 2: n=16 (33.3%)  Wealthier households pay more, independent of risk
   Level 3: n=16 (33.3%)  Households at higher risk pay more, independent of...
 
-A4 (Effectiveness of the measure):
+A3 (Effectiveness of the measure):
   Level 1: n=24 (50.0%)  Risk reduced to minimum level (very low)
   Level 3: n=24 (50.0%)  Small flood risk reduction, risk category unchange...
 
-A5 (Additional cost to your household per year):
+A4 (Additional cost to your household per year):
   Level 2: n=16 (33.3%)  £75
   Level 3: n=16 (33.3%)  £150
   Level 4: n=16 (33.3%)  £300
@@ -54,43 +49,38 @@ A5 (Additional cost to your household per year):
 --- Level balance by block ---
 
 Block 1 (6 choice sets):
-  A1: L1=4, L2=4, L3=3, L4=1
-  A2: L1=5, L2=7
-  A3: L1=4, L2=3, L3=5
-  A4: L1=6, L3=6
-  A5: L2=3, L3=5, L4=4
+  A1: L1=2, L2=3, L3=4, L4=3
+  A2: L1=4, L2=5, L3=3
+  A3: L1=6, L3=6
+  A4: L2=4, L3=5, L4=3
 
 Block 2 (6 choice sets):
-  A1: L1=3, L2=2, L3=2, L4=5
-  A2: L1=6, L2=6
-  A3: L1=3, L2=3, L3=6
-  A4: L1=6, L3=6
-  A5: L2=5, L3=3, L4=4
+  A1: L1=4, L2=2, L3=2, L4=4
+  A2: L1=5, L2=2, L3=5
+  A3: L1=6, L3=6
+  A4: L2=3, L3=5, L4=4
 
 Block 3 (6 choice sets):
-  A1: L1=3, L2=3, L3=4, L4=2
-  A2: L1=6, L2=6
-  A3: L1=4, L2=6, L3=2
-  A4: L1=7, L3=5
-  A5: L2=4, L3=4, L4=4
+  A1: L1=3, L2=3, L3=3, L4=3
+  A2: L1=3, L2=5, L3=4
+  A3: L1=6, L3=6
+  A4: L2=5, L3=2, L4=5
 
 Block 4 (6 choice sets):
-  A1: L1=2, L2=3, L3=3, L4=4
-  A2: L1=7, L2=5
-  A3: L1=5, L2=4, L3=3
-  A4: L1=5, L3=7
-  A5: L2=4, L3=4, L4=4
+  A1: L1=3, L2=4, L3=3, L4=2
+  A2: L1=4, L2=4, L3=4
+  A3: L1=6, L3=6
+  A4: L2=4, L3=4, L4=4
 
 --- Dominance and equality checks ---
   None found.
 
 --- Attribute differences (A vs B) ---
-  Min: 1  Max: 5  Mean: 3.2
-  Distribution: 1-diff=2, 2-diff=5, 3-diff=5, 4-diff=10, 5-diff=2
+  Min: 1  Max: 4  Mean: 2.9
+  Distribution: 1-diff=2, 2-diff=6, 3-diff=9, 4-diff=7
 
 --- Attribute overlap rate (A and B share level) ---
-  A1: 5/24 (21%)
-  A2: 10/24 (42%)
-  A3: 8/24 (33%)
-  A4: 14/24 (58%)
-  A5: 6/24 (25%)
+  A1: 8/24 (33%)
+  A2: 7/24 (29%)
+  A3: 4/24 (17%)
+  A4: 8/24 (33%)

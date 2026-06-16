@@ -32,11 +32,11 @@
 # --------------------------------------------------------------
 
 ATTRIBUTES <- list(
-
+  
   A1 = list(
     name      = "A1_excludability",
     concept   = "Excludability (who is protected by the programme)",
-    card_label = "Who is protected by the programme?",
+    card_label = "Who is protected",
     levels    = c(
       "All households in England at any level of risk",
       "Households in high-risk areas",
@@ -46,33 +46,17 @@ ATTRIBUTES <- list(
     card_levels = c(
       "Every household in England",
       "Households in high-risk areas",
-      "Households in high-risk areas, priority for deprived areas",
+      "Households in high-risk areas, deprived first",
       "Only households that opt in"
     ),
     sq        = 3,
-    ab_only   = NULL   # all four levels appear in A/B
-  ),
-
-  A2 = list(
-    name      = "A2_funding_mechanism",
-    concept   = "Funding mechanism (where the money comes from)",
-    card_label = "Who shares the cost?",
-    levels    = c(
-      "Everyone in England, through national taxes \u2014 lower-risk areas help fund higher-risk areas",
-      "The local area, through local taxes \u2014 each area funds its own protection"
-    ),
-    card_levels = c(
-      "Everyone in England, through national taxes",
-      "The local area, through local taxes"
-    ),
-    sq        = 1,
     ab_only   = NULL
   ),
-
-  A3 = list(
-    name      = "A3_distributional_fairness",
-    concept   = "Distributional fairness (how each household's contribution is calculated)",
-    card_label = "How is each household's share worked out?",
+  
+  A2 = list(
+    name      = "A2_distributional_fairness",
+    concept   = "Distributional fairness (how the cost is split across households)",
+    card_label = "How the cost is split",
     levels    = c(
       "Flat contribution \u2014 every household pays the same amount",
       "Wealthier households pay more, independent of risk",
@@ -81,32 +65,32 @@ ATTRIBUTES <- list(
     card_levels = c(
       "Every household pays the same",
       "Wealthier households pay more",
-      "Households most at risk pay more"
+      "Higher-risk households pay more"
     ),
     sq        = 2,
     ab_only   = NULL
   ),
-
-  A4 = list(
-    name      = "A4_effectiveness",
+  
+  A3 = list(
+    name      = "A3_effectiveness",
     concept   = "Effectiveness of the measure",
-    card_label = "How effective is the programme?",
+    card_label = "Effectiveness",
     levels    = c(
       "Risk reduced to minimum level (very low)",
       "Risk reduced by one category (e.g. high to medium)",
       "Small flood risk reduction, risk category unchanged"
     ),
     card_levels = c(
-      "High - risk reduced to very low",
-      "Medium - risk reduced",
-      "Low - small risk reduction"
+      "High \u2014 reduced to very low risk",
+      "Medium \u2014 risk reduced",
+      "Low \u2014 small reduction"
     ),
     sq        = 2,
-    ab_only   = c(1, 3)   # level 2 (one-category reduction) is SQ-only
+    ab_only   = c(1, 3)
   ),
-
-  A5 = list(
-    name        = "A5_cost",
+  
+  A4 = list(
+    name        = "A4_cost",
     concept     = "Additional cost to your household per year",
     card_label  = "Additional cost to your household per year",
     levels      = c("\u00a30", "\u00a375", "\u00a3150", "\u00a3300"),
@@ -114,7 +98,7 @@ ATTRIBUTES <- list(
     cost_values = c(0, 75, 150, 300),
     is_cost     = TRUE,
     sq          = 1,
-    ab_only     = c(2, 3, 4)   # \u00a30 is SQ-only
+    ab_only     = c(2, 3, 4)
   )
 )
 
@@ -146,40 +130,36 @@ COST_SCALE <- 100
 # --------------------------------------------------------------
 #
 # Parameter order:
-#   1. ASC_SQ (alternative-specific constant for status quo)
-#   2. Effects-coded columns for each non-cost attribute, in order:
-#        A1 excludability:               4 A/B levels -> 3 columns
-#        A2 funding mechanism:           2 A/B levels -> 1 columns
-#        A3 distributional fairness:     3 A/B levels -> 2 columns
-#        A4 effectiveness:               2 A/B levels (SQ at L2, outside ab_only) -> 1 column
-#      Non-cost coefficients: 7
-#   3. Cost as a continuous variable (per COST_SCALE units, default £100)
+#   1. ASC_SQ
+#   2. A1 excludability:           4 levels -> 3 cols
+#   3. A2 distributional fairness: 3 levels -> 2 cols
+#   4. A3 effectiveness:           2 A/B levels -> 1 col
+#   5. A4 cost (continuous)
 #
-# Total parameters: 1 (ASC) + 7 (attributes) + 1 (cost) = 9
-#
+# Total: 1 (ASC) + 3 + 2 + 1 + 1 (cost) = 8
+
+PRIOR_MEAN <- c(
+  0.2,            # ASC_SQ: mild status quo bias
+  0, 0, 0,        # A1 excludability (3 cols)
+  0, 0,           # A2 distributional fairness (2 cols)
+  0.45,           # A3 effectiveness: L1 vs L3
+  -0.8            # A4 cost: per £100
+)
+
+PRIOR_SD <- c(
+  0.3,            # ASC_SQ
+  rep(0.4, 3),    # A1 excludability
+  rep(0.4, 2),    # A2 distributional fairness
+  0.3,            # A3 effectiveness
+  0.4             # A4 cost
+)
+
 # NOTE on the A4 effectiveness sign: ab_only = c(1, 3) means the A/B
 # variation is between L1 (very low, most effective) and L3 (small
 # reduction, least effective). With L3 as the reference (-1 in effects
 # coding) and L1 as +1, a POSITIVE coefficient encodes preference for
 # more effective.
 
-PRIOR_MEAN <- c(
-  0.2,            # ASC_SQ: mild status quo bias
-  0, 0, 0,        # A1 excludability: no prior (3 cols)
-  0,            # A2 funding mechanism: no prior (1 cols)
-  0, 0,           # A3 distributional fairness: no prior (2 cols)
-  0.45,           # A4 effectiveness: L1 vs L3 (positive = prefer more effective)
-  -0.8            # A5 cost: per £100 (negative = dislike higher cost)
-)
-
-PRIOR_SD <- c(
-  0.3,            # ASC_SQ
-  rep(0.4, 3),    # A1 excludability
-  rep(0.4, 1),    # A2 funding mechanism
-  rep(0.4, 2),    # A3 distributional fairness
-  0.3,            # A4 effectiveness
-  0.4             # A5 cost
-)
 
 
 # --------------------------------------------------------------
