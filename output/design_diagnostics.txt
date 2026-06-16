@@ -1,14 +1,14 @@
 ============================================================
   DCE DESIGN DIAGNOSTICS
-  Generated: 2026-06-16 15:58:42.887872
+  Generated: 2026-06-16 18:33:12.784668
 ============================================================
 
 Design space:    144 candidate profiles
 Choice sets:     24
 Blocks:          4 (6 tasks each)
 Parameters:      9
-Objective:       Bayesian D-error over 20 prior draws
-D-error (best):  0.3554
+Objective:       Bayesian D-error over 500 prior draws
+D-error (best):  0.3477
 Level imbalance: 0.00
 Info-matrix rank: 9 / 9
 Cost scale:      100 (cost coef interpreted per cost-scale units)
@@ -54,43 +54,43 @@ A5 (Additional cost to your household per year):
 --- Level balance by block ---
 
 Block 1 (6 choice sets):
-  A1: L1=3, L2=2, L3=4, L4=3
+  A1: L1=4, L2=4, L3=3, L4=1
   A2: L1=5, L2=7
-  A3: L1=4, L2=5, L3=3
+  A3: L1=4, L2=3, L3=5
+  A4: L1=6, L3=6
+  A5: L2=3, L3=5, L4=4
+
+Block 2 (6 choice sets):
+  A1: L1=3, L2=2, L3=2, L4=5
+  A2: L1=6, L2=6
+  A3: L1=3, L2=3, L3=6
   A4: L1=6, L3=6
   A5: L2=5, L3=3, L4=4
 
-Block 2 (6 choice sets):
-  A1: L1=3, L2=3, L3=2, L4=4
-  A2: L1=7, L2=5
-  A3: L1=4, L2=4, L3=4
-  A4: L1=6, L3=6
-  A5: L2=4, L3=5, L4=3
-
 Block 3 (6 choice sets):
-  A1: L1=3, L2=4, L3=3, L4=2
-  A2: L1=7, L2=5
-  A3: L1=5, L2=2, L3=5
+  A1: L1=3, L2=3, L3=4, L4=2
+  A2: L1=6, L2=6
+  A3: L1=4, L2=6, L3=2
   A4: L1=7, L3=5
   A5: L2=4, L3=4, L4=4
 
 Block 4 (6 choice sets):
-  A1: L1=3, L2=3, L3=3, L4=3
-  A2: L1=5, L2=7
-  A3: L1=3, L2=5, L3=4
+  A1: L1=2, L2=3, L3=3, L4=4
+  A2: L1=7, L2=5
+  A3: L1=5, L2=4, L3=3
   A4: L1=5, L3=7
-  A5: L2=3, L3=4, L4=5
+  A5: L2=4, L3=4, L4=4
 
 --- Dominance and equality checks ---
   None found.
 
 --- Attribute differences (A vs B) ---
-  Min: 1  Max: 5  Mean: 3.6
-  Distribution: 1-diff=1, 2-diff=2, 3-diff=9, 4-diff=6, 5-diff=6
+  Min: 1  Max: 5  Mean: 3.2
+  Distribution: 1-diff=2, 2-diff=5, 3-diff=5, 4-diff=10, 5-diff=2
 
 --- Attribute overlap rate (A and B share level) ---
-  A1: 3/24 (12%)
+  A1: 5/24 (21%)
   A2: 10/24 (42%)
-  A3: 6/24 (25%)
-  A4: 12/24 (50%)
-  A5: 3/24 (12%)
+  A3: 8/24 (33%)
+  A4: 14/24 (58%)
+  A5: 6/24 (25%)

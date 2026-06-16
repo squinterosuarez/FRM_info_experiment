@@ -132,7 +132,7 @@ LAMBDA     <- 0.15   # balance penalty weight
 SEED       <- 2026   # random seed for reproducibility
 
 # --- Bayesian D-efficiency ---
-N_DRAWS    <- 20
+N_DRAWS    <- 500
 
 # --- Cost coding scale ---
 # Cost values are divided by COST_SCALE before entering the design matrix.

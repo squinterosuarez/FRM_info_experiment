@@ -35,17 +35,8 @@ cat("============================================================\n\n")
 # --------------------------------------------------------------
 
 # `Rscript run.R` and `source("run.R")`.
-get_script_dir <- function() {
-  args <- commandArgs(trailingOnly = FALSE)
-  file_arg <- grep("^--file=", args, value = TRUE)
-  if (length(file_arg) > 0) {
-    return(dirname(normalizePath(sub("^--file=", "", file_arg[1]))))
-  }
-  src <- tryCatch(sys.frame(1)$ofile, error = function(e) NULL)
-  if (!is.null(src)) return(dirname(normalizePath(src)))
-  getwd()
-}
-script_dir <- get_script_dir()
+library(here)
+script_dir <- here::here()
 setwd(script_dir)
 
 source("config.R")
@@ -55,7 +46,7 @@ OUTPUT_DIR <- file.path(script_dir, "output")
 if (!dir.exists(OUTPUT_DIR)) dir.create(OUTPUT_DIR)
 
 # Back-compatible defaults for newly added config parameters.
-if (!exists("N_DRAWS"))    N_DRAWS    <- 20
+if (!exists("N_DRAWS"))    N_DRAWS    <- 200
 if (!exists("COST_SCALE")) COST_SCALE <- 100
 
 # FIX 7: explicit divisibility check on blocking.
@@ -1333,3 +1324,34 @@ cat("  qualtrics_javascript.txt   -- JS to paste into question\n")
 cat("  qualtrics_setup_guide.md   -- step-by-step instructions\n")
 cat("  design_diagnostics.txt     -- balance & quality checks\n")
 cat("============================================================\n\n")
+
+
+# --- Per-block identification check ---
+cat("\n--- Per-block identification check ---\n")
+
+for (b in 1:N_BLOCKS) {
+  block_sets <- which(best_assignment == b)
+  
+  block_info <- matrix(0, N_PAR, N_PAR)
+  beta_pm <- matrix(PRIOR_MEAN, ncol = 1)
+  
+  for (s in block_sets) {
+    idx1 <- global_best_design[s, 1]
+    idx2 <- global_best_design[s, 2]
+    X <- rbind(c(0, cand_coded[idx1, ]),
+               c(0, cand_coded[idx2, ]),
+               sq_full)
+    V <- as.numeric(X %*% beta_pm)
+    V <- V - max(V)
+    eV <- exp(V)
+    p <- eV / sum(eV)
+    block_info <- block_info + crossprod(X, (diag(p) - tcrossprod(p)) %*% X)
+  }
+  
+  r <- qr(block_info)$rank
+  ev <- eigen(block_info)$values
+  cond <- max(ev) / min(ev[ev > 1e-12])
+  status <- if (r == N_PAR) "OK" else "RANK DEFICIENT"
+  
+  cat(sprintf("  Block %d: rank %d / %d  [%s]  Condition: %.1f\n", b, r, N_PAR, status, cond))
+}
