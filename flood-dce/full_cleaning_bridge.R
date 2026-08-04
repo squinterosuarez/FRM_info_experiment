@@ -25,7 +25,18 @@ t2col <- grep("T2", names(d), ignore.case = TRUE)
 k2col <- grep("^K2",       names(d), ignore.case = TRUE)
 stopifnot(length(t2col) == 1, length(k2col) == 1)
 d$T2 <- d[[t2col]]; d$K2 <- d[[k2col]]
-d <- d[d$treatment_arm %in% c("0","1"), ]      # safety: keep assigned-arm respondents
+
+## analysis sample: assigned arm, all 6 choice tasks answered, approved on
+## Prolific (pilot or full-wave export), one row per participant
+pp <- read.csv("data/prolific_demographic_export_pilot.csv", row.names = 1)
+pf <- read.csv("data/prolific_demographic_export_full.csv", row.names = 1)
+approved <- unique(c(pp$Participant.id[pp$Status == "APPROVED"],
+                     pf$Participant.id[pf$Status == "APPROVED"]))
+chcols <- paste0("task", 1:6, "_choice")
+d <- d[d$treatment_arm %in% c("0","1"), ]
+d <- d[rowSums(is.na(d[chcols]) | d[chcols] == "") == 0, ]
+d <- d[d$Prolific.ID %in% approved, ]
+d <- d[!duplicated(d$Prolific.ID), ]
 d$ID <- seq_len(nrow(d))
 
 ## 3. prior-gap category from T2 surprise item (correct = all dummies 0)

@@ -1,0 +1,206 @@
+Warning messages:
+1: package ‘apollo’ was built under R version 4.4.3 
+2: package ‘ggplot2’ was built under R version 4.4.3 
+Apollo ignition sequence completed
+apollo_draws and apollo_randCoeff were found, so apollo_control$mixing
+  was set to TRUE
+All checks on apollo_control completed.
+All checks on database completed.
+Generating inter-individual draws ...... Done
+Preparing user-defined functions.
+
+Testing likelihood function...
+
+Overview of choices for MNL model component :
+                                       A       B      SQ
+Times available                  6318.00 6318.00 6318.00
+Times chosen                     1506.00 1285.00 3527.00
+Percentage chosen overall          23.84   20.34   55.82
+Percentage chosen when available   23.84   20.34   55.82
+
+
+Pre-processing likelihood function...
+Creating cluster...
+Preparing workers for multithreading...
+
+Testing influence of parameters
+Starting main estimation
+
+BGW using analytic model derivatives supplied by caller...
+
+
+    it    nf     F            RELDF    PRELDF    RELDX    MODEL stppar
+     0     1 6.626123167e+03
+     1     4 6.261962234e+03 5.496e-02 4.772e-02 1.91e-01   G   1.47e+00
+     2     5 5.757043748e+03 8.063e-02 6.056e-02 3.16e-01   G   8.29e-02
+     3     6 5.314873377e+03 7.681e-02 6.932e-02 2.14e-01   S   2.26e-01
+     4     7 5.107677747e+03 3.898e-02 5.118e-02 1.58e-01   S   2.77e-01
+     5     9 5.084965032e+03 4.447e-03 1.242e-02 1.49e-01  S-G  1.77e-02
+     6    11 5.057912051e+03 5.320e-03 1.458e-02 2.56e-02   S   1.60e+00
+     7    13 5.034492347e+03 4.630e-03 5.180e-03 3.80e-02  S-G  2.01e-01
+     8    14 5.029397076e+03 1.012e-03 1.540e-03 2.96e-02   G   5.76e-02
+     9    15 5.025286934e+03 8.172e-04 8.871e-04 2.97e-02   S   2.16e-02
+    10    16 5.024003451e+03 2.554e-04 3.684e-04 2.85e-02   S   3.44e-03
+    11    17 5.023177247e+03 1.645e-04 1.139e-04 3.54e-03   S   0.00e+00
+    12    19 5.022858808e+03 6.339e-05 6.661e-05 3.21e-03   G   8.47e-02
+    13    20 5.022777829e+03 1.612e-05 6.440e-05 4.99e-03   G   2.75e-01
+    14    21 5.022560308e+03 4.331e-05 3.356e-05 4.21e-03   S   2.37e-02
+    15    23 5.022481731e+03 1.564e-05 1.597e-05 4.30e-03  G-S  1.31e-02
+    16    24 5.022462052e+03 3.918e-06 4.424e-06 3.67e-03   S   0.00e+00
+    17    25 5.022455564e+03 1.292e-06 1.282e-06 4.82e-04   S   0.00e+00
+    18    26 5.022453258e+03 4.591e-07 3.643e-07 7.65e-04   S   0.00e+00
+    19    27 5.022452967e+03 5.800e-08 6.943e-08 4.10e-04   G   0.00e+00
+    20    29 5.022452839e+03 2.534e-08 4.666e-08 3.25e-04  G-S  0.00e+00
+    21    30 5.022452750e+03 1.773e-08 2.122e-08 1.13e-04   S   0.00e+00
+    22    31 5.022452705e+03 8.926e-09 7.223e-09 1.01e-04   S   0.00e+00
+    23    32 5.022452692e+03 2.569e-09 2.099e-09 4.40e-05   S   0.00e+00
+    24    33 5.022452688e+03 9.842e-10 7.554e-10 2.57e-05   S   0.00e+00
+    25    34 5.022452686e+03 2.882e-10 2.431e-10 1.48e-05   S   0.00e+00
+    26    35 5.022452686e+03 3.165e-11 2.757e-11 6.43e-06   S   0.00e+00
+
+***** Relative function convergence (favorable) *****
+
+Estimated parameters with approximate standard errors from BHHH matrix:
+            Estimate     BHHH se BHH t-ratio (0)
+mu_asc      0.022868     0.07158         0.31948
+mu_a1e1     0.193635     0.07152         2.70741
+mu_a1e2     0.024828     0.07881         0.31506
+mu_a1e3     0.023791     0.08144         0.29212
+mu_a3e1    -0.116169     0.06060        -1.91704
+mu_a3e2     0.001936     0.06412         0.03019
+mu_a4e1     1.307281     0.06335        20.63507
+mu_cost    -0.918192     0.04411       -20.81742
+tau_asc     0.176185     0.09762         1.80487
+tau_a1e1   -0.045787     0.10486        -0.43666
+tau_a1e2   -0.019265     0.11137        -0.17298
+tau_a1e3    0.152644     0.11537         1.32303
+tau_a3e1    0.006035     0.08944         0.06748
+tau_a3e2   -0.107531     0.09031        -1.19070
+tau_a4e1   -0.221070     0.08665        -2.55140
+tau_cost    0.030674     0.05869         0.52261
+sd_a1e1     0.098188     0.29309         0.33501
+sd_a1e2    -0.312980     0.12554        -2.49315
+sd_a1e3    -0.248533     0.18368        -1.35304
+sd_a3e1    -0.025946     0.40428        -0.06418
+sd_a3e2     0.638626     0.05060        12.62001
+sd_a4e1     0.952949     0.04499        21.18118
+
+Final LL: -5022.4527
+
+Calculating log-likelihood at equal shares (LL(0)) for applicable
+  models...
+Calculating log-likelihood at observed shares from estimation data
+  (LL(c)) for applicable models...
+Calculating LL of each model component...
+Calculating other model fit measures
+
+Your model was estimated using the BGW algorithm. Please acknowledge
+  this by citing Bunch et al. (1993) - doi.org/10.1145/151271.151279
+
+Please acknowledge the use of Apollo by citing Hess & Palma (2019) -
+  doi.org/10.1016/j.jocm.2019.100170
+Model run by francescavantaggiato using Apollo 0.3.7 on R 4.4.1 for Darwin.
+Please acknowledge the use of Apollo by citing Hess & Palma (2019)
+  DOI 10.1016/j.jocm.2019.100170
+  www.ApolloChoiceModelling.com
+
+Model name                                  : mmnl_itt
+Model description                           : Flood DCE -- MMNL (spec=itt)
+Model run at                                : 2026-08-04 09:58:43.064921
+Estimation method                           : bgw
+Estimation diagnosis                        : Relative function convergence (favorable)
+Optimisation diagnosis                      : Unknown (no Hessian requested by user)
+Number of individuals                       : 1053
+Number of rows in database                  : 6318
+Number of modelled outcomes                 : 6318
+
+Number of cores used                        :  4 
+Number of inter-individual draws            : 300 (mlhs)
+
+LL(start)                                   : -6626.12
+LL at equal shares, LL(0)                   : -6941.03
+LL at observed shares, LL(C)                : -6262.15
+LL(final)                                   : -5022.45
+Rho-squared vs equal shares                  :  0.2764 
+Adj.Rho-squared vs equal shares              :  0.2732 
+Rho-squared vs observed shares               :  0.198 
+Adj.Rho-squared vs observed shares           :  0.1948 
+AIC                                         :  10088.91 
+BIC                                         :  10237.43 
+
+Estimated parameters                        : 22
+Time taken (hh:mm:ss)                       :  00:01:2 
+     pre-estimation                         :  00:00:25.25 
+     estimation                             :  00:00:35.12 
+     post-estimation                        :  00:00:1.63 
+Iterations                                  :  26  
+
+Unconstrained optimisation.
+
+Estimates:
+            Estimate   BHHH.s.e. BHHH.t.rat.(0)
+mu_asc      0.022868     0.07158        0.31948
+mu_a1e1     0.193635     0.07152        2.70741
+mu_a1e2     0.024828     0.07881        0.31506
+mu_a1e3     0.023791     0.08144        0.29212
+mu_a3e1    -0.116169     0.06060       -1.91704
+mu_a3e2     0.001936     0.06412        0.03019
+mu_a4e1     1.307281     0.06335       20.63507
+mu_cost    -0.918192     0.04411      -20.81742
+tau_asc     0.176185     0.09762        1.80487
+tau_a1e1   -0.045787     0.10486       -0.43666
+tau_a1e2   -0.019265     0.11137       -0.17298
+tau_a1e3    0.152644     0.11537        1.32303
+tau_a3e1    0.006035     0.08944        0.06748
+tau_a3e2   -0.107531     0.09031       -1.19070
+tau_a4e1   -0.221070     0.08665       -2.55140
+tau_cost    0.030674     0.05869        0.52261
+sd_a1e1     0.098188     0.29309        0.33501
+sd_a1e2    -0.312980     0.12554       -2.49315
+sd_a1e3    -0.248533     0.18368       -1.35304
+sd_a3e1    -0.025946     0.40428       -0.06418
+sd_a3e2     0.638626     0.05060       12.62001
+sd_a4e1     0.952949     0.04499       21.18118
+
+                       quantity   estimate       se         lo       hi
+1   public__vs_welfare__control   5.634837 16.01068 -25.746099 37.01577
+2     club__vs_welfare__control -12.749798 18.26130 -48.541954 23.04236
+3  private__vs_welfare__control -16.744724 17.26615 -50.586373 17.09692
+4   public__vs_welfare__treated  -3.732488 17.17563 -37.396722 29.93175
+5     club__vs_welfare__treated -19.764140 20.54277 -60.027966 20.49969
+6  private__vs_welfare__treated -20.839932 16.87920 -53.923155 12.24329
+7       public_vs_club__control  18.384635 13.54188  -8.157450 44.92672
+8    public_vs_private__control  22.379561 16.17883  -9.330948 54.09007
+9      club_vs_private__control   3.994926 17.68464 -30.666967 38.65682
+10      public_vs_club__treated  16.031653 14.65378 -12.689763 44.75307
+11   public_vs_private__treated  17.107444 17.43237 -17.060002 51.27489
+12     club_vs_private__treated   1.075791 20.26035 -38.634491 40.78607
+13           ITT_public_vs_club  -2.352982 19.80277 -41.166414 36.46045
+14        ITT_public_vs_private  -5.272117 23.33437 -51.007483 40.46325
+
+=== ITT MMNL estimates (full sample, N=1053) ===
+  mu_asc  mu_a1e1  mu_a1e2  mu_a1e3  mu_a3e1  mu_a3e2  mu_a4e1  mu_cost 
+   0.023    0.194    0.025    0.024   -0.116    0.002    1.307   -0.918 
+ tau_asc tau_a1e1 tau_a1e2 tau_a1e3 tau_a3e1 tau_a3e2 tau_a4e1 tau_cost 
+   0.176   -0.046   -0.019    0.153    0.006   -0.108   -0.221    0.031 
+ sd_a1e1  sd_a1e2  sd_a1e3  sd_a3e1  sd_a3e2  sd_a4e1 
+   0.098   -0.313   -0.249   -0.026    0.639    0.953 
+
+=== ITT WTP delta (treated - control on headline contrasts) ===
+                       quantity   estimate       se         lo       hi
+1   public__vs_welfare__control   5.634837 16.01068 -25.746099 37.01577
+2     club__vs_welfare__control -12.749798 18.26130 -48.541954 23.04236
+3  private__vs_welfare__control -16.744724 17.26615 -50.586373 17.09692
+4   public__vs_welfare__treated  -3.732488 17.17563 -37.396722 29.93175
+5     club__vs_welfare__treated -19.764140 20.54277 -60.027966 20.49969
+6  private__vs_welfare__treated -20.839932 16.87920 -53.923155 12.24329
+7       public_vs_club__control  18.384635 13.54188  -8.157450 44.92672
+8    public_vs_private__control  22.379561 16.17883  -9.330948 54.09007
+9      club_vs_private__control   3.994926 17.68464 -30.666967 38.65682
+10      public_vs_club__treated  16.031653 14.65378 -12.689763 44.75307
+11   public_vs_private__treated  17.107444 17.43237 -17.060002 51.27489
+12     club_vs_private__treated   1.075791 20.26035 -38.634491 40.78607
+13           ITT_public_vs_club  -2.352982 19.80277 -41.166414 36.46045
+14        ITT_public_vs_private  -5.272117 23.33437 -51.007483 40.46325
+
+FULL_ITT_DONE
