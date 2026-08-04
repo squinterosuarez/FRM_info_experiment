@@ -86,15 +86,14 @@ mean_k <- function(theta, k, g, spec_type = CFG$spec_type) {
 
 partworths <- function(theta, g) {
   G <- function(k) mean_k(theta, k, g)
-  a1 <- c(G("a1e1"),G("a1e2"),G("a1e3")); a1 <- c(a1, -sum(a1))     # levels 1..4
-  a2 <- G("a2e1");                        a2 <- c(a2, -a2)          # levels 1..2
-  a3 <- c(G("a3e1"),G("a3e2"));           a3 <- c(a3, -sum(a3))     # 1..3
-  a4 <- G("a4e1");                        a4 <- c(a4, -a4)          # [1]=most eff (lvl1), [2]=least (lvl3)
-  list(a1=a1, a2=a2, a3=a3, a4=a4, cost=G("cost"))
+  a1 <- c(G("a1e1"),G("a1e2"),G("a1e3")); a1 <- c(a1, -sum(a1))     # excludability, levels 1..4
+  a3 <- c(G("a3e1"),G("a3e2"));           a3 <- c(a3, -sum(a3))     # fairness, 1..3
+  a4 <- G("a4e1");                        a4 <- c(a4, -a4)          # effectiveness: [1]=most eff (lvl1), [2]=least (lvl3)
+  list(a1=a1, a3=a3, a4=a4, cost=G("cost"))
 }
 
-## generic utility of a bundle (A1,A2,A3 only)
-bundle_V <- function(pw, bundle) pw$a1[bundle["a1"]] + pw$a2[bundle["a2"]] + pw$a3[bundle["a3"]]
+## generic utility of a bundle (a1 excludability x a3 fairness; funding dropped)
+bundle_V <- function(pw, bundle) pw$a1[bundle["a1"]] + pw$a3[bundle["a3"]]
 
 ## WTP of bundle vs the welfare reference, for a given group
 bundle_wtp <- function(theta, bundle_name, g) {
@@ -107,8 +106,8 @@ pair_wtp <- function(theta, b1, b2, g) {
   unname(-GBP * (bundle_V(pw, BUNDLES[[b1]]) - bundle_V(pw, BUNDLES[[b2]])) / pw$cost)
 }
 ## WTP (£/yr) of a single-attribute level contrast (hi vs lo) within a group.
-## Used for the distributive estimands: a2 national(1) vs local(2) funding,
-## a3 flat(1) vs risk-priced(3) cost-sharing.
+## Used for the distributive estimands: a3 flat(1) vs risk-priced(3) cost-sharing
+## (the funding attribute was dropped, so the old "national" estimand is gone).
 attr_contrast_wtp <- function(theta, g, attr, hi, lo) {
   pw <- partworths(theta, g)
   unname(-GBP * (pw[[attr]][hi] - pw[[attr]][lo]) / pw$cost)
@@ -199,9 +198,8 @@ CATE_CELLS <- list(correct=c("trt_correct","ctl_correct"),
 ## distributive levers; effective = scheme efficacy; targeting = coverage breadth.
 ATTR_CITTS <- list(
   targeting = list(attr="a1", hi=1, lo=4),  # all households vs opt-in only
-  national  = list(attr="a2", hi=1, lo=2),  # national (cross-subsidy) vs local
-  flat      = list(attr="a3", hi=1, lo=3),  # flat vs risk-priced
-  effective = list(attr="a4", hi=1, lo=2)   # most vs least effective (levels 1 vs 3)
+  flat      = list(attr="a3", hi=1, lo=3),  # flat vs risk-priced (a3 = fairness)
+  effective = list(attr="a4", hi=1, lo=2)   # most vs least effective (a4; levels 1 vs 3)
 )
 target_wtps_cate <- function(theta) {
   out <- numeric(0)
@@ -225,6 +223,20 @@ target_wtps_cate <- function(theta) {
         attr_contrast_wtp(theta, GROUPS_CATE[[gg[1]]], a$attr, a$hi, a$lo) -
         attr_contrast_wtp(theta, GROUPS_CATE[[gg[2]]], a$attr, a$hi, a$lo)
     }
+  }
+  ## Cross-cell mechanism contrasts (PAP H2o/H2p): linear combinations of the
+  ## within-cell CITTs above, so they ride the same delta-method jacobian/VCOV.
+  ##   SEP  = underestimator - overestimator (directional separation; primary)
+  ##   ORD_* = the two adjacent gaps whose joint positivity is the monotone
+  ##           ordering under >= correct >= over.
+  for (pr in DIR_PAIRS) {
+    cit <- function(cl) out[[sprintf("CITT_%s__%s_vs_%s", cl, pr[1], pr[2])]]
+    out[sprintf("SEP_under_minus_over__%s_vs_%s", pr[1], pr[2])] <-
+      cit("under") - cit("over")
+    out[sprintf("ORD_under_minus_correct__%s_vs_%s", pr[1], pr[2])] <-
+      cit("under") - cit("correct")
+    out[sprintf("ORD_correct_minus_over__%s_vs_%s", pr[1], pr[2])] <-
+      cit("correct") - cit("over")
   }
   out
 }

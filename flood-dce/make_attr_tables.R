@@ -6,8 +6,9 @@
 cate <- read.csv("outputs/mc_summary_cate_dir.csv", stringsAsFactors = FALSE)
 
 ## attribute family -> (csv key, table title)
+## (The funding attribute was dropped, so the old "Table N. national vs local
+## funding" is gone.)
 attrs <- list(
-  national  = "Table N. WTP for national (cross-subsidy) vs. local funding",
   flat      = "Table R. WTP for flat (non-risk-priced) cost-sharing [redistributive mechanism]",
   effective = "Table E. WTP for scheme effectiveness (most vs. least effective)"
 )

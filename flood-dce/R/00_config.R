@@ -38,10 +38,17 @@ CFG <- list(
 )
 set.seed(CFG$seed)
 
-ATTR <- list(a1_levels=1:4, a2_levels=1:2, a3_levels=1:3,
+## NOTE (2026-06-17): the funding attribute was DROPPED from the study. In the
+## top-level instrument the remaining attributes were renumbered to A1/A2/A3/A4
+## (A2=fairness, A3=effectiveness, A4=cost). Here we deliberately KEEP the
+## original internal names with a gap -- a1 = excludability, a3 = fairness,
+## a4 = effectiveness -- so that no TRUE/prior values move between slots (a
+## rename would risk a silent DGP error). 01_design.R maps the new design
+## columns onto these internal names. Internal a2 (funding) is gone everywhere.
+ATTR <- list(a1_levels=1:4, a3_levels=1:3,
              a4_levels=c(1,3), cost_levels=c(75,150,300),
-             sq=list(a1=3,a2=1,a3=2,a4=2,cost=0))
-EC <- list(a1_base=4, a2_base=2, a3_base=3, a4_base=3)
+             sq=list(a1=3,a3=2,a4=2,cost=0))
+EC <- list(a1_base=4, a3_base=3, a4_base=3)
 
 ec_row <- function(value, levels, base, prefix) {
   nb <- setdiff(levels, base)
@@ -51,17 +58,17 @@ ec_row <- function(value, levels, base, prefix) {
 }
 
 ## ---- random-parameter set & TRUE values (shared with simulator) ------
-RP <- c("asc","a1e1","a1e2","a1e3","a2e1","a3e1","a3e2","a4e1")
+RP <- c("asc","a1e1","a1e2","a1e3","a3e1","a3e2","a4e1")
 
-TRUE_mu <- c(asc=-0.40, a1e1=0.50,a1e2=0.00,a1e3=0.40, a2e1=0.30,
+TRUE_mu <- c(asc=-0.40, a1e1=0.50,a1e2=0.00,a1e3=0.40,
              a3e1=-0.20,a3e2=0.40, a4e1=0.50, cost=-0.80)
 ## being informed, no surprise (correct prior): near zero
-TRUE_dt <- c(asc=-0.05, a1e1=0,a1e2=0,a1e3=0, a2e1=0, a3e1=0,a3e2=0, a4e1=0, cost=0)
+TRUE_dt <- c(asc=-0.05, a1e1=0,a1e2=0,a1e3=0, a3e1=0,a3e2=0, a4e1=0, cost=0)
 ## per upward step (learned higher than expected): "protect me, don't charge me"
-TRUE_up <- c(asc=-0.15, a1e1=-0.10,a1e2=0.20,a1e3=0.00, a2e1=0.15,
+TRUE_up <- c(asc=-0.15, a1e1=-0.10,a1e2=0.20,a1e3=0.00,
              a3e1=0.20,a3e2=0.10, a4e1=0.15, cost=0)
 ## per downward step (learned lower than expected): SQ / opt-in / let risky pay
-TRUE_dn <- c(asc=0.20, a1e1=-0.20,a1e2=-0.05,a1e3=0.00, a2e1=-0.15,
+TRUE_dn <- c(asc=0.20, a1e1=-0.20,a1e2=-0.05,a1e3=0.00,
              a3e1=-0.15,a3e2=-0.10, a4e1=0.00, cost=0)
 ## 'no idea' control: single intercept on ASC. Direction for no-idea people
 ## now flows through the imputed-prior gap (same up/dn coefficients as everyone).
@@ -70,7 +77,7 @@ TRUE_np_asc <- -0.10
 ## to the per-step upward effect so a treated DK behaves like a one-step
 ## underestimator. Consumed by the directional DGP's DK branch in 02_simulate.R.
 TRUE_dk <- TRUE_up
-TRUE_sd <- c(asc=1.0, a1e1=0.5,a1e2=0.5,a1e3=0.4, a2e1=0.4, a3e1=0.4,a3e2=0.4, a4e1=0.4)
+TRUE_sd <- c(asc=1.0, a1e1=0.5,a1e2=0.5,a1e3=0.4, a3e1=0.4,a3e2=0.4, a4e1=0.4)
 
 ## ---- TRUE values for the 2x2 (T × NoPrior) DGP ----
 ## mean_k = mu_k + α_k·T + β_k·NoPrior + γ_k·T·NoPrior
@@ -80,21 +87,22 @@ TRUE_sd <- c(asc=1.0, a1e1=0.5,a1e2=0.5,a1e3=0.4, a2e1=0.4, a3e1=0.4,a3e2=0.4, a
 ##   β_k: control no-prior shift (≈ 0; no-prior people in control don't differ)
 ##   γ_k: additional shift on updaters (mirrors TRUE_up: "high-risk targeting,
 ##        national funding, flat tax")
-TRUE_alpha <- c(asc=-0.05, a1e1=0,a1e2=0,a1e3=0, a2e1=0, a3e1=0,a3e2=0, a4e1=0, cost=0)
-TRUE_beta  <- c(asc= 0.00, a1e1=0,a1e2=0,a1e3=0, a2e1=0, a3e1=0,a3e2=0, a4e1=0, cost=0)
-TRUE_gamma <- c(asc=-0.10, a1e1=-0.10,a1e2=0.20,a1e3=0.00, a2e1=0.15,
+TRUE_alpha <- c(asc=-0.05, a1e1=0,a1e2=0,a1e3=0, a3e1=0,a3e2=0, a4e1=0, cost=0)
+TRUE_beta  <- c(asc= 0.00, a1e1=0,a1e2=0,a1e3=0, a3e1=0,a3e2=0, a4e1=0, cost=0)
+TRUE_gamma <- c(asc=-0.10, a1e1=-0.10,a1e2=0.20,a1e3=0.00,
                 a3e1= 0.20,a3e2=0.10, a4e1=0.15, cost=0)
 
-## ---- bundles on (A1,A2,A3); welfare == SQ config == reference ----
-## A2 now has two levels: 1 = national taxation, 2 = local taxes (beneficiaries pay).
-## The club good is funded LOCALLY (A2.2 = beneficiary group pays); public and
-## welfare are nationally funded (A2.1). The old national+local "club_mixed"
-## variant no longer exists (A2 collapsed from 3 -> 2 levels).
+## ---- bundles on (a1 excludability, a3 fairness); welfare == SQ == reference ----
+## NOTE (2026-06-17): the funding attribute (old A2) was dropped, so bundles no
+## longer encode national-vs-local funding. They now vary on targeting (a1) and
+## cost-sharing (a3 = fairness) only -- "club" is high-risk-area targeting with a
+## flat split (its old "local funding" meaning is gone). Co-author to confirm
+## bundle definitions/labels under the 3-attribute design.
 BUNDLES <- list(
-  public     = c(a1=1, a2=1, a3=1),   # all / national / flat
-  welfare    = c(a1=3, a2=1, a3=2),   # SQ config (reference; WTP defined = 0)
-  club       = c(a1=2, a2=2, a3=1),   # high-risk area / LOCAL / flat
-  private    = c(a1=4, a2=2, a3=3)    # opt-in / local / risk-priced
+  public     = c(a1=1, a3=1),   # all households / flat
+  welfare    = c(a1=3, a3=2),   # SQ config (reference; WTP defined = 0)
+  club       = c(a1=2, a3=1),   # high-risk area / flat
+  private    = c(a1=4, a3=3)    # opt-in / risk-priced
 )
 BUNDLE_REF <- "welfare"
 PAIRWISE <- list(c("public","club"), c("public","private"), c("club","private"))

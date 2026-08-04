@@ -20,3 +20,19 @@ flood-dce/outputs/smoke_cate/
 
 # Fitted model objects (regenerable, large-ish binaries)
 flood-dce/outputs/model_*.rds
+
+# Licensed postcode data (Digimap/EDINA) — never commit
+Digimap_Edina_Code-Point_postcodes/
+
+# Raw survey / Prolific exports (respondent-level, has IDs)
+flood-dce/data/
+flood-dce/full_results.csv
+
+# Per-iteration MC caches (regenerable; summaries are committed)
+flood-dce/outputs/mc_itt_pilot/
+flood-dce/outputs/mc_cate_pilot/
+
+# Local R cruft
+flood-dce/libs/
+flood-dce/outputs/.Rapp.history
+flood-dce/Rplots.pdf

@@ -20,12 +20,18 @@ read_locked_design <- function(path = CFG$design_path) {
   if (!file.exists(path)) stop("Locked design not found at: ", path,
                                "\n  Override CFG$design_path or use build_placeholder_design().")
   d <- read.csv(path, stringsAsFactors = FALSE)
+  ## Column map (2026-06-17, funding attribute dropped, instrument renumbered):
+  ##   new A1_level = excludability  -> internal a1
+  ##   new A2_level = fairness       -> internal a3
+  ##   new A3_level = effectiveness  -> internal a4
+  ##   new A4_value = cost (GBP)     -> internal cost
+  ## (Internal names keep the original a1/a3/a4 gap; see 00_config.R note.)
   required <- c("choice_set","block","alternative",
-                "A1_level","A2_level","A3_level","A4_level","A5_value")
+                "A1_level","A2_level","A3_level","A4_value")
   miss <- setdiff(required, names(d))
   if (length(miss)) stop("Locked design missing columns: ", paste(miss, collapse=", "))
   d <- d[d$alternative != "Status_Quo", , drop = FALSE]
-  d$cost <- d$A5_value
+  d$cost <- d$A4_value
   alt_tag <- ifelse(d$alternative == "Program_A", "A",
              ifelse(d$alternative == "Program_B", "B", NA_character_))
   if (any(is.na(alt_tag))) stop("Unrecognised alternative labels in design.")
@@ -33,8 +39,8 @@ read_locked_design <- function(path = CFG$design_path) {
   ids <- unique(d[, c("choice_set","block")])
   ids <- ids[order(ids$block, ids$choice_set), , drop = FALSE]
   ids$task <- ave(ids$choice_set, ids$block, FUN = seq_along)
-  attrs <- c("A1_level","A2_level","A3_level","A4_level","cost")
-  new   <- c("a1","a2","a3","a4","cost")
+  attrs <- c("A1_level","A2_level","A3_level","cost")
+  new   <- c("a1","a3","a4","cost")
   out <- ids
   for (alt in c("A","B")) {
     sel <- d[alt_tag == alt, c("choice_set","block", attrs)]
@@ -46,7 +52,7 @@ read_locked_design <- function(path = CFG$design_path) {
   ## Range / structure checks
   stopifnot(all(out$A_a4 %in% ATTR$a4_levels), all(out$B_a4 %in% ATTR$a4_levels))
   stopifnot(all(out$A_cost %in% ATTR$cost_levels), all(out$B_cost %in% ATTR$cost_levels))
-  ident <- with(out, A_a1==B_a1 & A_a2==B_a2 & A_a3==B_a3 & A_a4==B_a4 & A_cost==B_cost)
+  ident <- with(out, A_a1==B_a1 & A_a3==B_a3 & A_a4==B_a4 & A_cost==B_cost)
   if (any(ident)) stop(sprintf("Locked design has %d task(s) where A == B.", sum(ident)))
   n_blocks_obs <- length(unique(out$block))
   ntask_obs    <- max(table(out$block))
@@ -69,7 +75,6 @@ build_placeholder_design <- function() {
   n_sets <- CFG$n_blocks * CFG$tasks_per_blk           # 24
   draw_alt <- function() data.frame(
     a1   = sample(ATTR$a1_levels,   n_sets, TRUE),
-    a2   = sample(ATTR$a2_levels,   n_sets, TRUE),
     a3   = sample(ATTR$a3_levels,   n_sets, TRUE),
     a4   = sample(ATTR$a4_levels,   n_sets, TRUE),
     cost = sample(ATTR$cost_levels, n_sets, TRUE)
@@ -102,20 +107,19 @@ effects_code_design <- function(d) {
       else matrix(m, ncol = 1, dimnames = list(NULL, paste0(pre, "e1")))
     }
     a1 <- ec_mat(pull("a1"), ATTR$a1_levels, EC$a1_base, paste0(alt, "_a1"))
-    a2 <- ec_mat(pull("a2"), ATTR$a2_levels, EC$a2_base, paste0(alt, "_a2"))
     a3 <- ec_mat(pull("a3"), ATTR$a3_levels, EC$a3_base, paste0(alt, "_a3"))
-    ## A4 is binary in A/B: effects-coded indicator for level 1 (base = level 3)
+    ## a4 (effectiveness) is binary in A/B: effects-coded indicator for level 1 (base = level 3)
     a4 <- matrix(ifelse(pull("a4") == 1, 1, -1), ncol = 1,
                  dimnames = list(NULL, paste0(alt, "_a4e1")))
     cost100 <- matrix(pull("cost") / 100, ncol = 1,
                       dimnames = list(NULL, paste0(alt, "_cost100")))
-    cbind(a1, a2, a3, a4, cost100)
+    cbind(a1, a3, a4, cost100)
   }
   coded <- cbind(d, code_alt(d, "A"), code_alt(d, "B"))
 
   ## Identification check: the A-vs-B difference matrix must be full column rank.
   diff_cols <- function(suf) coded[[paste0("A_", suf)]] - coded[[paste0("B_", suf)]]
-  attr_suffix <- c("a1e1","a1e2","a1e3","a2e1","a3e1","a3e2","a4e1","cost100")
+  attr_suffix <- c("a1e1","a1e2","a1e3","a3e1","a3e2","a4e1","cost100")
   X <- sapply(attr_suffix, diff_cols)
   r <- qr(X)$rank
   if (r < ncol(X))

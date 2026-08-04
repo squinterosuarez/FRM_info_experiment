@@ -1,6 +1,7 @@
 ## make_distrib_figure.R — Figure 3: conditional ITTs on the policy attributes
-## (distributive: flat cost-sharing, national funding; plus effectiveness),
-## by prior-gap category. Recovered from the cached cate MC fits.
+## (distributive: flat cost-sharing; plus effectiveness), by prior-gap category.
+## Recovered from the cached cate MC fits.
+## (The funding attribute was dropped, so the national-funding panel is gone.)
 suppressMessages({
   library(ggplot2)
   source("R/00_config.R"); CFG$spec_type <- "cate"
@@ -9,7 +10,7 @@ suppressMessages({
 
 attr_wtp <- function(theta, g, which) {
   pw <- partworths(theta, g)
-  d <- switch(which, national = pw$a2[1]-pw$a2[2], flat = pw$a3[1]-pw$a3[3],
+  d <- switch(which, flat = pw$a3[1]-pw$a3[3],
               effective = pw$a4[1]-pw$a4[2])         # most(1) vs least(lvl3) effective
   unname(-100 * d / pw$cost)
 }
@@ -18,7 +19,6 @@ cells <- list(Underestimators=c("trt_under","ctl_under"),
               `Correct (placebo)`=c("trt_correct","ctl_correct"),
               Overestimators =c("trt_over","ctl_over"))
 attrs <- c(flat="Flat (non-risk-priced) cost-sharing",
-           national="National (cross-subsidy) funding",
            effective="Effectiveness (most vs least effective)")
 
 shift <- function(theta, w, cl) {
@@ -46,7 +46,7 @@ f3 <- ggplot(D, aes(mc_mean, cl)) +
   facet_wrap(~facet, ncol=1) +
   labs(x="Shift in willingness to pay, treated − control (£/year)", y=NULL,
        title="Figure 3. Where the information effect lands, by what respondents learned",
-       subtitle="Top two panels: distributive levers (who pays). Bottom: effectiveness (how well it works).\nDot = Monte Carlo mean, bar = 95% sampling interval, red × = true value") +
+       subtitle="Top panel: distributive lever (who pays). Bottom: effectiveness (how well it works).\nDot = Monte Carlo mean, bar = 95% sampling interval, red × = true value") +
   theme_minimal(base_size=12) + theme(strip.text=element_text(face="bold", hjust=0))
 ggsave("outputs/fig3_attributes.png", f3, width=7.4, height=7.4, dpi=160)
 file.remove("outputs/fig3_distributive.png")          # superseded by the 3-panel version
